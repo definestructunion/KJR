@@ -1,0 +1,6 @@
+*.ogg
+*.png
+*.TTF
+dependencies/
+.vscode/
+bin/
