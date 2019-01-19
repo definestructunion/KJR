@@ -31,4 +31,4 @@ used in a typical roguelike game, and often slows down the game as a result.
 
 KJR is licenced under the LGPL as it uses OpenAL.
 
-![ ](https://raw.githubusercontent.com/definestructunion/KJR/master/readmeres/sabersmile.jpg)
+![ ](https://raw.githubusercontent.com/definestructunion/KJR/master/sabersmile.jpg)
