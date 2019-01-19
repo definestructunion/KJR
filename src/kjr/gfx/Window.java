@@ -2,6 +2,8 @@ package kjr.gfx;
 
 import kjr.input.Input;
 import kjr.math.Vec2;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.glfw.GLFWVidMode;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.glfwInit;
@@ -38,8 +40,6 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
 import static org.lwjgl.opengl.GL11.glGetError;
 import static org.lwjgl.opengl.GL11.glClearColor;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.glfw.GLFWVidMode;
 
 /**
  * <pre>

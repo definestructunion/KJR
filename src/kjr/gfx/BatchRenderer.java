@@ -120,7 +120,6 @@ public class BatchRenderer extends Renderer
 
         float slot = getSlot(texture.getID());
 
-        //float c = Float.intBitsToFloat((r << 0) | (g << 8) | (b << 16) | (a << 24));
         float c = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
 
         buffer.put(0.0f);

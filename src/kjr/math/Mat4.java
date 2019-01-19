@@ -1,7 +1,6 @@
 package kjr.math;
 
 import java.nio.FloatBuffer;
-
 import kjr.util.BufferUtils;
 
 public class Mat4

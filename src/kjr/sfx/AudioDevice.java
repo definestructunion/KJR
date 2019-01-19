@@ -11,7 +11,7 @@ public class AudioDevice
     private int[] attributes = new int[1];
 
     private ALCCapabilities alcCapabilities;
-    private ALCapabilities  alCapabilities;
+    //private ALCapabilities  alCapabilities;
 
     public AudioDevice()
     {
@@ -25,7 +25,7 @@ public class AudioDevice
         alcMakeContextCurrent(context);
 
         alcCapabilities = ALC.createCapabilities(device);
-        alCapabilities  = AL.createCapabilities(alcCapabilities);
+        AL.createCapabilities(alcCapabilities);
     }
 
     public void delete()

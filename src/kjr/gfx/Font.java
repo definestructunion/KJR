@@ -32,15 +32,16 @@ public class Font
     public static int bitmap_width = 512;
     public static int bitmap_height = 512;
 
+    public int size;
+
     FloatBuffer xb = memAllocFloat(1);
     FloatBuffer yb = memAllocFloat(1);
 
     private int id;
     private int width;
     private int height;
-    private int size;
     private String file_path;
-    STBTTPackedchar.Buffer char_data;
+    private STBTTPackedchar.Buffer char_data;
 
     public Font(String file_path, int size)
     {
