@@ -1,6 +1,7 @@
 *.ogg
 *.png
 *.TTF
+!build/*
 dependencies/
 .vscode/
 bin/

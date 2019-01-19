@@ -1,0 +1,10 @@
+01/19/2019 : 1:57 PM
+
+Commit 8:
+
+1: Edited README.md
+	- Removed "Remove many unnecessary dependencies from the 	  	  project" from Todo - finished
+	- Removed "Text scaling" from Planned features - finished
+	  - forgot to remove in commit_7
+
+2: Added build for demo

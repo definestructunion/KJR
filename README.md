@@ -12,7 +12,6 @@ KJR is a simple, crossplatform, performant framework for creating tiled roguelik
 # Planned features
 - Z axis rendering
 - Config class
-- Text scaling
 
 # Why KJR Over More Popular Libraries?
 
@@ -22,7 +21,6 @@ used in a typical roguelike game, and often slows down the game as a result.
 # Todo
 - Add more menial functionality to Window and Audio
 - Integrate TileData into Renderer
-- Remove many unnecessary dependencies from the project
 - Finish documentation
 - Add pretty pictures to README.md
 

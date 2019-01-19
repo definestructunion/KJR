@@ -5,6 +5,7 @@ import kjr.sfx.AudioDevice;
 import kjr.gfx.Shader;
 import kjr.gfx.Renderer;
 import kjr.gfx.Window;
+import java.util.Timer;
 
 public abstract class GameProgram
 {
@@ -12,11 +13,14 @@ public abstract class GameProgram
     protected Renderer renderer = null;
     protected AudioDevice a_device = null;
 
-    public GameProgram(String title, int width, int height, boolean limit_framerate)
+    public GameProgram(String title, int width, int height, boolean limit_refresh_rate)
     {
-        a_device = new AudioDevice();
-        window = new Window(title, width, height, this, limit_framerate);
+        this.a_device = new AudioDevice();
+        this.window = new Window(title, width, height, this, limit_refresh_rate);
     }
+
+    int frames = 0;
+    long start = System.currentTimeMillis(), lastTime = System.currentTimeMillis();
 
     public final void run()
     {
@@ -26,6 +30,12 @@ public abstract class GameProgram
         {
             update();
             draw();
+            ++frames;
+            if (System.currentTimeMillis() - lastTime >= 1000) {
+                lastTime += 1000;
+                window.setTitle("KJR - " + frames + " FPS");
+                frames = 0;
+            }
         }
 
         clean();

@@ -2,6 +2,8 @@ import kjr.base.GameProgram;
 import kjr.gfx.BatchRenderer;
 import kjr.gfx.Font;
 import kjr.gfx.Texture;
+import kjr.input.Input;
+import kjr.input.Keys;
 import kjr.math.Vec4;
 import kjr.sfx.Audio;
 
@@ -37,10 +39,33 @@ public class TestGame extends GameProgram
     @Override public void initialize()
     {
         window.show();
+        sound.play();
     }
 
+    int x_offset = 0;
+    int y_offset = 0;
     @Override public void update()
     {
+        if(Input.keyDown(Keys.A))
+        {
+            x_offset -= 4;
+        }
+
+        if(Input.keyDown(Keys.D))
+        {
+            x_offset += 4;
+        }
+
+        if(Input.keyDown(Keys.W))
+        {
+            y_offset -= 4;
+        }
+
+        if(Input.keyDown(Keys.S))
+        {
+            y_offset += 4;
+        }
+
         window.clear(0, 0, 0, 0);
     }
 
@@ -53,7 +78,7 @@ public class TestGame extends GameProgram
             for(int x = 0; x < 15; ++x)
             {
                 Texture tex = ((x + y) % 2 == 0) ? texture : texture2;
-                renderer.draw(tex, x * 16, y * 16, white);
+                renderer.draw(tex, (x * 16) + x_offset, (y * 16) + y_offset, white);
             }
         }
 
@@ -63,6 +88,12 @@ public class TestGame extends GameProgram
         renderer.flush();
         window.update();
         window.render();
+    }
+
+    @Override public void windowResize()
+    {
+        super.windowResize();
+        System.out.println("Resized");
     }
 
     @Override public void clean()

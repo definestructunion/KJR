@@ -31,6 +31,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowSizeCallback;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
@@ -601,5 +602,16 @@ public class Window
     public Vec2 getDimensions()
     {
         return new Vec2(width, height);
+    }
+
+    /**
+     * <pre>
+     * Brief: Returns the elapsed time in milliseconds.
+     * </pre>
+     * @return double - milliseconds
+     */
+    public double getTime()
+    {
+        return glfwGetTime() / 100000000;
     }
 }
