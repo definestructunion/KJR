@@ -22,7 +22,6 @@ used in a typical roguelike game, and often slows down the game as a result.
 # Todo
 - Add more menial functionality to Window and Audio
 - Integrate TileData into Renderer
-- Update default shader
 - Remove many unnecessary dependencies from the project
 - Finish documentation
 - Add pretty pictures to README.md

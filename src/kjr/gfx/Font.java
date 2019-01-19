@@ -18,11 +18,6 @@ import org.lwjgl.stb.*;
 
 public class Font
 {
-    private static final float[] scale = {
-        24.0f,
-        14.0f
-    };
-
     private final static int CHAR_BUFFER_SIZE = 6;
     private final static int CHAR_BUFFER_COUNT = 128;
 
@@ -53,7 +48,12 @@ public class Font
     }
 
     private int load()
-{
+    {
+        final float[] scale = {
+            size,
+            size
+        };
+
         int tex_id = glGenTextures();
         char_data = STBTTPackedchar.malloc(CHAR_BUFFER_SIZE * CHAR_BUFFER_COUNT);
 

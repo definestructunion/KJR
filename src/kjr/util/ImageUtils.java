@@ -7,35 +7,41 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-public class ImageUtils {
-
-    public static class DecodedImage {
-
+public class ImageUtils
+{
+    public static class DecodedImage
+    {
         private ByteBuffer m_Buffer;
         private int m_Width, m_Height;
 
-        public DecodedImage(ByteBuffer buffer, int width, int height) {
+        public DecodedImage(ByteBuffer buffer, int width, int height)
+        {
             m_Buffer = buffer;
             m_Width = width;
             m_Height = height;
         }
 
-        public ByteBuffer getBuffer() {
+        public ByteBuffer getBuffer()
+        {
             return m_Buffer;
         }
 
-        public int getWidth() {
+        public int getWidth()
+        {
             return m_Width;
         }
 
-        public int getHeight() {
+        public int getHeight()
+        {
             return m_Height;
         }
 
     }
 
-    public static DecodedImage loadImage(String filename) {
-        try {
+    public static DecodedImage loadImage(String filename)
+    {
+        try
+        {
             InputStream input = new FileInputStream(filename);
             PNGDecoder decoder = new PNGDecoder(input);
 
@@ -49,7 +55,10 @@ public class ImageUtils {
             input.close();
 
             return new DecodedImage(buffer, width, height);
-        } catch (IOException e) {
+        }
+        
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
 

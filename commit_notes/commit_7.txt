@@ -1,0 +1,20 @@
+01/19/2019 : 12:38 AM
+
+Commit 7:
+
+1: Edited README.md
+	- Removed "Update default shader" from Todo - finished
+	- Removed "Text scaling" from Planned features - finished
+	- Removed " as it uses OpenAL." from License - useless
+	- Added   "." to license - punctuation
+
+2: Code Updates
+	- Updated shader class
+	- Added text scaling
+	- Removed all remnants of my heretical notation (hungarian) and
+	  brace style
+	- Moved all Main.java code into TestGame.java
+	- Abstracted shaders from user more
+	- Removed unneeded file (forgot name)
+
+I believe that is all.

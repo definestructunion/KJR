@@ -1,5 +1,6 @@
 package kjr.gfx;
 
+import kjr.base.GameProgram;
 import kjr.input.Input;
 import kjr.math.Vec2;
 import org.lwjgl.opengl.GL;
@@ -29,6 +30,8 @@ import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowTitle;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowSizeCallback;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
@@ -120,6 +123,22 @@ public class Window
 
     /**
      * <pre>
+     * Brief: GLFW callback function for setting window dimensions.
+     * </pre>
+     * @param window - glfw window
+     * @param width - new width of the monitor in pixels
+     * @param height - new height of the monitor in pixels
+     */
+    private void windowResizeCallback(long window, int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+        glViewport(0, 0, width, height);
+        game.windowResize();
+    }
+
+    /**
+     * <pre>
      * Brief: GLFW callback function for setting input keys.
      * </pre>
      * @param window - glfw window
@@ -160,6 +179,22 @@ public class Window
         Input.setX((float)x);
         Input.setY((float)y);
     }
+
+
+    /**
+     * <pre>
+     * Brief: the current game running used for user callbacks.
+     * 
+     * Layman:
+     * 
+     * Since the game window is tied to the current game being used
+     * we can use it to allow the user to make their own callback
+     * functions if they wish to make them.
+     * 
+     * ////
+     * </pre>
+     */
+    private GameProgram game;
 
     /**
      * <pre>
@@ -259,13 +294,15 @@ public class Window
      * @param title - title of the window
      * @param width - width of the window in pixels
      * @param height - height of the window in pixels
+     * @param game - game program used for user defined callback functions
      * @param limit_framerate - whether or not to limit the framerate
      */
-    public Window(String title, int width, int height, boolean limit_framerate)
+    public Window(String title, int width, int height, GameProgram game, boolean limit_framerate)
     {
         this.title = title;
         this.width = width;
         this.height = height;
+        this.game = game;
         this.vsync = (limit_framerate) ? 1 : 0;
         initWindow();
     }
@@ -304,7 +341,6 @@ public class Window
         // if the loading process takes a long time, the window will show white
         // and wont respond, which isn't very attractive to look at
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
         glfw_window = glfwCreateWindow(width, height, title, 0, 0);
@@ -339,6 +375,7 @@ public class Window
         glfwSetKeyCallback(glfw_window, this::keyCallback);
         glfwSetMouseButtonCallback(glfw_window, this::buttonCallback);
         glfwSetCursorPosCallback(glfw_window, this::cursorPositionCallback);
+        glfwSetWindowSizeCallback(glfw_window, this::windowResizeCallback);
 
         // whether or not to use vsync
         glfwSwapInterval(vsync);
@@ -450,24 +487,24 @@ public class Window
      * 
      * Layman:
      * 
-     * There's memory that the java GC can't collect.
+     * There is memory that the java GC can not collect.
      * You need to explicitely call delete() once
      * done with the window.
+     * 
+     * ////
      * 
      * Non-Layman:
      * 
      * Since the GLFW window is bound to native resources (C),
      * java GC does not know about it and therefor cannot collect it.
-     * Much like you would explicitely call delete on a pointer object
-     * once done with the resource.
+     * Explicitely call delete on a pointer object once
+     * done with the resource.
      * 
      * ////
      * </pre>
      */
     public void delete()
     {
-        // important to tell the window it should close,
-        // or else it won't
         glfwSetWindowShouldClose(glfw_window, true);
         // frees all resorces allocated by glfw
         glfwTerminate();
@@ -486,7 +523,7 @@ public class Window
 
     /**
      * <pre>
-     * Brief: Changes the title
+     * Brief: Changes the title.
      * </pre>
      * @param new_title - new title to change to
      */
@@ -496,21 +533,73 @@ public class Window
         glfwSetWindowTitle(glfw_window, new_title);
     }
 
+
+    /**
+     * <pre>
+     * Brief: Returns the primary monitor width in pixels.
+     * </pre>
+     * @return int - monitor width
+     */
     public int getScreenWidth()
     {
         GLFWVidMode mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         return mode.width();
     }
 
+    /**
+     * <pre>
+     * Brief: Returns the primary monitor height in pixels.
+     * </pre>
+     * @return int - monitor height
+     */
     public int getScreenHeight()
     {
         GLFWVidMode mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         return mode.height();
     }
 
+    /**
+     * <pre>
+     * Brief: Returns the primary monitor resolution in pixels.
+     * </pre>
+     * @return Vec2 - monitor resolution
+     */
     public Vec2 getScreenResolution()
     {
         GLFWVidMode mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         return new Vec2(mode.width(), mode.height());
+    }
+
+    /**
+     * <pre>
+     * Brief: Returns the window width in pixels.
+     * </pre>
+     * @return int - window width
+     */
+    public int getWidth()
+    {
+        return width;
+    }
+
+    /**
+     * <pre>
+     * Brief: Returns the window height in pixels.
+     * </pre>
+     * @return int - window height
+     */
+    public int getHeight()
+    {
+        return height;
+    }
+
+    /**
+     * <pre>
+     * Brief: Returns the window dimensions in pixels.
+     * </pre>
+     * @return Vec2 - window dimensions
+     */
+    public Vec2 getDimensions()
+    {
+        return new Vec2(width, height);
     }
 }

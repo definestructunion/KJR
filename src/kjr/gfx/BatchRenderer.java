@@ -7,9 +7,8 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.stb.STBTTAlignedQuad;
-import static org.lwjgl.system.MemoryUtil.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.system.MemoryUtil.memFree;
+import static org.lwjgl.system.MemoryUtil.memAllocFloat;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
@@ -52,6 +51,7 @@ public class BatchRenderer extends Renderer
 
     @Override public void delete()
     {
+        super.delete();
         ibo.delete();
         glDeleteVertexArrays(vao);
         glDeleteBuffers(vbo);
@@ -83,7 +83,8 @@ public class BatchRenderer extends Renderer
         int[] indices = new int[RENDERER_INDICES_SIZE];
 
         int offset = 0;
-        for (int i = 0; i < RENDERER_INDICES_SIZE; i += INDICES_SIZE) {
+        for (int i = 0; i < RENDERER_INDICES_SIZE; i += INDICES_SIZE)
+        {
             indices[i + 0] = offset + 0;
             indices[i + 1] = offset + 1;
             indices[i + 2] = offset + 2;
@@ -102,6 +103,7 @@ public class BatchRenderer extends Renderer
 
     @Override public void begin()
     {
+        super.begin();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         buffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY).asFloatBuffer();
     }
@@ -174,7 +176,7 @@ public class BatchRenderer extends Renderer
         for(int i = 0; i < text.length(); ++i)
         {
             c = text.charAt(i);
-
+            
             font.getQuad(c, xb, yb, quad);
             buffer.put(1.0f);
             buffer.put(quad.x0()).put(quad.y0()).put(0);
@@ -232,6 +234,7 @@ public class BatchRenderer extends Renderer
         ibo.unbind();
         glBindVertexArray(0);
         index_count = 0;
+        super.flush();
     }
 
     private float getSlot(float texture_id)

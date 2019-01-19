@@ -7,6 +7,27 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+/**
+ * <pre>
+ * Brief: Reads shaders and splits them into 2 parts.
+ * 
+ * Note: OutOfBoundsException will be made if either the
+ * shader token (default: "#shader") is incorrect or the
+ * shader identifier (default: "vertex", "fragment") do
+ * not match the tokens passed in as parameters.
+ * Example:
+ * - File: #shader vertex
+ * - Parameters: #sahder vertexx
+ * 
+ * Layman:
+ * 
+ * Splits the vertex and fragment shaders into a String array.
+ * Vertex shader goes at index [0] and the Fragment shader
+ * goes at index [1].
+ * 
+ * ////
+ * </pre>
+ */
 public final class ShaderReader
 {
     private static final int SHADER_NONE = -1;

@@ -39,70 +39,94 @@ import kjr.math.*;
  */
 public class Shader
 {
+    // default names for shaders
+    protected static final String def_pr_matrix_name = "pr_matrix";
+    protected static final String def_textures_name = "textures";
+
     // constant variables used for 
     // reading a KJR standard shader
     public static final String KJR_SHADER_TOKEN = "#shader";
     public static final String KJR_VERTEX_NAME = "vertex";
     public static final String KJR_FRAGMENT_NAME = "fragment";
 
-    // TODO: This needs to be fixed eventually
     public static final String KJR_STANDARD_SHADER =
     "#shader vertex\n" +
-	"#version 330 core\n" +
-	"layout(location = 0) in vec4 position;\n" +
-	"layout(location = 1) in vec2 uv;\n" +
-	//"layout(location = 2) in float tid;\n" +
-	"layout(location = 2) in vec4 color;\n" +
+    "#version 330 core\n" +
 
-	"uniform mat4 pr_matrix;\n" +
-	"uniform mat4 vw_matrix = mat4(1.0);\n" +
-	"uniform mat4 ml_matrix = mat4(1.0);\n" +
+    "layout (location = 0) in float is_text;\n" +
+    "layout (location = 1) in vec4 position;\n" +
+    "layout (location = 2) in vec2 uv;\n" +
+    "layout (location = 3) in float tid;\n" +
+    "layout (location = 4) in vec4 color;\n" +
 
-	"out DATA {\n" +
-	"	vec4 position;\n" +
-	"	vec2 uv;\n" +
-	//"	float tid;\n" +
-	"	vec4 color;\n" +
-	"} vs_out;\n" +
+    "uniform mat4 pr_matrix;\n" +
 
-	"void main() {\n" +
-	"	gl_Position = pr_matrix * vw_matrix * ml_matrix * position;\n" +
-	"	vs_out.position = ml_matrix * position;\n" +
-	"	vs_out.uv = uv;\n" +
-	//"	vs_out.tid = tid;\n" +
-	"	vs_out.color = color;\n" +
-	"}\n" +
+    "out DATA\n" +
+    "{\n" +
+    "    float is_text;\n" +
+    "    vec4 position;\n" +
+    "    vec2 uv;\n" +
+    "    float tid;\n" +
+    "    vec4 color;\n" +
+    "} vs_out;\n" +
 
-	"#shader fragment\n" +
-	"#version 330 core\n" +
+    "void main()\n" +
+    "{\n" +
+    "    vs_out.is_text = float(is_text);\n" +
+    "    gl_Position = pr_matrix * position;\n" +
+    "    vs_out.position = position;\n" +
+    "    vs_out.uv = uv;\n" +
+    "    vs_out.tid = tid;\n" +
+    "    vs_out.color = color;\n" +
+    "}\n" +
 
-	"layout(location = 0) out vec4 color;\n" +
+    "#shader fragment\n" +
+    "#version 330 core\n" +
 
-	"uniform vec4 colour;\n" +
-	"uniform vec2 light_pos;\n" +
+    "layout (location = 0) out vec4 color;\n" +
 
-	"in DATA\n" +
-	"{\n" +
-	"	vec4 position;\n" +
-	"	vec2 uv;\n" +
-	//"	float tid;\n" +
-	"	vec4 color;\n" +
-	"} fs_in;\n" +
+    "uniform vec4 colour;\n" +
 
-    //"uniform sampler2D textures[32];\n" +
-    "uniform sampler2D tex" +
+    "in DATA\n" +
+    "{\n" +
+    "    float is_text;\n" +
+    "    vec4 position;\n" +
+    "    vec2 uv;\n" +
+    "    float tid;\n" +
+    "    vec4 color;\n" +
+    "} fs_in;\n" +
 
-	"void main() {\n" +
-	//"	vec4 texColor = fs_in.color;\n" +
-	//"	if (fs_in.tid > 0.0) {\n" +
-	//"		int tid = int(fs_in.tid - 0.1);\n" +
-	//"		texColor = fs_in.color * texture(textures[tid], fs_in.uv);\n" +
-	//"	}\n" +
-    //"	color = texColor;\n" +
-    "float intensity = 1.0 / length(fs_in.position.xy - light_pos);\n" +
-	"color = fs_in.color * intensity;\n" +
-	"color = texture(tex, fs_in.uv) * intensity;\n" +
-	"}";
+    "uniform sampler2D textures[32];\n" +
+
+    "void main()\n" +
+    "{\n" +
+    "    vec4 texColor = fs_in.color;\n" + 
+
+    "    if(fs_in.tid > 0.0)\n" +
+    "    {\n" +
+    "        int tid = int(fs_in.tid - 0.5);\n" +
+    "        texColor = fs_in.color * texture(textures[tid], fs_in.uv);\n" +
+    
+    "        if(float(fs_in.is_text) == 1.0f)\n" +
+    "        {\n" +
+    "            if(texColor.a > 0.0)\n" +
+    "            {\n" +
+    "                texColor = vec4(fs_in.color.r, fs_in.color.g, fs_in.color.b, texColor.a);\n" +
+    
+    "            }\n" +
+
+    "            else\n" +
+    "            {\n" +
+    "                texColor = vec4(0, 0, 0, 0);\n" +
+    "            }\n" +
+    "        }\n" +
+    "    }\n" +
+    
+    "    color = texColor;\n" +
+    "};";
+
+    public String pr_matrix = def_pr_matrix_name;
+    public String textures = def_textures_name;
 
     /**
      * <pre>
@@ -117,7 +141,38 @@ public class Shader
      * ////
      * </pre>
      */
-    private int id = 0;
+    protected int id = 0;
+
+    /**
+     * <pre>
+     * Brief: Creates an out of the box shader ready for use.
+     * 
+     * Layman:
+     * 
+     * Using createDefault(), there is no worry for binding
+     * texture slots of setting the orthographics view, for
+     * it is also handled.
+     * 
+     * ////
+     * </pre>
+     * @return Shader - the KJR standard shader
+     */
+    public static Shader createDefault()
+    {
+        Shader shader = new Shader();
+
+        int[] tex_ids = 
+        {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+        };
+
+        shader.bind();
+        shader.setUniform1iv(shader.textures, tex_ids);
+        shader.setUniformMat4(shader.pr_matrix, Mat4.ortho(0, 960, 0, 540, -10, 10));
+        shader.unbind();
+
+        return shader;
+    }
 
     /**
      * <pre>
@@ -169,7 +224,7 @@ public class Shader
      * @param sources - shader strings where [0] = vertex and [1] = fragment
      * @return - the program ID
      */
-    private int load(String[] sources)
+    protected int load(String[] sources)
     {
         // program is our shader
         // OpenGL stores our shader in it's own

@@ -18,6 +18,7 @@ public class Audio
     private int sample_rate;
     private int format = -1;
     private float gain = 1.0f;
+    private boolean looping = false;
 
     public Audio(String file_path)
     {
@@ -25,10 +26,25 @@ public class Audio
         load();
     }
 
+    public Audio(String file_path, boolean looping)
+    {
+        this.file_path = file_path;
+        this.looping = looping;
+        load();
+    }
+
     public Audio(String file_path, float volume)
     {
         this.file_path = file_path;
         this.gain = volume;
+        load();
+    }
+
+    public Audio(String file_path, float volume, boolean looping)
+    {
+        this.file_path = file_path;
+        this.gain = volume;
+        this.looping = looping;
         load();
     }
 
@@ -63,12 +79,8 @@ public class Audio
         }
 
         id = alGenBuffers();
-        source = alGenSources();
-
         alBufferData(id, format, raw_audio, sample_rate);
-        alSourcef(source, AL_GAIN, gain);
-
-        alSourcei(source, AL_BUFFER, id);
+        source = createSource();
         free(raw_audio);
     }
 
@@ -84,29 +96,40 @@ public class Audio
                 if(state[0] == AL_STOPPED)
                 {
                     alDeleteSources(source_val);
+                    sources.remove(i);
                 }
             }
 
-            int new_source = alGenSources();
-            alSourcef(new_source, AL_GAIN, gain);
-            alSourcei(new_source, AL_BUFFER, id);
-            sources.add(new_source);
+            int new_source = createSource();
             alSourcePlay(new_source);
         }
 
         else
         {
-            int new_source = alGenSources();
-            alSourcef(new_source, AL_GAIN, gain);
-            alSourcei(new_source, AL_BUFFER, id);
-            sources.add(new_source);
+            int new_source = createSource();
             alSourcePlay(new_source);
         }
+    }
+
+    private int createSource()
+    {
+        int new_source = alGenSources();
+        alSourcef(new_source, AL_GAIN, gain);
+        alSourcei(new_source, AL_BUFFER, id);
+        alSourcei(new_source, AL_LOOPING, ((looping) ? 1 : 0));
+        sources.add(new_source);
+        return new_source;
     }
 
     public void delete()
     {
         alDeleteBuffers(id);
         alDeleteSources(source);
+    }
+
+    public void setLooping(boolean looping)
+    {
+        this.looping = looping;
+        //alSourcei(sourc)
     }
 }

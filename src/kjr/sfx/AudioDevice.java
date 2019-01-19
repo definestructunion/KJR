@@ -9,9 +9,7 @@ public class AudioDevice
     private long device;
     private long context;
     private int[] attributes = new int[1];
-
     private ALCCapabilities alcCapabilities;
-    //private ALCapabilities  alCapabilities;
 
     public AudioDevice()
     {

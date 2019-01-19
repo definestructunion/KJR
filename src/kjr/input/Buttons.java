@@ -17,6 +17,7 @@ public enum Buttons
     LENGTH       (12);
 
     private final int number;
+    
     Buttons(int number)
     {
         this.number = number;

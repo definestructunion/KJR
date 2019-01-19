@@ -41,36 +41,43 @@ public class Mat4
     }
 
     public Vec3 mult(Vec3 other) {
-        return new Vec3(
-                elements[0] * other.x + elements[4] * other.y + elements[8] * other.z + elements[12],
-                elements[1] * other.x + elements[5] * other.y + elements[9] * other.z + elements[13],
-                elements[2] * other.x + elements[6] * other.y + elements[10] * other.z + elements[14]
+        return new Vec3
+        (
+            elements[0] * other.x + elements[4] * other.y + elements[8] * other.z + elements[12],
+            elements[1] * other.x + elements[5] * other.y + elements[9] * other.z + elements[13],
+            elements[2] * other.x + elements[6] * other.y + elements[10] * other.z + elements[14]
         );
     }
 
     public Vec4 mult(Vec4 other) {
-        return new Vec4(
-                elements[0] * other.x + elements[4] * other.y + elements[8] * other.z + elements[12] * other.w,
-                elements[1] * other.x + elements[5] * other.y + elements[9] * other.z + elements[13] * other.w,
-                elements[2] * other.x + elements[6] * other.y + elements[10] * other.z + elements[14] * other.w,
-                elements[3] * other.x + elements[7] * other.y + elements[11] * other.z + elements[15] * other.w
+        return new Vec4
+        (
+            elements[0] * other.x + elements[4] * other.y + elements[8] * other.z + elements[12] * other.w,
+            elements[1] * other.x + elements[5] * other.y + elements[9] * other.z + elements[13] * other.w,
+            elements[2] * other.x + elements[6] * other.y + elements[10] * other.z + elements[14] * other.w,
+            elements[3] * other.x + elements[7] * other.y + elements[11] * other.z + elements[15] * other.w
         );
     }
 
     public Mat4 mult(Mat4 other) {
         float[] data = new float[4 * 4];
 
-        for (int y = 0; y < 4; y++) {
-            for (int x = 0; x < 4; x++) {
+        for (int y = 0; y < 4; y++)
+        {
+            for (int x = 0; x < 4; x++)
+            {
                 float sum = 0.0f;
-                for (int e = 0; e < 4; e++) {
+                for (int e = 0; e < 4; e++)
+                {
                     sum += elements[x + e * 4] * other.elements[e + y * 4];
                 }
+
                 data[x + y * 4] = sum;
             }
         }
 
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < data.length; i++)
+        {
             elements[i] = data[i];
         }
 
