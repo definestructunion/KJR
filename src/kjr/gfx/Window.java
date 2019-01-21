@@ -55,26 +55,18 @@ import static org.lwjgl.opengl.GL11.glClearColor;
  * with this object. Any rendering will be displayed on this
  * screen.
  * 
- * ////
- * 
  * Non-Layman:
  * 
  * This class creates an OpenGL context and uses this instance
  * as the context.
- * 
- * Initializes glfw and the OpenGL library once
- * 
- * Wrapper class for GLFW
- * 
- * ////
+ * Initializes glfw and the OpenGL library once.
+ * Wrapper class for GLFW.
  * 
  * Contains:
  * - Title as String - title of the window
  * - Width as int - width of screen in pixels
  * - Height as int - height of screen in pixels
  * - GLFW Window as long - the pointer to the object in C
- * 
- * ////
  * </pre>
  */
 public class Window
@@ -87,15 +79,11 @@ public class Window
      * 
      * GLFW doesn't like being initialized multiple times.
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * While GLFW can be successfully initialized multiple times,
      * GLFW doesn't support multiple instances of itself in a single
      * process.
-     * 
-     * ////
      * </pre>
      */
     private static boolean IS_GLFW_INITTED = false;
@@ -111,14 +99,10 @@ public class Window
      * 
      * OpenGL doesn't like being initialized more than once.
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * LWJGL's OpenGL may be able to be initialized more than once, but because
      * there is only ever 1 context at a time, there isn't a need to 
-     * 
-     * ////
      */
     private static boolean IS_OPENGL_INITTED = false;
 
@@ -191,8 +175,6 @@ public class Window
      * Since the game window is tied to the current game being used
      * we can use it to allow the user to make their own callback
      * functions if they wish to make them.
-     * 
-     * ////
      * </pre>
      */
     private GameProgram game;
@@ -207,15 +189,11 @@ public class Window
      * This class doesn't actually manage the window itself, but
      * exists to add flexibility to the window.
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * The pointer to the GLFW window in C which we use
      * to access our created window outside of Java in Java.
      * Set to 0 by default as 0 represents NULL.
-     * 
-     * ////
      * </pre>
      */
     private long glfw_window = 0;
@@ -235,8 +213,6 @@ public class Window
      * 
      * Value is set to 0 by default as GLFW asserts [width > 0]
      * halting the program if [!(width > 0)]
-     * 
-     * ////
      * </pre>
      */
     private int width = 0;
@@ -249,8 +225,6 @@ public class Window
      * 
      * Value is set to 0 by default as GLFW asserts [height > 0]
      * halting the program if [!(height > 0)]
-     * 
-     * ////
      * </pre>
      */
     private int height = 0;
@@ -270,15 +244,11 @@ public class Window
      * ready to display the information. Recommended
      * to use vsync (= 1).
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * If using vsync, then the window waits for the next vblank for swapping
      * front and back buffers. If not using vsync, then the window does not
      * wait for vblanks for swapping front and back buffers.
-     * 
-     * ////
      * </pre>
      */
     private int vsync = 1;
@@ -396,16 +366,12 @@ public class Window
      * 
      * Removes all the stuff rendered previously from the screen.
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * Clears both the OpenGL color buffer bits and
      * depth buffer bits. It's recommended to clear
      * everything previously rendered, making the window
      * a clean slate.
-     * 
-     * ////
      * </pre>
      * @param r - red value between 0 and 1
      * @param g - green value between 0 and 1
@@ -444,13 +410,9 @@ public class Window
      * will be rendered onto the screen. If nothing shows up,
      * something is messed up.
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * Swaps the front and back buffers of the GLFW window.
-     * 
-     * ////
      * </pre>
      */
     public void render()
@@ -492,16 +454,12 @@ public class Window
      * You need to explicitely call delete() once
      * done with the window.
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * Since the GLFW window is bound to native resources (C),
      * java GC does not know about it and therefor cannot collect it.
      * Explicitely call delete on a pointer object once
      * done with the resource.
-     * 
-     * ////
      * </pre>
      */
     public void delete()
@@ -515,6 +473,8 @@ public class Window
     /**
      * <pre>
      * Brief: Returns true if the window is still active.
+     * 
+     * @return 
      * </pre>
      */
     public boolean running()

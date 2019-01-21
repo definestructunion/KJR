@@ -21,20 +21,14 @@ import kjr.math.*;
  * over to the GPU, then we can get
  * way better performance.
  * 
- * ////
- * 
  * Non-Layman:
  * 
  * Shader program that is used to manipulate pixels
  * using matrices and textures. KJR uses
  * vertex and fragment shaders.
  * 
- * ////
- * 
  * Contains:
  * - ID as int - OpenGL program ID for the shader
- * 
- * ////
  * </pre>
  */
 public class Shader
@@ -137,8 +131,6 @@ public class Shader
      * OpenGL uses numbers to refer to stuff like textures and
      * programs. We need to keep track of this object's shader
      * by having the ID tied to the object.
-     * 
-     * ////
      * </pre>
      */
     protected int id = 0;
@@ -152,8 +144,6 @@ public class Shader
      * Using createDefault(), there is no worry for binding
      * texture slots of setting the orthographics view, for
      * it is also handled.
-     * 
-     * ////
      * </pre>
      * @return Shader - the KJR standard shader
      */
@@ -352,8 +342,6 @@ public class Shader
      * 
      * OpenGL is a state machine, so binding
      * it allows us to use it.
-     * 
-     * ////
      * </pre>
      */
     public void bind()
@@ -369,7 +357,6 @@ public class Shader
      * 
      * OpenGL is a state machine, so unbinding
      * it allows will stop it from being used.
-     * ////
      * </pre>
      */
     public void unbind()
@@ -399,8 +386,6 @@ public class Shader
      * java GC does not know about it and therefor cannot collect it.
      * Much like you would explicitely call delete on a pointer object
      * once done with the resource.
-     * 
-     * ////
      * </pre>
      */
     public void delete()

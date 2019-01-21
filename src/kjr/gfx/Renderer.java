@@ -9,20 +9,19 @@ public abstract class Renderer {
 
     protected ArrayDeque<Mat4> transforms = new ArrayDeque<Mat4>();
     protected Mat4 transforms_back;
+    public TileData tiles;
 
-    protected Shader shader;
-
-    protected Renderer()
+    protected Renderer(TileData tile_info)
     {
+        this.tiles = tile_info;
         transforms.addLast(Mat4.identity());
         transforms_back = transforms.getLast();
-        shader = Shader.createDefault();
         return;
     }
 
     public void delete()
     {
-        shader.delete();
+        
     }
 
     public void push(Mat4 matrix)
@@ -48,42 +47,16 @@ public abstract class Renderer {
     }
 
     public void begin()
-    { 
-        shader.bind();
-    }
-
-    public void draw(Texture texture, int x, int y, Vec4 color)
     {
 
     }
 
-    public void drawString(String text, Font font, int x, int y, Vec4 color)
-    {
-
-    }
+    public abstract void draw(Texture texture, int x, int y, Vec4 color);
+    public abstract void drawString(String text, Font font, int x, int y, Vec4 color);
+    public abstract void flush();
 
     public void end()
     { 
 
-    }
-
-    public void flush()
-    {
-        shader.unbind();
-    }
-
-    public final Shader getShader()
-    {
-        return shader;
-    }
-
-    public final void setShader(Shader new_shader, boolean delete_old)
-    {
-        if(delete_old)
-        {
-            shader.delete();
-        }
-
-        shader = new_shader;
     }
 }

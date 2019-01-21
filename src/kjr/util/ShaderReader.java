@@ -24,8 +24,6 @@ import java.util.Scanner;
  * Splits the vertex and fragment shaders into a String array.
  * Vertex shader goes at index [0] and the Fragment shader
  * goes at index [1].
- * 
- * ////
  * </pre>
  */
 public final class ShaderReader

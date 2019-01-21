@@ -4,18 +4,43 @@ import static org.lwjgl.stb.STBImage.*;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 /**
  * Image memory such as a sprite or picture
  */
 public class Texture
 {
+    static
+    {
+        textures = new ArrayList<Texture>();
+    }
+
+    private static ArrayList<Texture> textures;
+
+    public static void add(String file_path)
+    {
+        textures.add(new Texture(file_path));
+    }
+
+    public static Texture get(int index)
+    {
+        return textures.get(index);
+    }
+
+    public static void clean()
+    {
+        for(int i = 0; i < textures.size(); ++i)
+        {
+            textures.get(i).delete();
+        }
+    }
+
     private int id;
     private String file_path;
     private int[] width = new int[1];
     private int[] height = new int[1];
     private int[] bits_per_pixel = new int[1];
-    private ByteBuffer buffer;
 
     /**
      * Image memory such as a sprite or picture
@@ -43,7 +68,7 @@ public class Texture
         // according to the image's width, height, and bits per pixel
         // we will be using 4 channels for our images
         // R G B A
-        buffer = stbi_load(file_path, width, height, bits_per_pixel, 4);
+        ByteBuffer buffer = stbi_load(file_path, width, height, bits_per_pixel, 4);
 
         // generate our texture into memory
         // in OpenGL

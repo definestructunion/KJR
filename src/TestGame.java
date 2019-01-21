@@ -1,11 +1,13 @@
 import kjr.base.GameProgram;
 import kjr.gfx.BatchRenderer;
 import kjr.gfx.Font;
+import kjr.gfx.Shader;
 import kjr.gfx.Texture;
 import kjr.input.Input;
 import kjr.input.Keys;
 import kjr.math.Vec4;
 import kjr.sfx.Audio;
+import kjr.gfx.TileData;
 
 public class TestGame extends GameProgram
 {
@@ -13,6 +15,7 @@ public class TestGame extends GameProgram
     private final static int width = 32 * 30;
     private final static int height = 32 * 20;
 
+    Shader shader;
     Audio sound = null;
     Audio sound2 = null;
     Font font = null;
@@ -24,7 +27,7 @@ public class TestGame extends GameProgram
     public TestGame()
     {
         super(title, width, height, true);
-        renderer = new BatchRenderer();
+        renderer = new BatchRenderer(TileData.createOffset(16, 50, 50));
     }
 
     @Override public void loadAssets()
@@ -34,6 +37,7 @@ public class TestGame extends GameProgram
         font = new Font("PIXELADE.TTF", 20);
         texture = new Texture("test.png");
         texture2 = new Texture("smile.png");
+        shader = Shader.createDefault();
     }
 
     @Override public void initialize()
@@ -48,22 +52,22 @@ public class TestGame extends GameProgram
     {
         if(Input.keyDown(Keys.A))
         {
-            x_offset -= 4;
+            renderer.tiles.offset_x -= 4;
         }
 
         if(Input.keyDown(Keys.D))
         {
-            x_offset += 4;
+            renderer.tiles.offset_x += 4;
         }
 
         if(Input.keyDown(Keys.W))
         {
-            y_offset -= 4;
+            renderer.tiles.offset_y -= 4;
         }
 
         if(Input.keyDown(Keys.S))
         {
-            y_offset += 4;
+            renderer.tiles.offset_y += 4;
         }
 
         window.clear(0, 0, 0, 0);
@@ -71,6 +75,7 @@ public class TestGame extends GameProgram
 
     @Override public void draw()
     {
+        shader.bind();
         renderer.begin();
 
         for(int y = 0; y < 15; ++y)
@@ -78,7 +83,7 @@ public class TestGame extends GameProgram
             for(int x = 0; x < 15; ++x)
             {
                 Texture tex = ((x + y) % 2 == 0) ? texture : texture2;
-                renderer.draw(tex, (x * 16) + x_offset, (y * 16) + y_offset, white);
+                renderer.draw(tex, x, y, white);
             }
         }
 
@@ -88,6 +93,7 @@ public class TestGame extends GameProgram
         renderer.flush();
         window.update();
         window.render();
+        shader.unbind();
     }
 
     @Override public void windowResize()

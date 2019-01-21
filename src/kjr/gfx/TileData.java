@@ -17,8 +17,6 @@ package kjr.gfx;
  * framework, TileData makes it much easier
  * to render as a tilemap
  * 
- * ////
- * 
  * Contains:
  * - tile_size as int - the size of every tile
  * - offset_x as int - the offset of x from (0, 0)

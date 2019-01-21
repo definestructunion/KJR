@@ -11,8 +11,6 @@ import java.util.Arrays;
  * Holds information about whether or not a key
  * or button is being fired (pushed down).
  * 
- * ////
- * 
  * Non-Layman:
  * 
  * Holds generic information about an array of keys and their state.
@@ -20,8 +18,6 @@ import java.util.Arrays;
  * Meaning KeyState works for any state of time, but must be recorded and defined as such.
  * Meaning if you want a key state for the last frame, you must treat the keys and buttons
  * as if they were keys and buttons from the last frame.
- * 
- * ////
  * 
  * Contains:
  * - Keys as boolean array - the states of all the keys

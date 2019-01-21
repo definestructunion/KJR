@@ -9,8 +9,6 @@ package kjr.input;
  * All key related activities are kept here, such as keys being
  * pressed or not
  * 
- * ////
- * 
  * Contains:
  * Max Keys as final int - amount of keys in the key array
  * Max Buttons as final int - amount of buttons in the button array
@@ -118,16 +116,12 @@ public final class Input
      * meaning you have to release the key and press
      * it down again to fire the key.
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * Returns true if the key is pressed down,
      * the difference between this and keyDown is that
      * keyPressed is only fired once when held down
      * and must be released to be able to be fired again.
-     * 
-     * ////
      * </pre>
      * @param key the key to check
      * @return true if the key is pressed
@@ -159,16 +153,12 @@ public final class Input
      * meaning you have to release the button and press
      * it down again to fire the key.
      * 
-     * ////
-     * 
      * Non-Layman:
      * 
      * Returns true if the button is pressed down,
      * the difference between this and buttonDown is that
      * buttonPressed is only fired once when held down
      * and must be released to be able to be fired again.
-     * 
-     * ////
      * </pre>
      * @param button the button to check
      * @return true if the button is pressed
@@ -229,7 +219,7 @@ public final class Input
      * <pre>
      * Brief: Gets the X position of the mouse.
      * </pre>
-     * @return the mouse position's X
+     * @return double - mouse position's X
      */
     public static double getX()
     {
@@ -240,7 +230,7 @@ public final class Input
      * <pre>
      * Brief: Gets the Y position of the mouse.
      * </pre>
-     * @return the mouse position's Y
+     * @return double - mouse position's Y
      */
     public static double getY()
     {

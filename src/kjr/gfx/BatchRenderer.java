@@ -43,9 +43,9 @@ public class BatchRenderer extends Renderer
     private FloatBuffer buffer;
     private ArrayList<Float> texture_slots = new ArrayList<Float>(RENDERER_MAX_TEXTURES);
 
-    public BatchRenderer()
+    public BatchRenderer(TileData tile_info)
     {
-        super();
+        super(tile_info);
         init();
     }
 
@@ -103,7 +103,6 @@ public class BatchRenderer extends Renderer
 
     @Override public void begin()
     {
-        super.begin();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         buffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY).asFloatBuffer();
     }
@@ -111,9 +110,9 @@ public class BatchRenderer extends Renderer
     @Override public void draw(Texture texture, int x, int y, Vec4 color)
     {
         flushIfNeeded(INDICES_SIZE);
-        int tile_size = 16;
-        int pos_x = x;
-        int pos_y = y;
+        //int tile_size = 16;
+        int pos_x = (x * tiles.tile_size) + tiles.offset_x;
+        int pos_y = (y * tiles.tile_size) + tiles.offset_y;
 
         int r = (int) (color.x * 255);
         int g = (int) (color.y * 255);
@@ -131,19 +130,19 @@ public class BatchRenderer extends Renderer
         buffer.put(c);
 
         buffer.put(0.0f);
-        buffer.put(pos_x).put(pos_y + tile_size).put(0);
+        buffer.put(pos_x).put(pos_y + tiles.tile_size).put(0);
         buffer.put(0).put(1);
         buffer.put(slot);
         buffer.put(c);
 
         buffer.put(0.0f);
-        buffer.put(pos_x + tile_size).put(pos_y + tile_size).put(0);
+        buffer.put(pos_x + tiles.tile_size).put(pos_y + tiles.tile_size).put(0);
         buffer.put(1).put(1);
         buffer.put(slot);
         buffer.put(c);
 
         buffer.put(0.0f);
-        buffer.put(pos_x + tile_size).put(pos_y).put(0);
+        buffer.put(pos_x + tiles.tile_size).put(pos_y).put(0);
         buffer.put(1).put(0);
         buffer.put(slot);
         buffer.put(c);
@@ -234,7 +233,6 @@ public class BatchRenderer extends Renderer
         ibo.unbind();
         glBindVertexArray(0);
         index_count = 0;
-        super.flush();
     }
 
     private float getSlot(float texture_id)
