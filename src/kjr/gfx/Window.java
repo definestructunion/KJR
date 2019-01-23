@@ -120,6 +120,7 @@ public class Window
         this.height = height;
         glViewport(0, 0, width, height);
         game.windowResize();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     /**

@@ -1,0 +1,17 @@
+01/22/2019 : 4:54 PM
+
+Commit 10:
+
+1: Added Features
+	- TileRenderer
+		- Is still a bit of a mess and probably buggy, will fix 		  later
+	- Asset Management
+		- Adding either texture, audio, or font to the 		  appropriate asset manager will automatically
+		  delete the asset once game closes, meaning the user
+		  doesn't have to explicitely call it
+
+2: Edited README.md
+	- Removed "Z axis rendering" from Planned features - finished
+	- Added "Clean up renderer code" to Todo
+
+I believe that is all.

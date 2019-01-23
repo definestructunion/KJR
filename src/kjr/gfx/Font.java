@@ -9,6 +9,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import org.lwjgl.stb.STBTTPackContext;
 import org.lwjgl.stb.STBTTPackedchar;
@@ -18,6 +19,38 @@ import org.lwjgl.stb.*;
 
 public class Font
 {
+    static
+    {
+        fonts = new ArrayList<Font>();
+    }
+
+    private static ArrayList<Font> fonts;
+
+    public static Font add(String file_path, int size)
+    {
+        Font font = new Font(file_path, size);
+        fonts.add(font);
+        return font;
+    }
+
+    public static Font get(int index)
+    {
+        return fonts.get(index);
+    }
+
+    public static Font getBack()
+    {
+        return fonts.get(fonts.size() - 1);
+    }
+
+    public static void clean()
+    {
+        for(int i = 0; i < fonts.size(); ++i)
+        {
+            fonts.get(i).delete();
+        }
+    }
+
     private final static int CHAR_BUFFER_SIZE = 6;
     private final static int CHAR_BUFFER_COUNT = 128;
 

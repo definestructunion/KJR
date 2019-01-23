@@ -393,15 +393,18 @@ public class Shader
         glDeleteProgram(id);
     }
 
-    private int getUniformLocation(String name) {
+    private int getUniformLocation(String name)
+    {
         return glGetUniformLocation(id, name);
     }
 
-    public void setUniform1f(String name, float value) {
+    public void setUniform1f(String name, float value)
+    {
         glUniform1f(getUniformLocation(name), value);
     }
 
-    public void setUniform1i(String name, int value) {
+    public void setUniform1i(String name, int value)
+    {
         glUniform1i(getUniformLocation(name), value);
     }
 
@@ -410,19 +413,28 @@ public class Shader
         glUniform1iv(getUniformLocation(name), values);
     }
 
-    public void setUniform2f(String name, Vec2 vector) {
+    public void setUniform2f(String name, Vec2 vector)
+    {
         glUniform2f(getUniformLocation(name), vector.x, vector.y);
     }
 
-    public void setUniform3f(String name, Vec3 vector) {
+    public void setUniform3f(String name, Vec3 vector)
+    {
         glUniform3f(getUniformLocation(name), vector.x, vector.y, vector.z);
     }
 
-    public void setUniform4f(String name, Vec4 vector) {
+    public void setUniform4f(String name, Vec4 vector)
+    {
         glUniform4f(getUniformLocation(name), vector.x, vector.y, vector.z, vector.w);
     }
 
-    public void setUniformMat4(String name, Mat4 matrix) {
+    public void setUniformMat4(String name, Mat4 matrix)
+    {
         glUniformMatrix4fv(getUniformLocation(name), false, matrix.elements);
+    }
+
+    public void setShaderPRMatrix(Mat4 matrix)
+    {
+        glUniformMatrix4fv(getUniformLocation(pr_matrix), false, matrix.elements);
     }
 }

@@ -18,14 +18,21 @@ public class Texture
 
     private static ArrayList<Texture> textures;
 
-    public static void add(String file_path)
+    public static Texture add(String file_path)
     {
-        textures.add(new Texture(file_path));
+        Texture texture = new Texture(file_path);
+        textures.add(texture);
+        return texture;
     }
 
     public static Texture get(int index)
     {
         return textures.get(index);
+    }
+
+    public static Texture getBack()
+    {
+        return textures.get(textures.size() - 1);
     }
 
     public static void clean()

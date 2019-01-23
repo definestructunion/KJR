@@ -10,6 +10,59 @@ import static org.lwjgl.system.libc.LibCStdlib.*;
 
 public class Audio
 {
+    static
+    {
+        audios = new ArrayList<Audio>();
+    }
+
+    private static ArrayList<Audio> audios;
+
+    public static Audio add(String file_path)
+    {
+        Audio audio = new Audio(file_path);
+        audios.add(audio);
+        return audio;
+    }
+
+    public static Audio add(String file_path, float volume)
+    {
+        Audio audio = new Audio(file_path, volume);
+        audios.add(audio);
+        return audio;
+    }
+
+    public static Audio add(String file_path, boolean looping)
+    {
+        Audio audio = new Audio(file_path, looping);
+        audios.add(audio);
+        return audio;
+    }
+
+    public static Audio add(String file_path, float volume, boolean looping)
+    {
+        Audio audio = new Audio(file_path, volume, looping);
+        audios.add(audio);
+        return audio;
+    }
+
+    public static Audio get(int index)
+    {
+        return audios.get(index);
+    }
+
+    public static Audio getBack()
+    {
+        return audios.get(audios.size() - 1);
+    }
+
+    public static void clean()
+    {
+        for(int i = 0; i < audios.size(); ++i)
+        {
+            audios.get(i).delete();
+        }
+    }
+
     private ArrayList<Integer> sources = new ArrayList<Integer>();
     private String file_path;
     private int source;
@@ -125,6 +178,10 @@ public class Audio
     {
         alDeleteBuffers(id);
         alDeleteSources(source);
+        for(int i = 0; i < sources.size(); ++i)
+        {
+            alDeleteSources(sources.get(i));
+        }
     }
 
     public void setLooping(boolean looping)
