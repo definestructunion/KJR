@@ -1,0 +1,35 @@
+0/1/24/2019 : 10:32 PM
+
+Commit 11:
+
+1: Bug Fixes
+	- TileRenderer (renamed LayerBatch)
+		- fixed bug where TileRenderer would prematurely flush, 		  resulting in layers not layering properly
+
+2: Added Features
+	- TileRenderer (renamed LayerBatch)
+		- now resizes layer arrays permanently until
+		  collected as garbage
+		- added draw function: drawFree
+		- added draw function: drawTile
+		- added draw function: drawStringFree
+		- added draw function: drawStringTile
+	- BatchRenderer (renamed SpriteBatch)
+		- added draw function: drawFree
+		- added draw function: drawTile
+		- added draw function: drawStringFree
+		- added draw function: drawStringTile
+
+3: Removed Features
+	- Renderer
+		- removed abstract function draw
+		- removed abstract function drawString
+		- removed function begin
+		- removed function end
+
+4: Edited README.md
+	- fixed sabersmile.jpg location to be properly loaded
+	- removed "Clean up renderer code" from Todo - finished (mostly)
+	- removed "Integrate TileData into Renderer" from Todo - 	  finished
+
+I believe that is all.

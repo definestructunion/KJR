@@ -14,7 +14,7 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
-public class TileRenderer extends Renderer
+public class LayerBatch extends Renderer
 {
     private class Layer
     {
@@ -27,9 +27,14 @@ public class TileRenderer extends Renderer
 
         }
 
-        public boolean needsFlush(int expected_index_count_increase)
+        public void resizeIfNeeded(int put_count)
         {
-            return (index_count + expected_index_count_increase) > RENDERER_LAYER_MAX_SPRITES;
+            if(index + put_count >= buffer.length)
+            {
+                float[] new_buffer = new float[buffer.length + RENDERER_LAYER_MAX_SPRITES / 4];
+                System.arraycopy(buffer, 0, new_buffer, 0, buffer.length);
+                buffer = new_buffer;
+            }
         }
 
         public void reset()
@@ -51,13 +56,9 @@ public class TileRenderer extends Renderer
 
         public void putAll(FloatBuffer f_buffer)
         {
-            if(index > 0)
+            for(int i = 0; i < index; ++i)
             {
-                //f_buffer = f_buffer.put(buffer);
-                for(int i = 0; i < index; ++i)
-                {
-                    f_buffer.put(buffer[i]);
-                }
+                f_buffer.put(buffer[i]);
             }
         }
     }
@@ -76,15 +77,17 @@ public class TileRenderer extends Renderer
     public final static int SHADER_TID_SIZE            = (1 * 4);
     public final static int SHADER_COLOR_SIZE          = (1 * 4);
 
+    public final static int BUFFER_PUT_COUNT           = 8;
+
     public final static int RENDERER_MAX_TEXTURES      = 32;
-    public final static int RENDERER_MAX_SPRITES       = 16000;
+    public final static int RENDERER_MAX_SPRITES       = 60000;
     public final static int RENDERER_VERTEX_SIZE       = SHADER_VERTEX_SIZE + SHADER_UV_SIZE + SHADER_COLOR_SIZE + SHADER_TID_SIZE + SHADER_IS_TEXT_SIZE;
     public final static int RENDERER_SPRITE_SIZE       = RENDERER_VERTEX_SIZE * 4;
     public final static int RENDERER_BUFFER_SIZE       = RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES;
     public final static int RENDERER_INDICES_SIZE      = RENDERER_MAX_SPRITES * INDICES_SIZE;
 
     public final static int RENDERER_LAYER_COUNT       = 10;
-    public final static int RENDERER_LAYER_MAX_SPRITES = RENDERER_MAX_SPRITES / 2;/// RENDERER_LAYER_COUNT;
+    public final static int RENDERER_LAYER_MAX_SPRITES = RENDERER_MAX_SPRITES / RENDERER_LAYER_COUNT;
 
     private int vao;
     private int vbo;
@@ -94,13 +97,13 @@ public class TileRenderer extends Renderer
 
     private ArrayList<Layer> layers;
 
-    public TileRenderer(TileData tile_info)
+    public LayerBatch(TileData tile_info)
     {
         super(tile_info);
         init(RENDERER_LAYER_COUNT);
     }
 
-    public TileRenderer(TileData tile_info, int layer_count)
+    public LayerBatch(TileData tile_info, int layer_count)
     {
         super(tile_info);
         init(layer_count);
@@ -164,60 +167,61 @@ public class TileRenderer extends Renderer
         glBindVertexArray(0);
     }
 
-    @Override public void begin()
+    public void begin()
     {
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         buffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY).asFloatBuffer();
     }
 
-    @Override public void draw(Texture texture, int x, int y, Vec4 color)
+    public void drawTile(Texture texture, int x, int y, int layer, Vec4 color)
     {
-        draw(texture, x, y, 0, color);
+        int pos_x = (x * tiles.tile_size) + tiles.offset_x;
+        int pos_y = (y * tiles.tile_size) + tiles.offset_y;
+        drawFree(texture, pos_x, pos_y, layer, color);
     }
 
-    @Override public void drawString(String text, Font font, int x, int y, Vec4 color)
+    public void drawTile(Vec4 color, int x, int y, int layer)
     {
-        drawString(text, font, x, y, 0, color);
+        int pos_x = (x * tiles.tile_size) + tiles.offset_x;
+        int pos_y = (y * tiles.tile_size) + tiles.offset_y;
+        drawFree(color, pos_x, pos_y, layer);
     }
 
-    public void draw(Texture texture, int x, int y, int layer, Vec4 color)
+    public void drawFree(Texture texture, int x, int y, int layer, Vec4 color)
     {
         Layer level = layers.get(layer);
 
-        flushIfNeeded(INDICES_SIZE);
-        //int tile_size = 16;
-        int pos_x = (x * tiles.tile_size) + tiles.offset_x;
-        int pos_y = (y * tiles.tile_size) + tiles.offset_y;
+        flushIfNeeded(level, 8 * 4);
 
         int r = (int) (color.x * 255);
         int g = (int) (color.y * 255);
         int b = (int) (color.z * 255);
         int a = (int) (color.w * 255);
 
-        float slot = getSlot(texture.getID());
+        float slot = getSlot(texture_slots, texture.getID());
 
         float c = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
 
         level.put(0.0f);
-        level.put(pos_x); level.put(pos_y); level.put(0);
+        level.put(x); level.put(y); level.put(0);
         level.put(0); level.put(0);
         level.put(slot);
         level.put(c);
 
         level.put(0.0f);
-        level.put(pos_x); level.put(pos_y + tiles.tile_size); level.put(0);
+        level.put(x); level.put(y + tiles.tile_size); level.put(0);
         level.put(0); level.put(1);
         level.put(slot);
         level.put(c);
 
         level.put(0.0f);
-        level.put(pos_x + tiles.tile_size); level.put(pos_y + tiles.tile_size); level.put(0);
+        level.put(x + tiles.tile_size); level.put(y + tiles.tile_size); level.put(0);
         level.put(1); level.put(1);
         level.put(slot);
         level.put(c);
 
         level.put(0.0f);
-        level.put(pos_x + tiles.tile_size); level.put(pos_y); level.put(0);
+        level.put(x + tiles.tile_size); level.put(y); level.put(0);
         level.put(1); level.put(0);
         level.put(slot);
         level.put(c);
@@ -225,12 +229,114 @@ public class TileRenderer extends Renderer
         level.addIndexCount(INDICES_SIZE);
     }
 
-    public void drawString(String text, Font font, int x, int y, int layer, Vec4 color)
+    public void drawFree(Vec4 color, int x, int y, int layer)
     {
-        
+        Layer level = layers.get(layer);
+
+        flushIfNeeded(level, BUFFER_PUT_COUNT * 4);
+
+        int r = (int) (color.x * 255);
+        int g = (int) (color.y * 255);
+        int b = (int) (color.z * 255);
+        int a = (int) (color.w * 255);
+
+        float slot = getSlot(texture_slots, 0.0f);
+
+        float c = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
+
+        level.put(0.0f);
+        level.put(x); level.put(y); level.put(0);
+        level.put(0); level.put(0);
+        level.put(slot);
+        level.put(c);
+
+        level.put(0.0f);
+        level.put(x); level.put(y + tiles.tile_size); level.put(0);
+        level.put(0); level.put(1);
+        level.put(slot);
+        level.put(c);
+
+        level.put(0.0f);
+        level.put(x + tiles.tile_size); level.put(y + tiles.tile_size); level.put(0);
+        level.put(1); level.put(1);
+        level.put(slot);
+        level.put(c);
+
+        level.put(0.0f);
+        level.put(x + tiles.tile_size); level.put(y); level.put(0);
+        level.put(1); level.put(0);
+        level.put(slot);
+        level.put(c);
+
+        level.addIndexCount(INDICES_SIZE);
     }
 
-    @Override public void end()
+    public void drawStringTile(String text, Font font, int x, int y, int layer, Vec4 color)
+    {
+        int pos_x = (x * tiles.tile_size) + tiles.offset_x;
+        int pos_y = (y * tiles.tile_size) + tiles.offset_y;
+        drawStringFree(text, font, pos_x, pos_y, layer, color);
+    }
+
+    public void drawStringFree(String text, Font font, int x, int y, int layer, Vec4 color)
+    {
+        Layer level = layers.get(layer);
+        flushIfNeeded(level, BUFFER_PUT_COUNT * (4 * text.length()));//6 * text.length());
+
+        STBTTAlignedQuad quad = STBTTAlignedQuad.malloc();
+        FloatBuffer      xb   = memAllocFloat(1);
+        FloatBuffer      yb   = memAllocFloat(1);
+
+        int r = (int) (color.x * 255);
+        int g = (int) (color.y * 255);
+        int b = (int) (color.z * 255);
+        int a = (int) (color.w * 255);
+
+        float slot = getSlot(texture_slots, font.getID());
+        float f_color = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
+
+        xb.put(0, x);
+        yb.put(0, y);
+
+        char c = 0;
+        for(int i = 0; i < text.length(); ++i)
+        {
+            c = text.charAt(i);
+            
+            font.getQuad(c, xb, yb, quad);
+            level.put(1.0f);
+            level.put(quad.x0()); level.put(quad.y0()); level.put(0);
+            level.put(quad.s0()); level.put(quad.t0());
+            level.put(slot);
+            level.put(f_color);
+
+            level.put(1.0f);
+            level.put(quad.x0()); level.put(quad.y1()); level.put(0);
+            level.put(quad.s0()); level.put(quad.t1());
+            level.put(slot);
+            level.put(f_color);
+
+            level.put(1.0f);
+            level.put(quad.x1()); level.put(quad.y1()); level.put(0);
+            level.put(quad.s1()); level.put(quad.t1());
+            level.put(slot);
+            level.put(f_color);
+
+            level.put(1.0f);
+            level.put(quad.x1()); level.put(quad.y0()); level.put(0);
+            level.put(quad.s1()); level.put(quad.t0());
+            level.put(slot);
+            level.put(f_color);
+            
+            level.addIndexCount(INDICES_SIZE);
+        }
+
+        quad.free();
+        memFree(xb);
+        memFree(yb);
+    }
+
+    public void end()
     {
         for(int i = 0; i < layers.size(); ++i)
         {
@@ -242,7 +348,7 @@ public class TileRenderer extends Renderer
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    @Override public void flush()
+    public void flush()
     {
         for(int i = 0; i < texture_slots.size(); ++i)
         {
@@ -277,62 +383,18 @@ public class TileRenderer extends Renderer
 
         return index_count;
     }
-
-    private float getSlot(float texture_id)
-    {
-		// if the texture ID is 0, then it's textureless
-		// so we can just end it here
-		if (texture_id == 0.0f)
-			return 0.0f;
-
-        float[] slot = new float[1];
-        slot[0] = 0.0f;
-		// if the slot wasn't found
-		// as well, if getFound returns true
-		// it sets our slot to the correct texture slot
-		// anyways
-        if (!getFound(texture_id, slot))
-        {
-			// push back our texture ID
-			texture_slots.add(texture_id);
-			// make the slot equal to the back of the vector
-			slot[0] = (float)(texture_slots.size());
-		}
-		return slot[0];
-	}
-
-    private boolean getFound(float texture_id, float[] slot)
-    {
-        for (int i = 0; i < texture_slots.size(); ++i)
-        {
-			// if the texture_ids are equal to eachother
-            if (texture_slots.get(i) == texture_id)
-            {
-				// set the slot to i + 1
-				slot[0] = (float)(i + 1);
-				return true;
-            }
-        }
-
-		return false;
-    }
     
-    private void flushIfNeeded(int expected_index_count_increase)
+    private void flushIfNeeded(Layer layer, int put_count)
     {
-        /*if(index_count + expected_index_count_increase >= RENDERER_INDICES_SIZE)
-        {
-            end();
-            flush();
-            begin();
-        }
+        layer.resizeIfNeeded(put_count);
 
-        else if(texture_slots.size() >= RENDERER_MAX_TEXTURES)
+        if(texture_slots.size() >= RENDERER_MAX_TEXTURES)
         {
             end();
             flush();
             begin();
             texture_slots.clear();
             texture_slots.ensureCapacity(RENDERER_MAX_TEXTURES);
-        }*/
+        }
     }
 }

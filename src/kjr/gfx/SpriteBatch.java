@@ -13,7 +13,7 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
-public class BatchRenderer extends Renderer
+public class SpriteBatch extends Renderer
 {
     public final static int INDICES_SIZE            = 6;
 
@@ -43,7 +43,7 @@ public class BatchRenderer extends Renderer
     private FloatBuffer buffer;
     private ArrayList<Float> texture_slots = new ArrayList<Float>(RENDERER_MAX_TEXTURES);
 
-    public BatchRenderer(TileData tile_info)
+    public SpriteBatch(TileData tile_info)
     {
         super(tile_info);
         init();
@@ -101,13 +101,13 @@ public class BatchRenderer extends Renderer
         glBindVertexArray(0);
     }
 
-    @Override public void begin()
+    public void begin()
     {
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         buffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY).asFloatBuffer();
     }
 
-    @Override public void draw(Texture texture, int x, int y, Vec4 color)
+    public void draw(Texture texture, int x, int y, Vec4 color)
     {
         flushIfNeeded(INDICES_SIZE);
         //int tile_size = 16;
@@ -119,7 +119,7 @@ public class BatchRenderer extends Renderer
         int b = (int) (color.z * 255);
         int a = (int) (color.w * 255);
 
-        float slot = getSlot(texture.getID());
+        float slot = getSlot(texture_slots, texture.getID());
 
         float c = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
 
@@ -150,7 +150,7 @@ public class BatchRenderer extends Renderer
         index_count += INDICES_SIZE;
     }
 
-    @Override public void drawString(String text, Font font, int x, int y, Vec4 color)
+    public void drawString(String text, Font font, int x, int y, Vec4 color)
     {
         flushIfNeeded(6 * text.length());
         int pos_x = x;
@@ -165,7 +165,7 @@ public class BatchRenderer extends Renderer
         int b = (int) (color.z * 255);
         int a = (int) (color.w * 255);
 
-        float slot = getSlot(font.getID());
+        float slot = getSlot(texture_slots, font.getID());
         float f_color = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
 
         xb.put(0, pos_x);
@@ -209,13 +209,43 @@ public class BatchRenderer extends Renderer
         memFree(yb);
     }
 
-    @Override public void end()
+    public void drawTile(Texture texture, int x, int y, int layer, Vec4 color)
+    {
+
+    }
+
+    public void drawTile(Vec4 color, int x, int y, int layer)
+    {
+
+    }
+
+    public void drawFree(Texture texture, int x, int y, int layer, Vec4 color)
+    {
+
+    }
+
+    public void drawFree(Vec4 color, int x, int y, int layer)
+    {
+
+    }
+
+    public void drawStringTile(String text, Font font, int x, int y, int layer, Vec4 color)
+    {
+
+    }
+
+    public void drawStringFree(String text, Font font, int x, int y, int layer, Vec4 color)
+    {
+        
+    }
+
+    public void end()
     {
         glUnmapBuffer(GL_ARRAY_BUFFER);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    @Override public void flush()
+    public void flush()
     {
         for(int i = 0; i < texture_slots.size(); ++i)
         {
@@ -233,45 +263,6 @@ public class BatchRenderer extends Renderer
         ibo.unbind();
         glBindVertexArray(0);
         index_count = 0;
-    }
-
-    private float getSlot(float texture_id)
-    {
-		// if the texture ID is 0, then it's textureless
-		// so we can just end it here
-		if (texture_id == 0.0f)
-			return 0.0f;
-
-        float[] slot = new float[1];
-        slot[0] = 0.0f;
-		// if the slot wasn't found
-		// as well, if getFound returns true
-		// it sets our slot to the correct texture slot
-		// anyways
-        if (!getFound(texture_id, slot))
-        {
-			// push back our texture ID
-			texture_slots.add(texture_id);
-			// make the slot equal to the back of the vector
-			slot[0] = (float)(texture_slots.size());
-		}
-		return slot[0];
-	}
-
-    private boolean getFound(float texture_id, float[] slot)
-    {
-        for (int i = 0; i < texture_slots.size(); ++i)
-        {
-			// if the texture_ids are equal to eachother
-            if (texture_slots.get(i) == texture_id)
-            {
-				// set the slot to i + 1
-				slot[0] = (float)(i + 1);
-				return true;
-            }
-        }
-
-		return false;
     }
     
     private void flushIfNeeded(int expected_index_count_increase)

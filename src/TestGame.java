@@ -1,5 +1,5 @@
 import kjr.base.GameProgram;
-import kjr.gfx.BatchRenderer;
+import kjr.gfx.SpriteBatch;
 import kjr.gfx.Font;
 import kjr.gfx.Shader;
 import kjr.gfx.Texture;
@@ -9,7 +9,7 @@ import kjr.math.Mat4;
 import kjr.math.Vec4;
 import kjr.sfx.Audio;
 import kjr.gfx.TileData;
-import kjr.gfx.TileRenderer;
+import kjr.gfx.LayerBatch;
 
 public class TestGame extends GameProgram
 {
@@ -25,20 +25,21 @@ public class TestGame extends GameProgram
     Texture texture2;
     Vec4 white = new Vec4(1, 1, 1, 1);
     Vec4 blue = new Vec4(0, 0, 1, 1);
-    //BatchRenderer renderer = null;
-    TileRenderer renderer = null;
+    SpriteBatch renderer2 = null;
+    LayerBatch renderer = null;
+
 
     public TestGame()
     {
         super(title, width, height, true);
-        //renderer = new BatchRenderer(TileData.createOffset(16, 50, 50));
-        renderer = new TileRenderer(TileData.createOffset(16, 50, 50));
+        renderer2 = new SpriteBatch(TileData.createOffset(16, 50, 50));
+        renderer = new LayerBatch(TileData.createOffset(16, 50, 50));
     }
 
     @Override public void loadAssets()
     {
-        sound = Audio.add("song.ogg", 0.25f, true);
-        sound2 = Audio.add("sound.ogg");
+        //sound = Audio.add("song.ogg", 0.25f, true);
+        //sound2 = Audio.add("sound.ogg");
         font = Font.add("PIXELADE.TTF", 20);
         texture = Texture.add("test.png");
         texture2 = Texture.add("smile.png");
@@ -57,21 +58,25 @@ public class TestGame extends GameProgram
     {
         if(Input.keyDown(Keys.A))
         {
+            renderer2.tiles.offset_x -= 4;
             renderer.tiles.offset_x -= 4;
         }
 
         if(Input.keyDown(Keys.D))
         {
+            renderer2.tiles.offset_x += 4;
             renderer.tiles.offset_x += 4;
         }
 
         if(Input.keyDown(Keys.W))
         {
+            renderer2.tiles.offset_y -= 4;
             renderer.tiles.offset_y -= 4;
         }
 
         if(Input.keyDown(Keys.S))
         {
+            renderer2.tiles.offset_y += 4;
             renderer.tiles.offset_y += 4;
         }
 
@@ -83,20 +88,21 @@ public class TestGame extends GameProgram
         shader.bind();
         renderer.begin();
 
+        
+
         for(int y = 0; y < 15; ++y)
         {
             for(int x = 0; x < 15; ++x)
             {
                 Texture tex = ((x + y) % 2 == 0) ? texture : texture2;
-                int layer = (tex == texture) ? 0 : 1;
-
-                renderer.draw(tex, x, y, layer, white);
+                //int layer = ((x + y) % 2 == 0) ? 1 : 0;//(tex == texture) ? 0 : 1;
+                int layer = 1;
+                tex = texture;
+                renderer.drawTile(tex, x, y, 5, white);
             }
         }
 
-        //renderer.draw(texture2, 5, 5, 1, white);
-        //renderer.draw(texture, 5, 5, 0, white);
-        //renderer.drawString("Hello there, welcome to KJR.", font, 50, 300, blue);
+        renderer.drawStringFree("KJR", font, 400, 400, 0, blue);
 
         renderer.end();
         renderer.flush();
