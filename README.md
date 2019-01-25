@@ -18,9 +18,7 @@ While libraries such as libGDX and jMonkeyEngine may have many more features, ma
 used in a typical roguelike game, and often slows down the game as a result. 
 
 # Todo
-- Clean up renderer code
 - Add more menial functionality to Window and Audio
-- Integrate TileData into Renderer
 - Finish documentation
 - Add pretty pictures to README.md
 
@@ -30,4 +28,4 @@ used in a typical roguelike game, and often slows down the game as a result.
 KJR is licenced under the LGPL.
 
 
-![ ](https://raw.githubusercontent.com/definestructunion/KJR/master/readmeres/sabersmile.jpg)
+![ ](https://raw.githubusercontent.com/definestructunion/KJR/master/sabersmile.jpg)
