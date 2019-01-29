@@ -1,0 +1,17 @@
+01/28/2019 : 10:12 PM
+
+Commit 13:
+
+1: Removed Features:
+    - LayerBatch
+        - LayerBatch is no longer needed as it has been merged over to SpriteBatch while retaining the same functionality
+
+2: Added Features:
+    - SpriteBatch
+        - added layering functionality where the layer coordinate (z) is much more flexible now as it works with floats
+          and depends on the bound shader's near and far values
+    - Build Folder
+        - deleted previous build_unknown build
+        - added build_13 to build
+
+I believe that is all.

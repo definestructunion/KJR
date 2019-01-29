@@ -1,0 +1,9 @@
+01/28/2019 : 10:11 PM
+
+Commit 12:
+
+1: Fixed commit_11 - typo
+
+2: Filler commit meant to fix README.md
+
+I believe that is all.

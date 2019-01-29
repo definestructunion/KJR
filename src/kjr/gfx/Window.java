@@ -45,6 +45,8 @@ import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
 import static org.lwjgl.opengl.GL11.glGetError;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
+import static org.lwjgl.opengl.GL30.*;
+
 /**
  * <pre>
  * Brief: Renders content onto the screen.
@@ -356,7 +358,7 @@ public class Window
         glfwSwapBuffers(glfw_window);
 
         glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     /**

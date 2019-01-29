@@ -101,16 +101,30 @@ public class SpriteBatch extends Renderer
         glBindVertexArray(0);
     }
 
+    public void setSortModeLayered()
+    {
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_ALPHA_TEST);
+        glAlphaFunc(GL_GREATER, 0.0f);
+        //glDepthFunc(GL_ALWAYS); 
+        //glEnable(GL_DEPTH_TEST);
+        //glDepthFunc(GL_ALWAYS); 
+    }
+
+    public void setSortModeDeferred()
+    {
+        glDisable(GL_DEPTH_TEST);
+    }
+
     public void begin()
     {
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         buffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY).asFloatBuffer();
     }
 
-    public void draw(Texture texture, int x, int y, Vec4 color)
+    public void draw(Texture texture, Vec4 color, int x, int y, float layer)
     {
         flushIfNeeded(INDICES_SIZE);
-        //int tile_size = 16;
         int pos_x = (x * tiles.tile_size) + tiles.offset_x;
         int pos_y = (y * tiles.tile_size) + tiles.offset_y;
 
@@ -124,25 +138,25 @@ public class SpriteBatch extends Renderer
         float c = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
 
         buffer.put(0.0f);
-        buffer.put(pos_x).put(pos_y).put(0);
+        buffer.put(pos_x).put(pos_y).put(layer);
         buffer.put(0).put(0);
         buffer.put(slot);
         buffer.put(c);
 
         buffer.put(0.0f);
-        buffer.put(pos_x).put(pos_y + tiles.tile_size).put(0);
+        buffer.put(pos_x).put(pos_y + tiles.tile_size).put(layer);
         buffer.put(0).put(1);
         buffer.put(slot);
         buffer.put(c);
 
         buffer.put(0.0f);
-        buffer.put(pos_x + tiles.tile_size).put(pos_y + tiles.tile_size).put(0);
+        buffer.put(pos_x + tiles.tile_size).put(pos_y + tiles.tile_size).put(layer);
         buffer.put(1).put(1);
         buffer.put(slot);
         buffer.put(c);
 
         buffer.put(0.0f);
-        buffer.put(pos_x + tiles.tile_size).put(pos_y).put(0);
+        buffer.put(pos_x + tiles.tile_size).put(pos_y).put(layer);
         buffer.put(1).put(0);
         buffer.put(slot);
         buffer.put(c);
@@ -150,7 +164,7 @@ public class SpriteBatch extends Renderer
         index_count += INDICES_SIZE;
     }
 
-    public void drawString(String text, Font font, int x, int y, Vec4 color)
+    public void drawString(String text, Vec4 color, Font font, int x, int y, float layer)
     {
         flushIfNeeded(6 * text.length());
         int pos_x = x;
@@ -178,25 +192,25 @@ public class SpriteBatch extends Renderer
             
             font.getQuad(c, xb, yb, quad);
             buffer.put(1.0f);
-            buffer.put(quad.x0()).put(quad.y0()).put(0);
+            buffer.put(quad.x0()).put(quad.y0()).put(layer);
             buffer.put(quad.s0()).put(quad.t0());
             buffer.put(slot);
             buffer.put(f_color);
 
             buffer.put(1.0f);
-            buffer.put(quad.x0()).put(quad.y1()).put(0);
+            buffer.put(quad.x0()).put(quad.y1()).put(layer);
             buffer.put(quad.s0()).put(quad.t1());
             buffer.put(slot);
             buffer.put(f_color);
 
             buffer.put(1.0f);
-            buffer.put(quad.x1()).put(quad.y1()).put(0);
+            buffer.put(quad.x1()).put(quad.y1()).put(layer);
             buffer.put(quad.s1()).put(quad.t1());
             buffer.put(slot);
             buffer.put(f_color);
 
             buffer.put(1.0f);
-            buffer.put(quad.x1()).put(quad.y0()).put(0);
+            buffer.put(quad.x1()).put(quad.y0()).put(layer);
             buffer.put(quad.s1()).put(quad.t0());
             buffer.put(slot);
             buffer.put(f_color);
@@ -209,7 +223,7 @@ public class SpriteBatch extends Renderer
         memFree(yb);
     }
 
-    public void drawTile(Texture texture, int x, int y, int layer, Vec4 color)
+    /*public void drawTile(Texture texture, int x, int y, int layer, Vec4 color)
     {
 
     }
@@ -237,7 +251,7 @@ public class SpriteBatch extends Renderer
     public void drawStringFree(String text, Font font, int x, int y, int layer, Vec4 color)
     {
         
-    }
+    }*/
 
     public void end()
     {
