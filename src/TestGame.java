@@ -1,6 +1,7 @@
 import kjr.base.GameProgram;
 import kjr.gfx.SpriteBatch;
 import kjr.gfx.Font;
+import kjr.gfx.Rect;
 import kjr.gfx.Shader;
 import kjr.gfx.Texture;
 import kjr.input.Input;
@@ -26,12 +27,15 @@ public class TestGame extends GameProgram
     Vec4 blue = new Vec4(0, 0, 1, 1);
     SpriteBatch renderer = null;
 
+    boolean layered = false;
+
 
     public TestGame()
     {
         super(title, width, height, true);
         renderer = new SpriteBatch(TileData.createOffset(16, 50, 50));
         renderer.setSortModeLayered();
+        layered = true;
     }
 
     @Override public void loadAssets()
@@ -40,7 +44,7 @@ public class TestGame extends GameProgram
         //sound2 = Audio.add("sound.ogg");
         font = Font.add("PIXELADE.TTF", 20);
         texture = Texture.add("test.png");
-        shader = Shader.createDefault();
+        shader = Shader.createDefault(width, height);
     }
 
     @Override public void initialize()
@@ -86,11 +90,13 @@ public class TestGame extends GameProgram
         if(Input.keyDown(Keys.RightShift))
         {
             renderer.setSortModeDeferred();
+            layered = false;
         }
 
         if(Input.keyDown(Keys.LeftShift))
         {
             renderer.setSortModeLayered();
+            layered = true;
         }
 
         window.clear(0, 0, 0, 0);
@@ -112,11 +118,20 @@ public class TestGame extends GameProgram
                 //int layer = ((x + y) % 2 == 0) ? 1 : 0;//(tex == texture) ? 0 : 1;
                 float layer = 1.0f;
                 tex = texture;
-                renderer.draw(texture, white, x, y, 0.5f);
+                renderer.drawTile(texture, white, x, y, 0.5f);
             }
         }
 
-        renderer.drawString("KJR", blue, font, 200, 200, test_layer);
+        renderer.drawFree(texture, white, new Rect(100, 100, 50, 50), 0.5f);
+
+        renderer.drawFree(white, new Rect(20, 20, 100, 100), 0.5f);
+
+        renderer.drawStringTile("KJR", font, blue, 20, 1, test_layer);
+
+        if(layered)
+            renderer.drawStringFree("Layered mode", font, blue, 600, 50, 2.0f);
+        else
+            renderer.drawStringFree("Deferred mode", font, blue, 600, 50, 2.0f);
 
         renderer.end();
         renderer.flush();

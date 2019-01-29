@@ -1,0 +1,23 @@
+01/29/2018 : 10:47 PM
+
+Commit 14:
+
+1: Removed Features
+    - Window
+        - no longer contains redundant import
+
+1: Added Features
+    - Rect
+        - contains a position, width, and height
+        - can be used to draw and check if something is inside of it
+    - SpriteBatch
+        - draw is now private
+        - drawString is now private
+        - added drawTile method (x2)
+        - added drawFree method (x2)
+        - added drawStringTile method
+        - added drawStringFree method
+    - TestGame
+        - now reflects the new SpriteBatch methods
+
+I believe that is all.

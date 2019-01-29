@@ -147,7 +147,7 @@ public class Shader
      * </pre>
      * @return Shader - the KJR standard shader
      */
-    public static Shader createDefault()
+    public static Shader createDefault(int ortho_width, int ortho_height)
     {
         Shader shader = new Shader();
 
@@ -158,7 +158,7 @@ public class Shader
 
         shader.bind();
         shader.setUniform1iv(shader.textures, tex_ids);
-        shader.setUniformMat4(shader.pr_matrix, Mat4.ortho(0, 960, 0, 540, -10, 10));
+        shader.setUniformMat4(shader.pr_matrix, Mat4.ortho(0, ortho_width, 0, ortho_height, -10, 10));
         shader.unbind();
 
         return shader;

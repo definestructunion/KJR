@@ -45,8 +45,6 @@ import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
 import static org.lwjgl.opengl.GL11.glGetError;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
-import static org.lwjgl.opengl.GL30.*;
-
 /**
  * <pre>
  * Brief: Renders content onto the screen.
@@ -121,8 +119,8 @@ public class Window
         this.width = width;
         this.height = height;
         glViewport(0, 0, width, height);
-        game.windowResize();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        game.windowResize();
     }
 
     /**
