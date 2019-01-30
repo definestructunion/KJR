@@ -1,5 +1,6 @@
 import kjr.base.GameProgram;
 import kjr.gfx.SpriteBatch;
+import kjr.gfx.Colour;
 import kjr.gfx.Font;
 import kjr.gfx.Rect;
 import kjr.gfx.Shader;
@@ -23,8 +24,8 @@ public class TestGame extends GameProgram
     Font font = null;
     Texture texture;
     Texture texture2;
-    Vec4 white = new Vec4(1, 1, 1, 1);
-    Vec4 blue = new Vec4(0, 0, 1, 1);
+    Colour white = new Colour(1, 1, 1, 1);
+    Colour blue = new Colour(0, 0, 1, 1);
     SpriteBatch renderer = null;
 
     boolean layered = false;
@@ -118,20 +119,22 @@ public class TestGame extends GameProgram
                 //int layer = ((x + y) % 2 == 0) ? 1 : 0;//(tex == texture) ? 0 : 1;
                 float layer = 1.0f;
                 tex = texture;
-                renderer.drawTile(texture, white, x, y, 0.5f);
+                renderer.drawTile(texture, Colour.yellow, x, y, 0.5f);
             }
         }
 
-        renderer.drawFree(texture, white, new Rect(100, 100, 50, 50), 0.5f);
+        Colour color = new Colour(1, 1, 1, 1);
+
+        renderer.drawFree(texture, Colour.white, new Rect(100, 100, 50, 50), 0.5f);
 
         renderer.drawFree(white, new Rect(20, 20, 100, 100), 0.5f);
 
-        renderer.drawStringTile("KJR", font, blue, 20, 1, test_layer);
+        renderer.drawStringTile("KJR", font, Colour.blue, 20, 1, test_layer);
 
         if(layered)
-            renderer.drawStringFree("Layered mode", font, blue, 600, 50, 2.0f);
+            renderer.drawStringFree("Layered mode", font, Colour.maroon, 600, 50, 2.0f);
         else
-            renderer.drawStringFree("Deferred mode", font, blue, 600, 50, 2.0f);
+            renderer.drawStringFree("Deferred mode", font, Colour.teal, 600, 50, 2.0f);
 
         renderer.end();
         renderer.flush();

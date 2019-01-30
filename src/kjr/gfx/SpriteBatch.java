@@ -119,48 +119,41 @@ public class SpriteBatch extends Renderer
         buffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY).asFloatBuffer();
     }
 
-    private void draw(Texture texture, Vec4 color, float x, float y, float layer, float width, float height)
+    private void draw(Texture texture, Colour color, float x, float y, float layer, float width, float height)
     {
         flushIfNeeded(INDICES_SIZE);
 
-        int r = (int) (color.x * 255);
-        int g = (int) (color.y * 255);
-        int b = (int) (color.z * 255);
-        int a = (int) (color.w * 255);
-
         float id = (texture == null) ? 0 : texture.getID();
         float slot = getSlot(texture_slots, id);
-
-        float c = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
 
         buffer.put(0.0f);
         buffer.put(x).put(y).put(layer);
         buffer.put(0).put(0);
         buffer.put(slot);
-        buffer.put(c);
+        buffer.put(color.hex());
 
         buffer.put(0.0f);
         buffer.put(x).put(y + height).put(layer);
         buffer.put(0).put(1);
         buffer.put(slot);
-        buffer.put(c);
+        buffer.put(color.hex());
 
         buffer.put(0.0f);
         buffer.put(x + width).put(y + height).put(layer);
         buffer.put(1).put(1);
         buffer.put(slot);
-        buffer.put(c);
+        buffer.put(color.hex());
 
         buffer.put(0.0f);
         buffer.put(x + width).put(y).put(layer);
         buffer.put(1).put(0);
         buffer.put(slot);
-        buffer.put(c);
+        buffer.put(color.hex());
 
         index_count += INDICES_SIZE;
     }
 
-    private void drawString(String text, Font font, Vec4 color, float x, float y, float layer)
+    private void drawString(String text, Font font, Colour color, float x, float y, float layer)
     {
         flushIfNeeded(6 * text.length());
 
@@ -168,13 +161,7 @@ public class SpriteBatch extends Renderer
         FloatBuffer      xb   = memAllocFloat(1);
         FloatBuffer      yb   = memAllocFloat(1);
 
-        int r = (int) (color.x * 255);
-        int g = (int) (color.y * 255);
-        int b = (int) (color.z * 255);
-        int a = (int) (color.w * 255);
-
         float slot = getSlot(texture_slots, font.getID());
-        float f_color = Float.intBitsToFloat((a << 0x0018 | b << 0x0010 | g << 0x0008 | r));
 
         xb.put(0, x);
         yb.put(0, y);
@@ -189,25 +176,25 @@ public class SpriteBatch extends Renderer
             buffer.put(quad.x0()).put(quad.y0()).put(layer);
             buffer.put(quad.s0()).put(quad.t0());
             buffer.put(slot);
-            buffer.put(f_color);
+            buffer.put(color.hex());
 
             buffer.put(1.0f);
             buffer.put(quad.x0()).put(quad.y1()).put(layer);
             buffer.put(quad.s0()).put(quad.t1());
             buffer.put(slot);
-            buffer.put(f_color);
+            buffer.put(color.hex());
 
             buffer.put(1.0f);
             buffer.put(quad.x1()).put(quad.y1()).put(layer);
             buffer.put(quad.s1()).put(quad.t1());
             buffer.put(slot);
-            buffer.put(f_color);
+            buffer.put(color.hex());
 
             buffer.put(1.0f);
             buffer.put(quad.x1()).put(quad.y0()).put(layer);
             buffer.put(quad.s1()).put(quad.t0());
             buffer.put(slot);
-            buffer.put(f_color);
+            buffer.put(color.hex());
 
             index_count += INDICES_SIZE;
         }
@@ -217,38 +204,38 @@ public class SpriteBatch extends Renderer
         memFree(yb);
     }
 
-    public void drawTile(Texture texture, Vec4 color, int x, int y, float layer)
+    public void drawTile(Texture texture, Colour color, int x, int y, float layer)
     {
         float pos_x = (x * tiles.tile_size) + tiles.offset_x;
         float pos_y = (y * tiles.tile_size) + tiles.offset_y;
         draw(texture, color, pos_x, pos_y, layer, tiles.tile_size, tiles.tile_size);
     }
 
-    public void drawTile(Vec4 color, int x, int y, float layer)
+    public void drawTile(Colour color, int x, int y, float layer)
     {
         float pos_x = (x * tiles.tile_size) + tiles.offset_x;
         float pos_y = (y * tiles.tile_size) + tiles.offset_y;
         draw(null, color, pos_x, pos_y, layer, tiles.tile_size, tiles.tile_size);
     }
 
-    public void drawFree(Texture texture, Vec4 color, Rect rect, float layer)
+    public void drawFree(Texture texture, Colour color, Rect rect, float layer)
     {
         draw(texture, color, rect.x, rect.y, layer, rect.width, rect.height);
     }
 
-    public void drawFree(Vec4 color, Rect rect, float layer)
+    public void drawFree(Colour color, Rect rect, float layer)
     {
         draw(null, color, rect.x, rect.y, layer, rect.width, rect.height);
     }
 
-    public void drawStringTile(String text, Font font, Vec4 color, int x, int y, float layer)
+    public void drawStringTile(String text, Font font, Colour color, int x, int y, float layer)
     {
         float pos_x = (x * tiles.tile_size) + tiles.offset_x;
         float pos_y = (y * tiles.tile_size) + tiles.offset_y;
         drawString(text, font, color, pos_x, pos_y, layer);
     }
 
-    public void drawStringFree(String text, Font font, Vec4 color, float x, float y, float layer)
+    public void drawStringFree(String text, Font font, Colour color, float x, float y, float layer)
     {
         drawString(text, font, color, x, y, layer);
     }

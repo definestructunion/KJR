@@ -1,0 +1,21 @@
+01/29/2018 : 4:44 PM
+
+Commit 15:
+
+1: Updated README.md
+    - created category "Maybe features"
+        - designed for features of low priority and may not be Added
+    - removed "Config class" from planned features - no longer planned
+    - added "Config class" to Maybe features
+
+2: Removed Features
+    - SpriteBatch
+        - removed all uses of Vec4 and replaced it with Colour, making performance moderately better
+
+3: Added Features
+    - Colour
+        - represents both an rgba and hex value
+        - no longer have to perform calculations every submission to convert
+          rgba to hex
+
+I believe that is all.
