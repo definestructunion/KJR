@@ -1,5 +1,6 @@
 import kjr.base.GameProgram;
 import kjr.gfx.SpriteBatch;
+import kjr.gfx.BFont;
 import kjr.gfx.Colour;
 import kjr.gfx.Font;
 import kjr.gfx.Rect;
@@ -8,7 +9,6 @@ import kjr.gfx.Texture;
 import kjr.input.Input;
 import kjr.input.Keys;
 import kjr.math.Mat4;
-import kjr.math.Vec4;
 import kjr.sfx.Audio;
 import kjr.gfx.TileData;
 
@@ -24,6 +24,7 @@ public class TestGame extends GameProgram
     Font font = null;
     Texture texture;
     Texture texture2;
+    BFont bfont = null;
     Colour white = new Colour(1, 1, 1, 1);
     Colour blue = new Colour(0, 0, 1, 1);
     SpriteBatch renderer = null;
@@ -41,17 +42,18 @@ public class TestGame extends GameProgram
 
     @Override public void loadAssets()
     {
-        sound = Audio.add("song.ogg", 0.25f, true);
+        sound = Audio.add("song.ogg", 0.175f, true);
         //sound2 = Audio.add("sound.ogg");
         font = Font.add("PIXELADE.TTF", 20);
         texture = Texture.add("test.png");
         shader = Shader.createDefault(width, height);
+        bfont = new BFont("res/fonts/bfont8x8.png", 8);
     }
 
     @Override public void initialize()
     {
         window.show();
-        sound.play();
+        //sound.play();
     }
 
     int x_offset = 0;
@@ -115,11 +117,11 @@ public class TestGame extends GameProgram
         {
             for(int x = 0; x < 15; ++x)
             {
-                Texture tex = ((x + y) % 2 == 0) ? texture : texture2;
+                //Texture tex = ((x + y) % 2 == 0) ? texture : texture2;
                 //int layer = ((x + y) % 2 == 0) ? 1 : 0;//(tex == texture) ? 0 : 1;
-                float layer = 1.0f;
-                tex = texture;
-                renderer.drawTile(texture, Colour.yellow, x, y, 0.5f);
+                //float layer = 1.0f;
+                //tex = texture;
+                renderer.drawTile(texture, Colour.magenta, x, y, 1.5f);
             }
         }
 
@@ -127,9 +129,13 @@ public class TestGame extends GameProgram
 
         renderer.drawFree(texture, Colour.white, new Rect(100, 100, 50, 50), 0.5f);
 
-        renderer.drawFree(white, new Rect(20, 20, 100, 100), 0.5f);
+        renderer.drawFree(Colour.lavender, new Rect(20, 20, 100, 100), 0.5f);
 
         renderer.drawStringTile("KJR", font, Colour.blue, 20, 1, test_layer);
+
+        renderer._DEBUG_drawGlyphString("Testing testing, hello. Let's get some @$#(*$&@) [] \\ / ^ symbols in here too!", Colour.red, bfont, 300, 300, 1.0f);
+
+        renderer._DEBUG_drawGlyphs(Colour.red, bfont, 300, 320, 1.0f, 1, 1, 0, 2, 3);
 
         if(layered)
             renderer.drawStringFree("Layered mode", font, Colour.maroon, 600, 50, 2.0f);

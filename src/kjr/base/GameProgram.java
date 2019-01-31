@@ -59,7 +59,7 @@ public abstract class GameProgram
     {
 
     }
-
+    
     public void clean()
     {
         Texture.clean();

@@ -24,6 +24,7 @@ public class Colour
     public static final Colour grey;
     public static final Colour white;
     public static final Colour black;
+    public static final Colour darkGrey;
     static
     {
         red      = new Colour(0.902f, 0.098f, 0.294f, 1.0f);
@@ -48,6 +49,7 @@ public class Colour
         grey     = new Colour(0.5019608f, 0.5019608f, 0.5019608f, 1.0f);
         white    = new Colour(1.0f, 1.0f, 1.0f, 1.0f);
         black    = new Colour(0.0f, 0.0f, 0.0f, 1.0f);
+        darkGrey = new Colour(0.05f, 0.05f, 0.05f, 1.0f);
     }
 
     private float r, g, b, a;

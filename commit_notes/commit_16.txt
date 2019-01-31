@@ -1,0 +1,18 @@
+01/31/2019 : 11:17 AM
+
+Commit 16:
+
+Added Features:
+    - Glyph
+        - represents basic characteristics of a bitmap font glyph
+    - BFont (Bitmap Font)
+        - represents a font made from a bitmap
+        - limited in how it can be made
+            - requires 32 glyphs prior to starting at 0x0020 (UTF-16)
+            - after which, you need all the characters from space to tilde
+              after tilde, you can have as many characters as you want, but must be
+              accessed by index rather than by char
+    - SpriteBatch
+        - added debug functions for printing glyphs and glyph texts
+
+I believe that is all.
