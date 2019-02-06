@@ -4,10 +4,10 @@ import kjr.math.Vec2;
 
 public class Glyph
 {
-    public int id;
+    public char id;
     public Vec2[] uv;
 
-    public Glyph(int id, Vec2[] uv)
+    public Glyph(char id, Vec2[] uv)
     {
         this.id = id;
         this.uv = uv;

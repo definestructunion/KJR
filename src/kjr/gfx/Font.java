@@ -1,21 +1,12 @@
 package kjr.gfx;
 
-import static org.lwjgl.stb.STBTruetype.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.GL_CLAMP_TO_EDGE;
-import static kjr.lwjgl.IOUtil.ioResourceToByteBuffer;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.stb.STBImage.*;
+import static org.lwjgl.opengl.GL30.*;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import org.lwjgl.stb.STBTTPackContext;
-import org.lwjgl.stb.STBTTPackedchar;
-import org.lwjgl.BufferUtils;
-
-import org.lwjgl.stb.*;
+import kjr.math.Vec2;
 
 public class Font
 {
@@ -23,12 +14,19 @@ public class Font
     {
         fonts = new ArrayList<Font>();
     }
-
+    
     private static ArrayList<Font> fonts;
 
-    public static Font add(String file_path, int size)
+    public static Font add(String file_path, int glyph_dimensions, int glyph_count)
     {
-        Font font = new Font(file_path, size);
+        Font font = new Font(file_path, glyph_dimensions, glyph_count);
+        fonts.add(font);
+        return font;
+    }
+
+    public static Font add(String file_path, int glyph_dimensions)
+    {
+        Font font = new Font(file_path, glyph_dimensions);
         fonts.add(font);
         return font;
     }
@@ -51,97 +49,97 @@ public class Font
         }
     }
 
-    private final static int CHAR_BUFFER_SIZE = 6;
-    private final static int CHAR_BUFFER_COUNT = 128;
-
-    // the size of the texture atlases
-    // made public so the user can change them
-    // if they so desire, but 512 is optimal
-    public static int bitmap_width = 512;
-    public static int bitmap_height = 512;
-
-    public int size;
-
-    FloatBuffer xb = memAllocFloat(1);
-    FloatBuffer yb = memAllocFloat(1);
-
     private int id;
-    private int width;
-    private int height;
     private String file_path;
-    private STBTTPackedchar.Buffer char_data;
+    private int[] width = new int[1];
+    private int[] height = new int[1];
+    private int[] bits_per_pixel = new int[1];
+    private Glyph[] glyphs = null;
+    private int glyph_dimensions = 8;
 
-    public Font(String file_path, int size)
+    public Font(String file_path, int glyph_dimensions)
     {
         this.file_path = file_path;
-        this.size = size;
-        this.width = bitmap_width;
-        this.height = bitmap_height;
-        this.id = load();
+        this.glyph_dimensions = glyph_dimensions;
+        this.glyphs = new Glyph[256];
+        load();
+        defaultGlyphsFill();
     }
 
-    private int load()
+    public Font(String file_path, int glyph_dimensions, int glyph_count)
     {
-        final float[] scale = {
-            size,
-            size
-        };
+        this.file_path = file_path;
+        this.glyph_dimensions = glyph_dimensions;
+        this.glyphs = new Glyph[glyph_count];
+        load();
+    }
 
-        int tex_id = glGenTextures();
-        char_data = STBTTPackedchar.malloc(CHAR_BUFFER_SIZE * CHAR_BUFFER_COUNT);
+    private void load()
+    {
+        stbi_set_flip_vertically_on_load(false);
 
-        try(STBTTPackContext pc = STBTTPackContext.malloc())
+        ByteBuffer buffer = stbi_load(file_path, width, height, bits_per_pixel, 4);
+
+        id = glGenTextures();
+        
+        glBindTexture(GL_TEXTURE_2D, id);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        if(buffer != null)
         {
-            ByteBuffer ttf = ioResourceToByteBuffer(file_path, 512 * 1024);
-            ByteBuffer bitmap = BufferUtils.createByteBuffer(width * height);
+            stbi_image_free(buffer);
+        }
+    }
 
-            stbtt_PackBegin(pc, bitmap, width, height, 0, 1, 0);
+    private void defaultGlyphsFill()
+    {
+        int columns = (height[0] / glyph_dimensions);
+        int rows = (width[0] / glyph_dimensions);
+        float pos_x = 0;
+        float pos_y = 0;
 
-            for(int i = 0; i < 2; ++i)
+        for(int i = 0; i < rows * columns; ++i)
+        {
+            Vec2[] uvs = new Vec2[4];
+
+            if(i % columns == 0 && i != 0)
             {
-                int p = (i * 3 + 0) * 128 + 32;
-                char_data.limit(p + 95);
-                char_data.position(p);
-                stbtt_PackSetOversampling(pc, 1, 1);
-                stbtt_PackFontRange(pc, ttf, 0, scale[i], 32, char_data);    
-                
-                p = (i * 3 + 1) * 128 + 32;
-                char_data.limit(p + 95);
-                char_data.position(p);
-                stbtt_PackSetOversampling(pc, 2, 2);
-                stbtt_PackFontRange(pc, ttf, 0, scale[i], 32, char_data); 
-
-                p = (i * 3 + 2) * 128 + 32;
-                char_data.limit(p + 95);
-                char_data.position(p);
-                stbtt_PackSetOversampling(pc, 3, 1);
-                stbtt_PackFontRange(pc, ttf, 0, scale[i], 32, char_data); 
+                pos_y += glyph_dimensions;
+                pos_x = 0;
             }
 
-            char_data.clear();
-            stbtt_PackEnd(pc);
+            uvs[0] = new Vec2(pos_x / width[0], pos_y / height[0]);
+            uvs[1] = new Vec2(pos_x / width[0], (pos_y + glyph_dimensions) / height[0]);
+            uvs[2] = new Vec2((pos_x + glyph_dimensions) / width[0], (pos_y + glyph_dimensions) / height[0]);
+            uvs[3] = new Vec2((pos_x + glyph_dimensions) / width[0], pos_y / height[0]);
 
-            glBindTexture(GL_TEXTURE_2D, tex_id);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, bitmap);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glBindTexture(GL_TEXTURE_2D, 0);
+            pos_x += glyph_dimensions;
+            glyphs[i] = new Glyph((char)i, uvs);
         }
-
-        catch(IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        return tex_id;
     }
 
-    public void getQuad(char c, FloatBuffer x, FloatBuffer y, STBTTAlignedQuad quad)
+    public Vec2 measureString(String text)
     {
-        char_data.position(id * 128);
-        stbtt_GetPackedQuad(char_data, width, height, c, x, y, quad, true);
+        Vec2 vec = new Vec2(0, 0);
+        return vec;
+    }
+
+    public int getGlyphDimensions()
+    {
+        return glyph_dimensions;
+    }
+
+    public Glyph getGlyph(char c)
+    {
+        return glyphs[c];
     }
 
     public void bind()
@@ -157,13 +155,16 @@ public class Font
     public void delete()
     {
         glDeleteTextures(id);
-        char_data.free();
-        memFree(xb);
-        memFree(yb);
     }
 
     public int getID()
     {
         return id;
+    }
+
+    @Override public boolean equals(Object obj)
+    {
+        Font t_obj = (Font)obj;
+        return file_path == t_obj.file_path && id == t_obj.id;
     }
 }

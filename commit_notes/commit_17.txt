@@ -1,0 +1,15 @@
+02/06/2019 : 12:39 PM
+
+Commit 17:
+
+Added Features:
+    - GUIBox
+        - a tiled box that use a font for the outline, and a colour for the inside
+
+Changed Features:
+    - SpriteBatch
+        - now submit glyphs of type char, instead of int
+    - Glyph
+        - id changed from int to char
+
+I believe that is all.

@@ -9,11 +9,11 @@ public abstract class Renderer {
 
     protected ArrayDeque<Mat4> transforms = new ArrayDeque<Mat4>();
     protected Mat4 transforms_back;
-    public TileData tiles;
+    public int tile_size = 0;
 
-    protected Renderer(TileData tile_info)
+    protected Renderer(int tile_size)
     {
-        this.tiles = tile_info;
+        this.tile_size = tile_size;
         transforms.addLast(Mat4.identity());
         transforms_back = transforms.getLast();
         return;

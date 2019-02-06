@@ -4,7 +4,7 @@ import kjr.math.Vec2;
 
 public class Rect
 {
-    float x, y, width, height;
+    public float x, y, width, height;
 
     public Rect()
     {

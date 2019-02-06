@@ -59,6 +59,11 @@ public abstract class GameProgram
     {
 
     }
+
+    public final void close()
+    {
+        window.close();
+    }
     
     public void clean()
     {

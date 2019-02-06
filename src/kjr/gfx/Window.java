@@ -575,4 +575,14 @@ public class Window
     {
         return glfwGetTime() / 100000000;
     }
+
+    /**
+     * <pre>
+     * Brief: Sets the window to close, setting running to false.
+     * </pre>
+     */
+    public void close()
+    {
+        glfwSetWindowShouldClose(glfw_window, true);
+    }
 }
