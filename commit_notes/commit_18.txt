@@ -1,0 +1,16 @@
+02/06/2019 : 8:55 PM
+
+Commit 18:
+
+Edited README.md
+    - removed "Basic GUI" from Planned Features - revising
+    - added "Finish Planned freatures" in Todo as top priority
+    - added GUI as umbrella term
+    - added Button to GUI
+	- added Checkbox to GUI
+	- added Label to GUI
+	- added List to GUI
+	- added Panel to GUI
+	- added Textbox to GUI
+
+I believe that is all.

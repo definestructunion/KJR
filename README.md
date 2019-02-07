@@ -10,7 +10,13 @@ KJR is a simple, cross-platform, performant framework for creating tiled rogueli
 - Input
 
 # Planned features
-- Basic GUI
+- GUI
+	- Button
+	- Checkbox
+	- Label
+	- List
+	- Panel
+	- Textbox
 
 # Maybe features
 - Config class
@@ -21,6 +27,7 @@ While libraries such as libGDX and jMonkeyEngine may have many more features, ma
 used in a typical roguelike game, and often slows down the game as a result. 
 
 # Todo
+- Finish Planned features
 - Add more menial functionality to Window and Audio
 - Finish documentation
 - Add pretty pictures to README.md
