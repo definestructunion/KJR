@@ -1,0 +1,17 @@
+DATE : TIME
+
+Commit 19:
+
+1: Added Features
+    - XComp
+        - A GUI component
+    - XConsole
+        - Defines a colour theme and an area to add XComps
+    - Align
+        - Helps to align XComps to XConsoles
+
+Very primitive GUI features have been added
+
+Variable naming convention will change from snake_case to camelCase
+
+I believe that is all.

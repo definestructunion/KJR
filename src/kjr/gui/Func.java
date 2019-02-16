@@ -1,6 +1,6 @@
 package kjr.gui;
 
-public interface GUIFunc
+public interface Func
 {
     public void call();
 }

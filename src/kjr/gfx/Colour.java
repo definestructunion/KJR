@@ -1,6 +1,8 @@
 package kjr.gfx;
 
-public class Colour
+import kjr.util.DeepCopy;
+
+public class Colour implements DeepCopy<Colour>
 {
     public static final Colour red;
     public static final Colour green;
@@ -93,4 +95,16 @@ public class Colour
     public void sg(float val) { g = val; setHex(); }
     public void sb(float val) { b = val; setHex(); }
     public void sa(float val) { a = val; setHex(); }
+
+    @Override
+    public Colour copy()
+    {
+        Colour obj = new Colour();
+        obj.r      = r;
+        obj.g      = g;
+        obj.b      = b;
+        obj.a      = a;
+        obj.hex    = hex;
+        return obj;
+    }
 }

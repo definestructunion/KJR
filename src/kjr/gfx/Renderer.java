@@ -1,49 +1,20 @@
 package kjr.gfx;
 
-import kjr.math.Mat4;
-
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-public abstract class Renderer {
-
-    protected ArrayDeque<Mat4> transforms = new ArrayDeque<Mat4>();
-    protected Mat4 transforms_back;
+public abstract class Renderer
+{
     public int tile_size = 0;
 
     protected Renderer(int tile_size)
     {
         this.tile_size = tile_size;
-        transforms.addLast(Mat4.identity());
-        transforms_back = transforms.getLast();
         return;
     }
 
     public void delete()
     {
         
-    }
-
-    public void push(Mat4 matrix)
-    {
-        transforms.addLast(transforms_back.mult(matrix));
-        transforms_back = transforms.getLast();
-    }
-
-    public void pushOverride(Mat4 matrix)
-    {
-        transforms.addLast(matrix);
-        transforms_back = matrix;
-    }
-
-    public void pop()
-    {
-        if (transforms.size() > 1)
-        {
-            transforms.removeLast();
-        }
-
-        transforms_back = transforms.getLast();
     }
 
     // for batch rendering types of renderers

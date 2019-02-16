@@ -47,17 +47,15 @@ public class Shader
     "#shader vertex\n" +
     "#version 330 core\n" +
 
-    "layout (location = 0) in float is_text;\n" +
-    "layout (location = 1) in vec4 position;\n" +
-    "layout (location = 2) in vec2 uv;\n" +
-    "layout (location = 3) in float tid;\n" +
-    "layout (location = 4) in vec4 color;\n" +
+    "layout (location = 0) in vec4 position;\n" +
+    "layout (location = 1) in vec2 uv;\n" +
+    "layout (location = 2) in float tid;\n" +
+    "layout (location = 3) in vec4 color;\n" +
 
     "uniform mat4 pr_matrix;\n" +
 
     "out DATA\n" +
     "{\n" +
-    "    float is_text;\n" +
     "    vec4 position;\n" +
     "    vec2 uv;\n" +
     "    float tid;\n" +
@@ -66,7 +64,6 @@ public class Shader
 
     "void main()\n" +
     "{\n" +
-    "    vs_out.is_text = float(is_text);\n" +
     "    gl_Position = pr_matrix * position;\n" +
     "    vs_out.position = position;\n" +
     "    vs_out.uv = uv;\n" +
@@ -83,7 +80,6 @@ public class Shader
 
     "in DATA\n" +
     "{\n" +
-    "    float is_text;\n" +
     "    vec4 position;\n" +
     "    vec2 uv;\n" +
     "    float tid;\n" +
@@ -100,20 +96,6 @@ public class Shader
     "    {\n" +
     "        int tid = int(fs_in.tid - 0.5);\n" +
     "        texColor = fs_in.color * texture(textures[tid], fs_in.uv);\n" +
-    
-    "        if(float(fs_in.is_text) == 1.0f)\n" +
-    "        {\n" +
-    "            if(texColor.a > 0.0)\n" +
-    "            {\n" +
-    "                texColor = vec4(fs_in.color.r, fs_in.color.g, fs_in.color.b, texColor.a);\n" +
-    
-    "            }\n" +
-
-    "            else\n" +
-    "            {\n" +
-    "                texColor = vec4(0, 0, 0, 0);\n" +
-    "            }\n" +
-    "        }\n" +
     "    }\n" +
     
     "    color = texColor;\n" +

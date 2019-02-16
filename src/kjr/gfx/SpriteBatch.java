@@ -13,13 +13,11 @@ public class SpriteBatch extends Renderer
 {
     public final static int INDICES_SIZE            = 6;
 
-    public final static int SHADER_IS_TEXT_INDEX    = 0;
-    public final static int SHADER_VERTEX_INDEX     = 1;
-    public final static int SHADER_UV_INDEX         = 2;
-    public final static int SHADER_TID_INDEX        = 3;
-    public final static int SHADER_COLOR_INDEX      = 4;
+    public final static int SHADER_VERTEX_INDEX     = 0;
+    public final static int SHADER_UV_INDEX         = 1;
+    public final static int SHADER_TID_INDEX        = 2;
+    public final static int SHADER_COLOR_INDEX      = 3;
 
-    public final static int SHADER_IS_TEXT_SIZE     = (1 * 4);
     public final static int SHADER_VERTEX_SIZE      = (3 * 4);
     public final static int SHADER_UV_SIZE          = (2 * 4);
     public final static int SHADER_TID_SIZE         = (1 * 4);
@@ -27,7 +25,7 @@ public class SpriteBatch extends Renderer
 
     public final static int RENDERER_MAX_TEXTURES   = 32;
     public final static int RENDERER_MAX_SPRITES    = 60000;
-    public final static int RENDERER_VERTEX_SIZE    = SHADER_VERTEX_SIZE + SHADER_UV_SIZE + SHADER_COLOR_SIZE + SHADER_TID_SIZE + SHADER_IS_TEXT_SIZE;
+    public final static int RENDERER_VERTEX_SIZE    = SHADER_VERTEX_SIZE + SHADER_UV_SIZE + SHADER_COLOR_SIZE + SHADER_TID_SIZE;
     public final static int RENDERER_SPRITE_SIZE    = RENDERER_VERTEX_SIZE * 4;
     public final static int RENDERER_BUFFER_SIZE    = RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES;
     public final static int RENDERER_INDICES_SIZE   = RENDERER_MAX_SPRITES * INDICES_SIZE;
@@ -39,7 +37,8 @@ public class SpriteBatch extends Renderer
     private FloatBuffer buffer;
     private ArrayList<Float> texture_slots = new ArrayList<Float>(RENDERER_MAX_TEXTURES);
 
-    private Font font = null;
+    private ArrayList<Font> fonts = new ArrayList<Font>();
+    private Font fonts_back = null;
 
     public SpriteBatch(int tile_size)
     {
@@ -64,17 +63,15 @@ public class SpriteBatch extends Renderer
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, RENDERER_BUFFER_SIZE, GL_DYNAMIC_DRAW);
 
-        glEnableVertexAttribArray(SHADER_IS_TEXT_INDEX);
         glEnableVertexAttribArray(SHADER_VERTEX_INDEX);
         glEnableVertexAttribArray(SHADER_UV_INDEX);
         glEnableVertexAttribArray(SHADER_TID_INDEX);
         glEnableVertexAttribArray(SHADER_COLOR_INDEX);
 
-        glVertexAttribPointer(SHADER_IS_TEXT_INDEX, 1, GL_FLOAT, false, RENDERER_VERTEX_SIZE, 0);
-        glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, false, RENDERER_VERTEX_SIZE, SHADER_IS_TEXT_SIZE);
-        glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, false, RENDERER_VERTEX_SIZE, SHADER_IS_TEXT_SIZE + SHADER_VERTEX_SIZE);
-        glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, false, RENDERER_VERTEX_SIZE, SHADER_IS_TEXT_SIZE + SHADER_VERTEX_SIZE + SHADER_UV_SIZE);
-        glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, true, RENDERER_VERTEX_SIZE, SHADER_IS_TEXT_SIZE + SHADER_VERTEX_SIZE + SHADER_UV_SIZE + SHADER_TID_SIZE);
+        glVertexAttribPointer(SHADER_VERTEX_INDEX, 3, GL_FLOAT, false, RENDERER_VERTEX_SIZE, 0);
+        glVertexAttribPointer(SHADER_UV_INDEX, 2, GL_FLOAT, false, RENDERER_VERTEX_SIZE, SHADER_VERTEX_SIZE);
+        glVertexAttribPointer(SHADER_TID_INDEX, 1, GL_FLOAT, false, RENDERER_VERTEX_SIZE, SHADER_VERTEX_SIZE + SHADER_UV_SIZE);
+        glVertexAttribPointer(SHADER_COLOR_INDEX, 4, GL_UNSIGNED_BYTE, true, RENDERER_VERTEX_SIZE, SHADER_VERTEX_SIZE + SHADER_UV_SIZE + SHADER_TID_SIZE);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -99,9 +96,20 @@ public class SpriteBatch extends Renderer
         glBindVertexArray(0);
     }
 
-    public void setFont(Font font)
+    public void pushFont(Font font)
     {
-        this.font = font;
+        fonts.add(font);
+        fonts_back = fonts.get(fonts.size() - 1);
+    }
+
+    // only pops if size > 1
+    public void popFont()
+    {
+        if(fonts.size() > 1)
+        {
+            fonts.remove(fonts.get(fonts.size() - 1));
+            fonts_back = fonts.get(fonts.size() - 1);
+        }
     }
 
     public void setSortModeLayered()
@@ -129,25 +137,21 @@ public class SpriteBatch extends Renderer
         float id = (texture == null) ? 0 : texture.getID();
         float slot = getSlot(texture_slots, id);
 
-        buffer.put(0.0f);
         buffer.put(x).put(y).put(layer);
         buffer.put(0).put(0);
         buffer.put(slot);
         buffer.put(color.hex());
 
-        buffer.put(0.0f);
         buffer.put(x).put(y + height).put(layer);
         buffer.put(0).put(1);
         buffer.put(slot);
         buffer.put(color.hex());
 
-        buffer.put(0.0f);
         buffer.put(x + width).put(y + height).put(layer);
         buffer.put(1).put(1);
         buffer.put(slot);
         buffer.put(color.hex());
 
-        buffer.put(0.0f);
         buffer.put(x + width).put(y).put(layer);
         buffer.put(1).put(0);
         buffer.put(slot);
@@ -158,25 +162,21 @@ public class SpriteBatch extends Renderer
 
     private void drawGlyph(Glyph glyph, float glyph_slot, Colour colour,float glyph_dimensions, float x, float y, float layer)
     {
-        buffer.put(0.0f);
         buffer.put(x).put(y).put(layer);
         buffer.put(glyph.uv[0].x).put(glyph.uv[0].y);
         buffer.put(glyph_slot);
         buffer.put(colour.hex());
 
-        buffer.put(0.0f);
         buffer.put(x).put(y + glyph_dimensions).put(layer);
         buffer.put(glyph.uv[1].x).put(glyph.uv[1].y);
         buffer.put(glyph_slot);
         buffer.put(colour.hex());
 
-        buffer.put(0.0f);
         buffer.put(x + glyph_dimensions).put(y + glyph_dimensions).put(layer);
         buffer.put(glyph.uv[2].x).put(glyph.uv[2].y);
         buffer.put(glyph_slot);
         buffer.put(colour.hex());
 
-        buffer.put(0.0f);
         buffer.put(x + glyph_dimensions).put(y).put(layer);
         buffer.put(glyph.uv[3].x).put(glyph.uv[3].y);
         buffer.put(glyph_slot);
@@ -188,12 +188,12 @@ public class SpriteBatch extends Renderer
     private void drawGlyphsArray(char[] glyphs, Colour colour, float scale, float x, float y, float layer)
     {
         flushIfNeeded(INDICES_SIZE * glyphs.length);
-        float slot = getSlot(texture_slots, font.getID());
-        float glyph_dimensions = font.getGlyphDimensions() * scale;
+        float slot = getSlot(texture_slots, fonts_back.getID());
+        float glyph_dimensions = fonts_back.getGlyphDimensions() * scale;
 
         for(int i = 0; i < glyphs.length; ++i)
         {
-            Glyph glyph = font.getGlyph(glyphs[i]);
+            Glyph glyph = fonts_back.getGlyph(glyphs[i]);
             drawGlyph(glyph, slot, colour, glyph_dimensions, x, y, layer);
             x += glyph_dimensions;
         }
@@ -204,17 +204,17 @@ public class SpriteBatch extends Renderer
         flushIfNeeded(INDICES_SIZE);
         float pos_x = tilePosX(x);
         float pos_y = tilePosY(y);
-        float slot = getSlot(texture_slots, font.getID());
-        Glyph glyph = font.getGlyph(glyph_char);
-        drawGlyph(glyph, slot, colour, font.getGlyphDimensions() * scale, pos_x, pos_y, layer);
+        float slot = getSlot(texture_slots, fonts_back.getID());
+        Glyph glyph = fonts_back.getGlyph(glyph_char);
+        drawGlyph(glyph, slot, colour, fonts_back.getGlyphDimensions() * scale, pos_x, pos_y, layer);
     }
 
     public void drawGlyphFree(char glyph_char, Colour colour, float scale, int x, int y, float layer)
     {
         flushIfNeeded(INDICES_SIZE);
-        float slot = getSlot(texture_slots, font.getID());
-        Glyph glyph = font.getGlyph(glyph_char);
-        drawGlyph(glyph, slot, colour, font.getGlyphDimensions() * scale, x, y, layer);
+        float slot = getSlot(texture_slots, fonts_back.getID());
+        Glyph glyph = fonts_back.getGlyph(glyph_char);
+        drawGlyph(glyph, slot, colour, fonts_back.getGlyphDimensions() * scale, x, y, layer);
     }
 
     public void drawGlyphs(Colour colour, float scale, int x, int y, float layer, char... glyphs)
@@ -246,8 +246,8 @@ public class SpriteBatch extends Renderer
         flushIfNeeded(INDICES_SIZE);
         float pos_x = tilePosX(x);
         float pos_y = tilePosY(y);
-        float slot = getSlot(texture_slots, font.getID());
-        float dim = font.getGlyphDimensions() * scale;
+        float slot = getSlot(texture_slots, fonts_back.getID());
+        float dim = fonts_back.getGlyphDimensions() * scale;
 
         for(int i = 0; i < text.length(); ++i)
         {
@@ -260,7 +260,7 @@ public class SpriteBatch extends Renderer
                 continue;
             }
 
-            Glyph glyph = font.getGlyph(c);
+            Glyph glyph = fonts_back.getGlyph(c);
             drawGlyph(glyph, slot, colour, dim, pos_x, pos_y, layer);
             pos_x += dim;
         }
@@ -269,8 +269,8 @@ public class SpriteBatch extends Renderer
     public void drawStringFree(String text, Colour colour, float scale, int x, int y, float layer)
     {
         flushIfNeeded(INDICES_SIZE);
-        float slot = getSlot(texture_slots, font.getID());
-        float dim = font.getGlyphDimensions() * scale;
+        float slot = getSlot(texture_slots, fonts_back.getID());
+        float dim = fonts_back.getGlyphDimensions() * scale;
         float pos_x = x;
         float pos_y = y;
 
@@ -285,7 +285,7 @@ public class SpriteBatch extends Renderer
                 continue;
             }
 
-            Glyph glyph = font.getGlyph(c);
+            Glyph glyph = fonts_back.getGlyph(c);
             drawGlyph(glyph, slot, colour, dim, pos_x, pos_y, layer);
             x += dim;
         }

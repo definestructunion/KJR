@@ -1,23 +1,24 @@
 import kjr.base.GameProgram;
 import kjr.gfx.SpriteBatch;
 import kjr.gfx.Font;
+import kjr.gfx.Box;
 import kjr.gfx.Colour;
 import kjr.gfx.Rect;
 import kjr.gfx.Shader;
 import kjr.gfx.Texture;
+import kjr.gui.Align;
+import kjr.gui.tile.Button;
+import kjr.gui.tile.XConsole;
 import kjr.input.Input;
 import kjr.input.Keys;
 import kjr.math.Mat4;
 import kjr.sfx.Audio;
-import kjr.gui.tile.GUIBox;
 
 public class TestGame extends GameProgram
 {
     private final static String title = "KJR";
     private final static int width = 32 * 30;
     private final static int height = 32 * 20;
-
-    private GUIBox box = new GUIBox("Inventory", 40, 0, 15, 15);
 
     Shader shader;
     //Audio sound = null;
@@ -29,6 +30,8 @@ public class TestGame extends GameProgram
     Colour white = new Colour(1, 1, 1, 1);
     Colour blue = new Colour(0, 0, 1, 1);
     SpriteBatch renderer = null;
+
+    XConsole gui = new XConsole();
 
     boolean layered = false;
 
@@ -44,7 +47,7 @@ public class TestGame extends GameProgram
     {
         //sound = Audio.add("song.ogg", 0.175f, true);
         //sound2 = Audio.add("sound.ogg");
-        font = Font.add("res/fonts/bfont8x8.png", 8);
+        font = Font.add("res/fonts/bfont8x8trans.png", 8);
         texture = Texture.add("test.png");
         shader = Shader.createDefault(width, height);
         //bfont = new Font("res/fonts/bfont8x8.png", 8);
@@ -52,15 +55,18 @@ public class TestGame extends GameProgram
 
     @Override public void initialize()
     {
-        GUIBox.defaultOutlineScale = 2.0f;
-        box.setToDefaults();
-        //box.box_outline_colour = Colour.green;
-        //box.box_inner_colour = Colour.pink;
-
         renderer.setSortModeLayered();
-        renderer.setFont(font);
+        renderer.pushFont(font);
         window.show();
         //sound.play();
+        gui.setBox(new Box(10, 10, 10, 10));
+        gui.setFont(font);
+        gui.setTileSize(16);
+        gui.getColourTheme().setInner(Colour.lavender);
+        Button button = new Button("Close");
+        button.setBox(new Box(1, 1, 5, 1));
+        button.setAlign(Align.BottomRight);
+        gui.add(button);
     }
 
     int x_offset = 0;
@@ -75,38 +81,23 @@ public class TestGame extends GameProgram
         if(Input.keyDown(Keys.RightShift))
         {
             renderer.setSortModeDeferred();
-            GUIBox.defaultInnerColour = Colour.black;
-            box.setToDefaults();
             layered = false;
         }
 
         if(Input.keyDown(Keys.LeftShift))
         {
             renderer.setSortModeLayered();
-            GUIBox.defaultInnerColour = Colour.green;
-            box.setToDefaults();
             layered = true;
         }
 
-        if(Input.keyDown(Keys.W))
-            --box.pos_y;
-        if(Input.keyDown(Keys.A))
-            --box.pos_x;
-        if(Input.keyDown(Keys.S))
-            ++box.pos_y;
-        if(Input.keyDown(Keys.D))
-            ++box.pos_x;
-
-        if(Input.keyPressed(Keys.Up))
-            ++box.dim_y;
-        if(Input.keyPressed(Keys.Down))
-            --box.dim_y;
-        if(Input.keyPressed(Keys.Left))
-            --box.dim_x;
-        if(Input.keyPressed(Keys.Right))
-            ++box.dim_x;
-
-        window.clear(1, 1, 1, 1);
+        if(Input.keyDown(Keys.Enter))
+            draw();
+        /*if(Input.keyDown(Keys.RightShift))
+        {
+            window.clear(0.05f, 0.05f, 0.05f, 1.0f);
+            window.render();
+        }*/
+        window.clear(0.05f, 0.05f, 0.05f, 1.0f);
     }
 
     @Override public void draw()
@@ -115,19 +106,18 @@ public class TestGame extends GameProgram
         renderer.begin();
 
 
-        //for(int y = 0; y < 16; ++y)
-        //    for(int x = 0; x < 16; ++x)
-        //        renderer.draw(texture, Colour.magenta, x, y, 1.5f);
+        /*for(int y = 0; y < 16; ++y)
+            for(int x = 0; x < 16; ++x)
+                renderer.draw(texture, Colour.magenta, x, y, 1.5f);
 
         renderer.drawFree(texture, Colour.white, new Rect(100, 100, 50, 50), 0.5f);
 
-        renderer.drawFree(Colour.lavender, new Rect(20, 20, 100, 100), 0.5f);
+        renderer.drawFree(Colour.lavender, new Rect(20, 20, 100, 100), 0.5f);*/
 
 
-        renderer.drawString("Testing\nTesting", Colour.lime, 1.0f, 1, 1, 5.0f);
-        //renderer.drawGlyph(188, Colour.white, 1.0f, 4, 4, 6.0f);
+        renderer.drawString("Testing\nTesting", Colour.lime, 2.0f, 1, 1, 5.0f);
 
-        box.draw(renderer);
+        gui.draw(renderer);
 
         renderer.end();
         renderer.flush();

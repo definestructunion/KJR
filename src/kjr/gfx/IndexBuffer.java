@@ -5,7 +5,6 @@ import static org.lwjgl.opengl.GL15.*;
 
 public class IndexBuffer
 {
-
     private int id, count;
 
     public IndexBuffer(int[] data, int count)

@@ -27,6 +27,7 @@ public abstract class GameProgram
         while(window.running())
         {
             update();
+            window.update();
             draw();
             ++frames;
             if (System.currentTimeMillis() - lastTime >= 1000) {
