@@ -5,3 +5,5 @@
 dependencies/
 .vscode/
 bin/
+out/
+.idea/
