@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public abstract class Renderer
 {
-    public int tile_size = 0;
+    public int tileSize = 0;
 
-    protected Renderer(int tile_size)
+    protected Renderer(int tileSize)
     {
-        this.tile_size = tile_size;
+        this.tileSize = tileSize;
         return;
     }
 
@@ -16,6 +16,14 @@ public abstract class Renderer
     {
         
     }
+
+    abstract public void draw(Texture texture, Colour colour, int x, int y, float layer);
+    abstract public void draw(Colour colour, int x, int y, float layer);
+    abstract public void draw(char glyph, Colour colour, int x, int y, float layer);
+    abstract public void drawFree(Texture texture, Colour colour, int x, int y, float layer);
+
+    abstract public void drawString(String text, Colour colour, int x, int y, float layer);
+    abstract public void drawStringFree(String text, Colour colour, int x, int y, float layer);
 
     // for batch rendering types of renderers
     protected float getSlot(ArrayList<Float> slots, float texture_id)

@@ -1,5 +1,7 @@
 package kjr.input;
 
+import kjr.math.Vec2;
+
 /**
  * <pre>
  * Brief: The keystate of the application.
@@ -75,6 +77,8 @@ public final class Input
             // it was not fired last frame
             // if it's being fired this frame
             previous.keys[i] = glfw.keys[i] && !current.keys[i];
+            if(previous.keys[i])
+                System.out.println("true" + i);
         }
 
         // copy the value of glfw keys to current keys
@@ -258,4 +262,56 @@ public final class Input
      * @param val - new Y value
      */
     public static void setY(float val) { y = val; }
+
+    private static Vec2 mousePosition = new Vec2(0, 0);
+    public static Vec2 getMousePosition()
+    {
+        mousePosition.x = x;
+        mousePosition.y = y;
+        return mousePosition;
+    }
+
+    /**
+     * If the key is down, it returns true and sets the key to false
+     * @return
+     */
+    public static boolean keyDownSet(Keys key)
+    {
+        boolean isKeyDown = current.keys[key.value()];
+        current.keys[key.value()] = false;
+        return isKeyDown;
+    }
+
+    /**
+     * If the key is pressed, it returns true and sets the key to false
+     * @return
+     */
+    public static boolean keyPressedSet(Keys key)
+    {
+        boolean isKeyPressed = previous.keys[key.value()];
+        previous.keys[key.value()] = false;
+        return isKeyPressed;
+    }
+
+    /**
+     * If the button is down, it returns true and sets the key to false
+     * @return
+     */
+    public static boolean buttonDownSet(Buttons button)
+    {
+        boolean isButtonDown = current.buttons[button.value()];
+        current.buttons[button.value()] = false;
+        return isButtonDown;
+    }
+
+    /**
+     * If the button is pressed, it returns true and sets the key to false
+     * @return
+     */
+    public static boolean buttonPressedSet(Buttons button)
+    {
+        boolean isButtonPressed = previous.buttons[button.value()];
+        previous.buttons[button.value()] = false;
+        return isButtonPressed;
+    }
 }

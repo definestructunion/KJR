@@ -51,7 +51,7 @@ public class Colour implements DeepCopy<Colour>
         grey     = new Colour(0.5019608f, 0.5019608f, 0.5019608f, 1.0f);
         white    = new Colour(1.0f, 1.0f, 1.0f, 1.0f);
         black    = new Colour(0.0f, 0.0f, 0.0f, 1.0f);
-        darkGrey = new Colour(0.05f, 0.05f, 0.05f, 1.0f);
+        darkGrey = new Colour(0.15f, 0.15f, 0.15f, 1.0f);
     }
 
     private float r, g, b, a;
@@ -91,10 +91,10 @@ public class Colour implements DeepCopy<Colour>
     public float a() { return a; }
     public float hex() { return hex; }
 
-    public void sr(float val) { r = val; setHex(); }
-    public void sg(float val) { g = val; setHex(); }
-    public void sb(float val) { b = val; setHex(); }
-    public void sa(float val) { a = val; setHex(); }
+    public void r(float val) { r = val; setHex(); }
+    public void g(float val) { g = val; setHex(); }
+    public void b(float val) { b = val; setHex(); }
+    public void a(float val) { a = val; setHex(); }
 
     @Override
     public Colour copy()

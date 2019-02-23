@@ -2,27 +2,36 @@ package kjr.gui.tile;
 
 import kjr.util.DeepCopy;
 import kjr.gfx.Colour;
+import kjr.gui.ColourTheme;
 
 public class GUISettings implements DeepCopy<GUISettings>
 {
-    public static int defaultColumnGlyph = 100;
-    public static int defaultRowGlyph = 100;
-    public static int defaultLeftTitleGlyph = 100;
-    public static int defaultRightTitleGlyph = 100;
-    public static float defaultBorderScale = 1.0f;
+    public static char defaultColumnGlyph      = 186;
+    public static char defaultRowGlyph         = 205;
+    public static char defaultLeftTitleGlyph   = 185;
+    public static char defaultRightTitleGlyph  = 204;
+
+    public static char defaultGlyphSize        = 16;
+
+    public static char defaultTopRightGlyph    = 187;
+    public static char defaultTopLeftGlyph     = 201;
+    public static char defaultBottomRightGlyph = 188;
+    public static char defaultBottomLeftGlyph  = 200;
     
-    public static Colour defaultInnerColour = new Colour(0, 0, 0, 1);
-    public static Colour defaultBorderColour = new Colour(1, 1, 1, 1);
+    public static ColourTheme defaultColourTheme = new ColourTheme(new Colour(1, 1, 1, 1), new Colour(0, 0, 0, 1));
 
-    public int columnGlyph,
-               rowGlyph,
-               leftTitleGlyph,
-               rightTitleGlyph;
-               
-    public float borderScale;
+    public char columnGlyph,
+                rowGlyph,
+                leftTitleGlyph,
+                rightTitleGlyph,
+                topRightGlyph,
+                topLeftGlyph,
+                bottomRightGlyph,
+                bottomLeftGlyph;
 
-    public Colour borderColour;
-    public Colour innerColour;
+    public int glyphSize;
+
+    public ColourTheme colourTheme;
 
     public GUISettings()
     {
@@ -31,27 +40,35 @@ public class GUISettings implements DeepCopy<GUISettings>
 
     public void setToDefaults()
     {
-        columnGlyph     = defaultColumnGlyph;
-        rowGlyph        = defaultRowGlyph;
-        leftTitleGlyph  = defaultLeftTitleGlyph;
-        rightTitleGlyph = defaultRightTitleGlyph;
-        borderScale     = defaultBorderScale;
-        borderColour    = defaultBorderColour;
-        innerColour     = defaultInnerColour;
+        columnGlyph      = defaultColumnGlyph;
+        rowGlyph         = defaultRowGlyph;
+        leftTitleGlyph   = defaultLeftTitleGlyph;
+        rightTitleGlyph  = defaultRightTitleGlyph;
+        glyphSize        = defaultGlyphSize;
+
+        topRightGlyph    = defaultTopRightGlyph;
+        topLeftGlyph     = defaultTopLeftGlyph;
+        bottomRightGlyph = defaultBottomRightGlyph;
+        bottomLeftGlyph  = defaultBottomLeftGlyph;
+
+        colourTheme      = defaultColourTheme;
     }
 
     @Override
     public GUISettings copy()
     {
-        GUISettings obj     = new GUISettings();
+        GUISettings obj      = new GUISettings();
 
-        obj.columnGlyph     = columnGlyph;
-        obj.rowGlyph        = rowGlyph;
-        obj.leftTitleGlyph  = leftTitleGlyph;
-        obj.rightTitleGlyph = rightTitleGlyph;
-        obj.borderScale     = borderScale;
-        obj.borderColour    = borderColour;
-        obj.innerColour     = innerColour;
+        obj.columnGlyph      = columnGlyph;
+        obj.rowGlyph         = rowGlyph;
+        obj.leftTitleGlyph   = leftTitleGlyph;
+        obj.rightTitleGlyph  = rightTitleGlyph;
+        obj.glyphSize        = glyphSize;
+        obj.colourTheme      = colourTheme.copy();
+        obj.topLeftGlyph     = topLeftGlyph;
+        obj.topRightGlyph    = topRightGlyph;
+        obj.bottomLeftGlyph  = bottomLeftGlyph;
+        obj.bottomRightGlyph = bottomRightGlyph;
 
         return obj;
     }

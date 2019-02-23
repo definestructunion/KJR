@@ -128,7 +128,7 @@ public class Audio
 
         else
         {
-            System.out.println("Could not find a valid audio format.");
+            //System.out.println("Could not find a valid audio format.");
         }
 
         id = alGenBuffers();

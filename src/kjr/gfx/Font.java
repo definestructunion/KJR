@@ -41,6 +41,8 @@ public class Font
         return fonts.get(fonts.size() - 1);
     }
 
+    public static int getSize() { return fonts.size(); }
+
     public static void clean()
     {
         for(int i = 0; i < fonts.size(); ++i)

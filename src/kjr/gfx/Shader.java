@@ -240,7 +240,7 @@ public class Shader
             // so just throw an exception
             //throw new RuntimeException("Failed to compile vertex shader.");
             String error = glGetShaderInfoLog(vertex);
-            System.out.println("Failed to compile vertex shader!\n" + "Detail: " + error);
+            //System.out.println("Failed to compile vertex shader!\n" + "Detail: " + error);
 
             glDeleteShader(vertex);
             glDeleteShader(fragment);
@@ -269,7 +269,7 @@ public class Shader
             // so just throw an exception
             //throw new RuntimeException("Failed to link the shader program to OpenGL.");
             String error = glGetShaderInfoLog(fragment);
-            System.out.println("Failed to compile fragment shader!\n" + "Detail: " + error);
+            //System.out.println("Failed to compile fragment shader!\n" + "Detail: " + error);
 
             glDeleteShader(vertex);
             glDeleteShader(fragment);
@@ -296,7 +296,7 @@ public class Shader
         // OpenGL returns GL_FALSE (0) if compiling wasn't successful
         if(result[0] == GL_FALSE)
         {
-            System.out.println("Failed to link shaders to program.");
+            //System.out.println("Failed to link shaders to program.");
 
             glDeleteShader(vertex);
             glDeleteShader(fragment);

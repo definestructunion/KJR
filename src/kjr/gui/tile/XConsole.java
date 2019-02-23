@@ -12,31 +12,62 @@ public class XConsole
 {
     private Font font = null;
     private String title = null;
-    private ColourTheme theme = null;
     private ArrayList<XComp> xcomps = new ArrayList<>();
     private Box box = new Box();
-    private int tileSize = 16;
+    private GUISettings settings;
 
-    public Font getFont() { return font; }
-    public void setFont(Font value) { font = value; }
+    public Font        getFont            ()                         { return font;                                 }
+    public void        setFont            (Font value)               { font                      = value;           }
+    public String      getTitle           ()                         { return title;                                }
+    public void        setTitle           (String value)             { title                     = value;           }
+    public Box         getBox             ()                         { return box;                                  }
+    public void        setBox             (Box value)                { box                       = value;           }
+    public GUISettings getSettings        ()                         { return settings;                             }
+    public void        setSettings        (GUISettings value)        { settings                  = value;           }
+    public char        getColumnGlyph     ()                         { return settings.columnGlyph;                 }
+    public void        setColumnGlyph     (char columnGlyph)         { settings.columnGlyph      = columnGlyph;     }
+    public char        getRowGlyph        ()                         { return settings.rowGlyph;                    }
+    public void        setRowGlyph        (char rowGlyph)            { settings.rowGlyph         = rowGlyph;        }
+    public char        getLeftTitleGlyph  ()                         { return settings.leftTitleGlyph;              }
+    public void        setLeftTitleGlyph  (char leftTitleGlyph)      { settings.leftTitleGlyph   = leftTitleGlyph;  }
+    public char        getRightTitleGlyph ()                         { return settings.rightTitleGlyph;             }
+    public void        setRightTitleGlyph (char rightTitleGlyph)     { settings.rightTitleGlyph  = rightTitleGlyph; }
+    public int         getGlyphSize       ()                         { return settings.glyphSize;                   }
+    public void        setGlyphSize       (int glyphSize)            { settings.glyphSize        = glyphSize;       }
+    public ColourTheme getColourTheme     ()                         { return settings.colourTheme;                 }
+    public void        setColourTheme     (ColourTheme colourTheme)  { settings.colourTheme      = colourTheme;     }
+    public char        getTopRightGlyph   ()                         { return settings.topRightGlyph;               }
+    public void        setTopRightGlyph   (char value)               { settings.topRightGlyph    = value;           }
+    public char        getTopLeftGlyph    ()                         { return settings.topLeftGlyph;                }
+    public void        setTopLeftGlyph    (char value)               { settings.topLeftGlyph     = value;           }
+    public char        getBottomRightGlyph()                         { return settings.bottomRightGlyph;            }
+    public void        setBottomRightGlyph(char value)               { settings.bottomRightGlyph = value;           }
+    public char        getBottomLeftGlyph ()                         { return settings.bottomLeftGlyph;             }
+    public void        setBottomLeftGlyph (char value)               { settings.bottomLeftGlyph  = value;           }
 
-    public String getTitle() { return title; }
-    public void setTitle(String value) { title = value; }
-
-    public ColourTheme getColourTheme() { return theme; }
-    public void setColourTheme(ColourTheme value) { theme = value; }
-
-    public Box getBox() { return box; }
-    public void setBox(Box value) { box = value; }
-
-    public int getTileSize() { return tileSize; }
-    public void setTileSize(int value) { tileSize = value; }
+    public void add(XComp comp)
+    {
+        xcomps.add(comp);
+    }
 
     public XConsole()
     {
-        theme = new ColourTheme(Colour.white, Colour.black);
+        settings = new GUISettings();
         title = "";
-        font = null;
+        if(Font.getSize() > 0)
+            font = Font.get(0);
+        else
+            font = null;
+    }
+
+    public XConsole(String title)
+    {
+        settings = new GUISettings();
+        this.title = title;
+        if(Font.getSize() > 0)
+            font = Font.get(0);
+        else
+            font = null;
     }
 
     public void update()
@@ -47,16 +78,91 @@ public class XConsole
 
     public void draw(SpriteBatch renderer)
     {
-        for(int y = 0; y < box.height; ++y)
-            for(int x = 0; x < box.width; ++x)
-                renderer.draw(theme.getInner(), box.x + x, box.y + y, 0.9f);
+        renderer.pushFont(font);
+
+        int oldTileSize = renderer.tileSize;
+        renderer.tileSize = settings.glyphSize;
+
+        for(int y = 0; y < box.height + 1; ++y)
+            for(int x = 0; x < box.width + 1; ++x)
+                renderer.draw(settings.colourTheme.getInner(), box.x + x, box.y + y, 0.0f);
+
+        drawCorners(renderer);
+        drawColumns(renderer);
+        drawRowBottom(renderer);
+        drawRowTop(renderer);
 
         for(XComp xcomp : xcomps)
             xcomp.draw(this, renderer);
+
+        renderer.tileSize = oldTileSize;
+        renderer.popFont();
     }
 
-    public void add(XComp comp)
+    private void drawCorners(SpriteBatch renderer)
     {
-        xcomps.add(comp);
+        int left = box.x;
+        int right = box.x + box.width;
+        int top = box.y;
+        int bottom = box.y + box.height;
+
+        Colour border = getColourTheme().getBorder();
+        renderer.draw(getTopLeftGlyph(), border, left, top, 0.0f);
+        renderer.draw(getTopRightGlyph(), border, right, top, 0.0f);
+        renderer.draw(getBottomLeftGlyph(), border, left, bottom, 0.0f);
+        renderer.draw(getBottomRightGlyph(), border, right, bottom, 0.0f);
+    }
+
+    private void drawColumns(SpriteBatch renderer)
+    {
+        Colour border = getColourTheme().getBorder();
+
+        // y = 0 is occupied by corner
+        for(int y = 1; y < box.height; ++y)
+        {
+            // draw left column
+            renderer.draw(getColumnGlyph(), border, box.x, box.y + y, 0.0f);
+
+            // draw right column
+            renderer.draw(getColumnGlyph(), border, box.x + box.width, box.y + y, 0.0f);
+        }
+    }
+
+    private void drawRowBottom(SpriteBatch renderer)
+    {
+        Colour border = getColourTheme().getBorder();
+        Colour inner = getColourTheme().getInner();
+
+        // x = 0 is occupied by corner
+        for(int x = 1; x < box.width; ++x)
+            renderer.draw(getRowGlyph(), border, box.x + x, box.y + box.height, 0.0f);
+    }
+
+    private void drawRowTop(SpriteBatch renderer)
+    {
+        Colour border = getColourTheme().getBorder();
+        int titleStart = 3;
+        int titleEnd = titleStart + title.length();
+        boolean titleTooLong = title.length() > box.width - titleStart - 1;
+
+        for(int x = 1; x < box.width; ++x)
+        {
+            if(!titleTooLong)
+            {
+                if(x == titleStart - 1)
+                    renderer.draw(getLeftTitleGlyph(), border, box.x + x, box.y, 0.0f);
+                else if(x == titleEnd)
+                    renderer.draw(getRightTitleGlyph(), border, box.x + x, box.y, 0.0f);
+                else if(x < titleStart || x > titleEnd)
+                    renderer.draw(getRowGlyph(), border, box.x + x, box.y, 0.0f);
+            }
+
+            else
+                renderer.draw(getRowGlyph(), border, box.x + x, box.y, 0.0f);
+        }
+
+        if(!titleTooLong)
+            for(int i = 0; i < title.length(); ++i)
+                renderer.draw(title.charAt(i), border, box.x + titleStart + i, box.y, 0.0f);
     }
 }
