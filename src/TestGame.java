@@ -83,6 +83,7 @@ public class TestGame extends GameProgram
 
     @Override public void update()
     {
+        window.clear(0.05f, 0.05f, 0.05f, 1.0f);
         XGUI.update();
 
         if(Input.keyPressed(Keys.A))
@@ -129,15 +130,12 @@ public class TestGame extends GameProgram
             System.out.println(XGUI.getList().size());
         }
 
-        window.clear(0.05f, 0.05f, 0.05f, 1.0f);
         window.update();
     }
 
     @Override public void draw()
     {
         shader.bind();
-
-        //XGUI.draw(renderer);
 
         renderer.begin();
 
@@ -153,6 +151,8 @@ public class TestGame extends GameProgram
 
         window.render();
         shader.unbind();
+
+
     }
 
     @Override public void windowResize()

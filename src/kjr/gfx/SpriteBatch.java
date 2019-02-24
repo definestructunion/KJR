@@ -21,7 +21,7 @@ public class SpriteBatch extends Renderer
     public final static int SHADER_COLOR_SIZE       = (1 * 4);
 
     public final static int RENDERER_MAX_TEXTURES   = 32;
-    public final static int RENDERER_MAX_SPRITES    = 12;
+    public final static int RENDERER_MAX_SPRITES    = 60000;
     public final static int RENDERER_VERTEX_SIZE    = SHADER_VERTEX_SIZE + SHADER_UV_SIZE + SHADER_COLOR_SIZE + SHADER_TID_SIZE;
     public final static int RENDERER_SPRITE_SIZE    = RENDERER_VERTEX_SIZE * 4;
     public final static int RENDERER_BUFFER_SIZE    = RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES;
@@ -36,8 +36,6 @@ public class SpriteBatch extends Renderer
 
     private ArrayList<Font> fonts = new ArrayList<Font>();
     private Font fontsBack = null;
-
-    public int drawCalls = 0;
 
     public SpriteBatch(int tile_size)
     {
@@ -184,6 +182,7 @@ public class SpriteBatch extends Renderer
             glyph = fontsBack.getGlyph(c);
             drawGlyph(glyph, slot, colour.hex(), posX, posY, layer);
             posX += tileSize;
+            indexCount += INDICES_SIZE;
         }
     }
 
@@ -197,6 +196,7 @@ public class SpriteBatch extends Renderer
 
         for(int i = 0; i < text.length(); ++i)
         {
+            //flushIfNeeded(INDICES_SIZE);
             char c = text.charAt(i);
 
             if(c == '\n')
@@ -209,6 +209,7 @@ public class SpriteBatch extends Renderer
             glyph = fontsBack.getGlyph(c);
             drawGlyph(glyph, slot, colour.hex(), posX, posY, layer);
             posX += tileSize;
+            indexCount += INDICES_SIZE;
         }
     }
 
@@ -250,7 +251,6 @@ public class SpriteBatch extends Renderer
 
     public void flush()
     {
-        ++drawCalls;
         for(int i = 0; i < textureSlots.size(); ++i)
         {
             // first activate the texture
@@ -267,6 +267,7 @@ public class SpriteBatch extends Renderer
         ibo.unbind();
         glBindVertexArray(0);
         indexCount = 0;
+        buffer.clear();
     }
     
     private void flushIfNeeded(int expectedIndexCountIncrease)

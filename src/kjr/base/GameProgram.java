@@ -17,8 +17,10 @@ public abstract class GameProgram
         this.window = new Window(title, width, height, this, limit_refresh_rate);
     }
 
+    long start = 0, end = 0;
+    long time = 0;
+    double fpsTime = ((double)60 / 1000) * 100000000;
     int frames = 0;
-    long start = System.currentTimeMillis(), lastTime = System.currentTimeMillis();
 
     public final void run()
     {
@@ -26,15 +28,32 @@ public abstract class GameProgram
         initialize();
         while(window.running())
         {
+            /*start = System.nanoTime();
+
+            if(time > fpsTime)
+            {
+                update();
+                draw();
+                window.update();
+                time = 0;
+            }
+
+            end = System.nanoTime();
+            time += end - start;*/
+
+            start = System.currentTimeMillis();
+
             update();
-            window.update();
             draw();
             ++frames;
-            if (System.currentTimeMillis() - lastTime >= 1000) {
-                lastTime += 1000;
+            if (time >= 1000) {
+                time = 0;
                 window.setTitle("KJR - " + frames + " FPS");
                 frames = 0;
             }
+
+            end = System.currentTimeMillis();
+            time += end - start;
         }
 
         clean();
