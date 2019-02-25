@@ -11,16 +11,14 @@ public class Button extends XComp
 {
     protected String message = "";
 
-    protected Box actualBox = new Box();
-
     protected boolean highlighting = false;
 
     public String getMessage() { return message; }
     public void setMessage(String value) { message = value; }
 
-    public Button(String message)
+    public Button(String message, XConsole console)
     {
-        super(new Box(), Align.TopLeft);
+        super(new Box(), console);
         this.message = message;
     }
 
@@ -30,7 +28,7 @@ public class Button extends XComp
         if(activated)
             update.call();
 
-        if(box.asRect(16).contains(Input.getMousePosition()))
+        if(alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
         {
             highlighting = true;
             if(Input.buttonPressed(Buttons.Left))
@@ -38,24 +36,24 @@ public class Button extends XComp
         }
         else
             highlighting = false;
+
+        alignBox();
     }
 
     @Override
-    public void draw(XConsole console, SpriteBatch renderer)
+    public void draw(SpriteBatch renderer)
     {
         box.width = message.length();
-        
-        box = align.toPosition(console.getBox(), box);
 
         for(int x = 0; x < box.width; ++x)
         {
             Colour inner = (highlighting) ? console.getColourTheme().getBorder() : console.getColourTheme().getInner();
             Colour border = (highlighting) ? console.getColourTheme().getInner() : console.getColourTheme().getBorder();
 
-            renderer.draw(inner, box.x + x, box.y, 1.0f);
+            renderer.draw(inner, alignedBox.x + x, alignedBox.y, 0.0f);
 
             if(x < message.length())
-                renderer.draw(message.charAt(x), border, box.x + x, box.y, 1.1f);
+                renderer.draw(message.charAt(x), border, alignedBox.x + x, alignedBox.y, 0.0f);
         }
     }
 }

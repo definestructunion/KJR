@@ -155,9 +155,8 @@ public class Shader
      */
     public Shader()
     {
-        String[] sources = ShaderReader.ReadString(KJR_STANDARD_SHADER, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME);
+        String[] sources = ShaderReader.readString(KJR_STANDARD_SHADER, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME);
         id = load(sources);
-        System.gc();
     }
 
     /**
@@ -175,17 +174,16 @@ public class Shader
         String[] sources = null;
         try
         {
-            sources = (is_file) ? ShaderReader.ReadShaderFile(shader, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME)
-                                : ShaderReader.ReadString(shader, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME);
+            sources = (is_file) ? ShaderReader.readShaderFile(shader, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME)
+                                : ShaderReader.readString(shader, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME);
         }
 
         catch(IOException e)
         {
-            throw new RuntimeException("Unable to read shader " + ((is_file) ? "file." : "string."));
+            throw new RuntimeException("Unable to read shader " + ((is_file) ? "file." : "string. Perhaps you're trying to read a file as a String."));
         }
         
         id = load(sources);
-        System.gc();
     }
 
     /**
@@ -240,7 +238,7 @@ public class Shader
             // so just throw an exception
             //throw new RuntimeException("Failed to compile vertex shader.");
             String error = glGetShaderInfoLog(vertex);
-            //System.out.println("Failed to compile vertex shader!\n" + "Detail: " + error);
+            System.out.println("Failed to compile vertex shader!\n" + "Detail: " + error);
 
             glDeleteShader(vertex);
             glDeleteShader(fragment);
@@ -269,7 +267,7 @@ public class Shader
             // so just throw an exception
             //throw new RuntimeException("Failed to link the shader program to OpenGL.");
             String error = glGetShaderInfoLog(fragment);
-            //System.out.println("Failed to compile fragment shader!\n" + "Detail: " + error);
+            System.out.println("Failed to compile fragment shader!\n" + "Detail: " + error);
 
             glDeleteShader(vertex);
             glDeleteShader(fragment);
@@ -296,7 +294,7 @@ public class Shader
         // OpenGL returns GL_FALSE (0) if compiling wasn't successful
         if(result[0] == GL_FALSE)
         {
-            //System.out.println("Failed to link shaders to program.");
+            System.out.println("Failed to link shaders to program.");
 
             glDeleteShader(vertex);
             glDeleteShader(fragment);

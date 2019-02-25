@@ -121,7 +121,7 @@ public class SpriteBatch extends Renderer
     public void setSortModeDeferred()
     {
         glDisable(GL_DEPTH_TEST);
-        glDisable(GL_ALPHA_TEST);
+        //glDisable(GL_ALPHA_TEST);
     }
 
     public void begin()
@@ -182,7 +182,6 @@ public class SpriteBatch extends Renderer
             glyph = fontsBack.getGlyph(c);
             drawGlyph(glyph, slot, colour.hex(), posX, posY, layer);
             posX += tileSize;
-            indexCount += INDICES_SIZE;
         }
     }
 
@@ -209,7 +208,6 @@ public class SpriteBatch extends Renderer
             glyph = fontsBack.getGlyph(c);
             drawGlyph(glyph, slot, colour.hex(), posX, posY, layer);
             posX += tileSize;
-            indexCount += INDICES_SIZE;
         }
     }
 

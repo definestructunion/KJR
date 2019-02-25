@@ -164,9 +164,15 @@ public class Font
         return id;
     }
 
-    @Override public boolean equals(Object obj)
+    @Override
+    public boolean equals(Object obj)
     {
+        if(obj == null)
+            return false;
         Font t_obj = (Font)obj;
-        return file_path == t_obj.file_path && id == t_obj.id;
+        return file_path.equals(t_obj.file_path) && id == t_obj.id;
     }
+
+    @Override
+    public int hashCode() { return id; }
 }

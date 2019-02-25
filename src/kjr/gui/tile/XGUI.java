@@ -1,5 +1,6 @@
 package kjr.gui.tile;
 
+import kjr.gfx.Colour;
 import kjr.gfx.RenderType;
 import kjr.gfx.SpriteBatch;
 

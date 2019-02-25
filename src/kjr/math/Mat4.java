@@ -1,9 +1,12 @@
 package kjr.math;
 
 import java.nio.FloatBuffer;
-import kjr.util.BufferUtils;
+import java.util.Arrays;
 
-public class Mat4
+import kjr.util.BufferUtils;
+import kjr.util.DeepCopy;
+
+public class Mat4 implements DeepCopy<Mat4>
 {
     public float[] elements = new float[16];
 
@@ -87,5 +90,13 @@ public class Mat4
     public FloatBuffer toFloatBuffer()
     {
         return BufferUtils.toFloatBuffer(elements);
+    }
+
+    @Override
+    public Mat4 copy()
+    {
+        Mat4 obj = new Mat4();
+        System.arraycopy(elements, 0, obj.elements, 0, elements.length);
+        return obj;
     }
 }

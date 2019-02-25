@@ -58,6 +58,7 @@ public class XConsole
             font = Font.get(0);
         else
             font = null;
+        XGUI.add(this);
     }
 
     public XConsole(String title)
@@ -68,6 +69,7 @@ public class XConsole
             font = Font.get(0);
         else
             font = null;
+        XGUI.add(this);
     }
 
     public void update()
@@ -93,7 +95,7 @@ public class XConsole
         drawRowTop(renderer);
 
         for(XComp xcomp : xcomps)
-            xcomp.draw(this, renderer);
+            xcomp.draw(renderer);
 
         renderer.tileSize = oldTileSize;
         renderer.popFont();
@@ -131,7 +133,6 @@ public class XConsole
     private void drawRowBottom(SpriteBatch renderer)
     {
         Colour border = getColourTheme().getBorder();
-        Colour inner = getColourTheme().getInner();
 
         // x = 0 is occupied by corner
         for(int x = 1; x < box.width; ++x)
@@ -143,11 +144,11 @@ public class XConsole
         Colour border = getColourTheme().getBorder();
         int titleStart = 3;
         int titleEnd = titleStart + title.length();
-        boolean titleTooLong = title.length() > box.width - titleStart - 1;
+        boolean drawingTitle = title.length() > box.width - titleStart - 1 || title.length() == 0;
 
         for(int x = 1; x < box.width; ++x)
         {
-            if(!titleTooLong)
+            if(!drawingTitle)
             {
                 if(x == titleStart - 1)
                     renderer.draw(getLeftTitleGlyph(), border, box.x + x, box.y, 0.0f);
@@ -161,7 +162,7 @@ public class XConsole
                 renderer.draw(getRowGlyph(), border, box.x + x, box.y, 0.0f);
         }
 
-        if(!titleTooLong)
+        if(!drawingTitle)
             for(int i = 0; i < title.length(); ++i)
                 renderer.draw(title.charAt(i), border, box.x + titleStart + i, box.y, 0.0f);
     }

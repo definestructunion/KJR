@@ -38,9 +38,9 @@ public final class ShaderReader
      * </pre>
      * @return vertex shader at [0] and fragment shader at [1]
      */
-    public static String[] ReadString()
+    public static String[] readString()
     {
-        return ReadString(Shader.KJR_STANDARD_SHADER, Shader.KJR_SHADER_TOKEN, Shader.KJR_VERTEX_NAME, Shader.KJR_FRAGMENT_NAME);
+        return readString(Shader.KJR_STANDARD_SHADER, Shader.KJR_SHADER_TOKEN, Shader.KJR_VERTEX_NAME, Shader.KJR_FRAGMENT_NAME);
     }
 
     /**
@@ -56,7 +56,7 @@ public final class ShaderReader
      * </pre>
      * @param shader the shader source containing the
      *               vertex and fragment shaders
-     * @param type_token the identifier which informs the ReadString
+     * @param type_token the identifier which informs the readString
      *                   function that it's reading into a new shader
      *                   type
      * @param vertex_name the name of the vertex shader
@@ -67,7 +67,7 @@ public final class ShaderReader
      *                      as type_token
      * @return the vertex shader at index 0 and the fragment shader at index 1
      */
-    public static String[] ReadString(String shader, String type_token, String vertex_name, String fragment_name)
+    public static String[] readString(String shader, String type_token, String vertex_name, String fragment_name)
     {
         // what index the line will be fed into
         // SHADER_NONE will cause a runtime exception
@@ -162,9 +162,9 @@ public final class ShaderReader
         return sources;
     }
 
-    public static String[] ReadShaderFile(String file_path, String type_token, String vertex_name, String fragment_name) throws IOException
+    public static String[] readShaderFile(String file_path, String type_token, String vertex_name, String fragment_name) throws IOException
     {
         String shader = new String(Files.readAllBytes(Paths.get(file_path)));
-        return ReadString(shader, type_token, vertex_name, fragment_name);
+        return readString(shader, type_token, vertex_name, fragment_name);
     }
 }

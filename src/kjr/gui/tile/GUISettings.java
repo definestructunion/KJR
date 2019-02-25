@@ -6,19 +6,35 @@ import kjr.gui.ColourTheme;
 
 public class GUISettings implements DeepCopy<GUISettings>
 {
-    public static char defaultColumnGlyph      = 186;
-    public static char defaultRowGlyph         = 205;
-    public static char defaultLeftTitleGlyph   = 185;
-    public static char defaultRightTitleGlyph  = 204;
+    public static char defaultColumnGlyph;
+    public static char defaultRowGlyph;
+    public static char defaultLeftTitleGlyph;
+    public static char defaultRightTitleGlyph;
 
-    public static char defaultGlyphSize        = 16;
+    public static char defaultGlyphSize;
 
-    public static char defaultTopRightGlyph    = 187;
-    public static char defaultTopLeftGlyph     = 201;
-    public static char defaultBottomRightGlyph = 188;
-    public static char defaultBottomLeftGlyph  = 200;
+    public static char defaultTopRightGlyph;
+    public static char defaultTopLeftGlyph;
+    public static char defaultBottomRightGlyph;
+    public static char defaultBottomLeftGlyph;
     
-    public static ColourTheme defaultColourTheme = new ColourTheme(new Colour(1, 1, 1, 1), new Colour(0, 0, 0, 1));
+    public static ColourTheme defaultColourTheme;
+
+    static
+    {
+        defaultColumnGlyph      = 186;
+        defaultRowGlyph         = 205;
+        defaultLeftTitleGlyph   = 185;
+        defaultRightTitleGlyph  = 204;
+
+        defaultGlyphSize        = 16;
+
+        defaultTopRightGlyph    = 187;
+        defaultTopLeftGlyph     = 201;
+        defaultBottomRightGlyph = 188;
+        defaultBottomLeftGlyph  = 200;
+        defaultColourTheme      = new ColourTheme(new Colour(1, 1, 1, 1), new Colour(0, 0, 0, 1));
+    }
 
     public char columnGlyph,
                 rowGlyph,

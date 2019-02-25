@@ -1,11 +1,9 @@
 package kjr.math;
 
-import java.io.Serializable;
+import kjr.util.DeepCopy;
 
-public class Vec4 implements Serializable
+public class Vec4 implements DeepCopy<Vec4>
 {
-    private static final long serialVersionUID = 1L;
-
     public float x = 0.0f;
     public float y = 0.0f;
     public float z = 0.0f;
@@ -57,9 +55,29 @@ public class Vec4 implements Serializable
         return new Vec4(vec.x, vec.y, vec.z, vec.w);
     }
 
-    @Override public boolean equals(Object obj)
+    @Override
+    public boolean equals(Object obj)
     {
+        if(obj == null)
+            return false;
         Vec4 vec = (Vec4)obj;
         return (x == vec.x && y == vec.y && z == vec.z && w == vec.w);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hashCode = 0;
+        hashCode = (hashCode * 397) ^ (int)x;
+        hashCode = (hashCode * 397) ^ (int)y;
+        hashCode = (hashCode * 397) ^ (int)z;
+        hashCode = (hashCode * 397) ^ (int)w;
+        return hashCode;
+    }
+
+    @Override
+    public Vec4 copy()
+    {
+        return new Vec4(x, y, z, w);
     }
 }

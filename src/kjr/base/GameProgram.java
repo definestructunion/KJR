@@ -10,54 +10,32 @@ public abstract class GameProgram
 {
     protected Window window = null;
     protected AudioDevice a_device = null;
+    protected long frameTime = (long)(1000.0 / 60.0);
 
-    public GameProgram(String title, int width, int height, boolean limit_refresh_rate)
+    public GameProgram(String title, int width, int height, boolean limitRefreshRate)
     {
         this.a_device = new AudioDevice();
-        this.window = new Window(title, width, height, this, limit_refresh_rate);
+        this.window = new Window(title, width, height, this, limitRefreshRate);
     }
 
-    long start = 0, end = 0;
-    long time = 0;
-    double fpsTime = ((double)60 / 1000) * 100000000;
-    int frames = 0;
-
-    public final void run()
+    public final void run() throws InterruptedException
     {
         loadAssets();
         initialize();
         while(window.running())
         {
-            /*start = System.nanoTime();
-
-            if(time > fpsTime)
-            {
-                update();
-                draw();
-                window.update();
-                time = 0;
-            }
-
-            end = System.nanoTime();
-            time += end - start;*/
-
-            start = System.currentTimeMillis();
+            Thread.sleep(frameTime);
 
             update();
+            window.update();
             draw();
-            ++frames;
-            if (time >= 1000) {
-                time = 0;
-                window.setTitle("KJR - " + frames + " FPS");
-                frames = 0;
-            }
-
-            end = System.currentTimeMillis();
-            time += end - start;
         }
 
         clean();
     }
+
+    public final void setFPS(int fps) {frameTime = (long)(1000.0 / fps); }
+    public final long getFPS() { return (long)(frameTime * 1000.0); }
 
     public void loadAssets()
     {

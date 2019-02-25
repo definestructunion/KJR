@@ -1,11 +1,11 @@
 package kjr.math;
 
+import kjr.util.DeepCopy;
+
 import java.io.Serializable;
 
-public class Vec3 implements Serializable
+public class Vec3 implements DeepCopy<Vec3>
 {
-    private static final long serialVersionUID = 1L;
-
     public float x = 0.0f;
     public float y = 0.0f;
     public float z = 0.0f;
@@ -67,9 +67,28 @@ public class Vec3 implements Serializable
         return v.sub(axis.mult((axis.mult(v))).mult((float)Math.cos(angle))).add((axis.dotProduct(v).mult((float)Math.sin(angle)).add((axis.mult((axis.mult(v)))))));
     }
 
-    @Override public boolean equals(Object obj)
+    @Override
+    public boolean equals(Object obj)
     {
+        if(obj == null)
+            return false;
         Vec3 vec = (Vec3)obj;
         return (x == vec.x && y == vec.y && z == vec.z);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hashCode = 0;
+        hashCode = (hashCode * 397) ^ (int)x;
+        hashCode = (hashCode * 397) ^ (int)y;
+        hashCode = (hashCode * 397) ^ (int)z;
+        return hashCode;
+    }
+
+    @Override
+    public Vec3 copy()
+    {
+        return new Vec3(x, y, z);
     }
 }

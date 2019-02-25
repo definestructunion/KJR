@@ -12,9 +12,7 @@ import kjr.gfx.Texture;
 import kjr.gui.Align;
 import kjr.gui.ColourTheme;
 import kjr.gui.Func;
-import kjr.gui.tile.Button;
-import kjr.gui.tile.XConsole;
-import kjr.gui.tile.XGUI;
+import kjr.gui.tile.*;
 import kjr.input.Input;
 import kjr.input.Keys;
 import kjr.math.Mat4;
@@ -72,24 +70,22 @@ public class TestGame extends GameProgram
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
 
-        Button button = new Button("Close");
-        button.setBox(new Box(1, 1, 5, 1));
+        Button button = new Button("Close", console);
+        button.setBox(new Box(0, 0, 5, 1));
         button.setAlign(Align.BottomRight);
 
         console.add(button);
         button.setUpdate( () -> XGUI.remove(console));
-        XGUI.add(console);
     }
 
     @Override public void update()
     {
-        window.clear(0.05f, 0.05f, 0.05f, 1.0f);
         XGUI.update();
 
-        if(Input.keyPressed(Keys.A))
-        {
-            System.out.println("Enter");
-        }
+        if(Input.keyPressed(Keys.W)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y - 1, e.getBox().width, e.getBox().height))); }
+        if(Input.keyPressed(Keys.A)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x - 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
+        if(Input.keyPressed(Keys.S)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y + 1, e.getBox().width, e.getBox().height))); }
+        if(Input.keyPressed(Keys.D)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x + 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
 
         if(Input.keyDown(Keys.Escape))
         {
@@ -113,36 +109,47 @@ public class TestGame extends GameProgram
         {
             int xPos = random.nextInt(15) + 5;
             int yPos = random.nextInt(8) + xPos + 1;
-            XConsole console = new XConsole("Box");
-            console.setBox(new Box(xPos, yPos, random.nextInt(10) + 5, random.nextInt(10) + 5));
+            int width = random.nextInt(10) + 5;
+            int height = random.nextInt(10) + 5;
+            XConsole console = new XConsole("");
+            console.setBox(new Box(xPos, yPos, width, height));
             console.setFont(font);
             console.setGlyphSize(16);
             console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
 
-            Button button = new Button("Close");
-            button.setBox(new Box(1, 1, 5, 1));
+            Button button = new Button("Close", console);
+            button.setBox(new Box(0, 0, 5, 1));
             button.setAlign(Align.BottomRight);
 
             button.setUpdate( () -> XGUI.remove(console) );
 
+            ListItem item = new ListItem(texture2, "Heart");
+            ListItem item2 = new ListItem(texture2, "Cooler Heart");
+            List list = new List(new Box(1, 1, 10, 10), console);
+            list.add(item, item2);
+
             console.add(button);
-            XGUI.add(console);
-            System.out.println(XGUI.getList().size());
+            console.add(list);
         }
 
         window.update();
+
     }
 
     @Override public void draw()
     {
+        window.clear(0.05f, 0.05f, 0.05f, 1.0f);
         shader.bind();
-
         renderer.begin();
 
         renderer.draw(texture, Colour.white, 20, 20, 0.9f);
         renderer.draw(texture2, Colour.white, 20, 20, 0.9f);
 
-        renderer.drawString("Testing\nTesting", Colour.white, 1, 1, 5.0f);
+        //renderer.drawString("Testing\nTesting", Colour.white, 1, 1, 5.0f);
+
+        //renderer.drawString("Mask of the Ancients", Colour.white, 10, 10, 5.0f);
+
+        renderer.draw(texture, Colour.white, 1, 1, 1.0f);
 
         renderer.end();
         renderer.flush();
@@ -151,7 +158,6 @@ public class TestGame extends GameProgram
 
         window.render();
         shader.unbind();
-
 
     }
 

@@ -10,7 +10,8 @@ public enum Align
     CenterLeft,
     Center,
     BottomRight,
-    BottomLeft;
+    BottomLeft,
+    None;
 
     public Box toPosition(Box boxToAlignTo, Box boxBeingChanged)
     {
