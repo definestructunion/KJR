@@ -36,14 +36,13 @@ public class Button extends XComp
         }
         else
             highlighting = false;
-
-        alignBox();
     }
 
     @Override
     public void draw(SpriteBatch renderer)
     {
         box.width = message.length();
+        alignBox();
 
         for(int x = 0; x < box.width; ++x)
         {

@@ -77,8 +77,6 @@ public final class Input
             // it was not fired last frame
             // if it's being fired this frame
             previous.keys[i] = glfw.keys[i] && !current.keys[i];
-            if(previous.keys[i])
-                System.out.println("true" + i);
         }
 
         // copy the value of glfw keys to current keys

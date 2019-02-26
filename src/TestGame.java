@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Random;
 
 import kjr.base.GameProgram;
@@ -6,12 +5,10 @@ import kjr.gfx.SpriteBatch;
 import kjr.gfx.Font;
 import kjr.gfx.Box;
 import kjr.gfx.Colour;
-import kjr.gfx.Rect;
 import kjr.gfx.Shader;
 import kjr.gfx.Texture;
 import kjr.gui.Align;
 import kjr.gui.ColourTheme;
-import kjr.gui.Func;
 import kjr.gui.tile.*;
 import kjr.input.Input;
 import kjr.input.Keys;
@@ -63,29 +60,52 @@ public class TestGame extends GameProgram
         renderer.setSortModeLayered();
         renderer.pushFont(font);
         window.show();
-        sound.play();
-        XConsole console = new XConsole("Box");
-        console.setBox(new Box(10, 10, 2, 2));
+
+        XConsole console = new XConsole("Inventory");
+        console.setBox(new Box(15, 15, 20, 20));
         console.setFont(font);
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
 
-        Button button = new Button("Close", console);
-        button.setBox(new Box(0, 0, 5, 1));
-        button.setAlign(Align.BottomRight);
+        List myInv = new List(new Box(1, 1, 8, 8), console);
+        ListItem heart = new ListItem(texture2, "Heart");
+        List enemInv = new List(new Box(-1, 1, 6, 6), console);
+        enemInv.setAlign(Align.BottomRight);
 
-        console.add(button);
-        button.setUpdate( () -> XGUI.remove(console));
+        heart.onActivate = () ->
+        {
+            System.out.println("oopsie woopsie");
+            if(myInv.hasRef(heart)) {
+                enemInv.add(heart);
+                myInv.remove(heart); }
+            else {
+                enemInv.remove(heart); myInv.add(heart);
+            }
+        };
+
+        ListItem coolHeart = new ListItem(texture2, "CHeartTest");
+        coolHeart.onActivate = () ->  { System.out.println("Clicked coolheart"); };
+        myInv.add(coolHeart);
+
+
+        ListItem thing = new ListItem(texture2, "Thing");
+        thing.onActivate = () -> { System.out.println("Clicked thing"); };
+        ListItem coolThing = new ListItem(texture2, "CThingTest");
+        coolThing.onActivate = () ->  { System.out.println("Clicked coolthing"); };
+        enemInv.add(thing, coolThing, heart);
+        System.out.println(enemInv.getItems().size());
+        console.add(myInv);
+        console.add(enemInv);
     }
 
     @Override public void update()
     {
         XGUI.update();
 
-        if(Input.keyPressed(Keys.W)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y - 1, e.getBox().width, e.getBox().height))); }
-        if(Input.keyPressed(Keys.A)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x - 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
-        if(Input.keyPressed(Keys.S)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y + 1, e.getBox().width, e.getBox().height))); }
-        if(Input.keyPressed(Keys.D)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x + 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
+        if(Input.keyDown(Keys.W)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y - 1, e.getBox().width, e.getBox().height))); }
+        if(Input.keyDown(Keys.A)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x - 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
+        if(Input.keyDown(Keys.S)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y + 1, e.getBox().width, e.getBox().height))); }
+        if(Input.keyDown(Keys.D)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x + 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
 
         if(Input.keyDown(Keys.Escape))
         {
@@ -109,9 +129,9 @@ public class TestGame extends GameProgram
         {
             int xPos = random.nextInt(15) + 5;
             int yPos = random.nextInt(8) + xPos + 1;
-            int width = random.nextInt(10) + 5;
-            int height = random.nextInt(10) + 5;
-            XConsole console = new XConsole("");
+            int width = random.nextInt(10) + 8;
+            int height = random.nextInt(10) + 8;
+            XConsole console = new XConsole("Inventory");
             console.setBox(new Box(xPos, yPos, width, height));
             console.setFont(font);
             console.setGlyphSize(16);
@@ -138,7 +158,8 @@ public class TestGame extends GameProgram
 
     @Override public void draw()
     {
-        window.clear(0.05f, 0.05f, 0.05f, 1.0f);
+        //window.clear(0.05f, 0.05f, 0.05f, 1.0f);
+        window.clear(1, 1, 1, 1);
         shader.bind();
         renderer.begin();
 
@@ -159,6 +180,7 @@ public class TestGame extends GameProgram
         window.render();
         shader.unbind();
 
+        //Screenshot.screenshot(window.getWidth(), window.getHeight());
     }
 
     @Override public void windowResize()
