@@ -1,10 +1,8 @@
 package kjr.gui.tile;
 
-import javafx.scene.control.Label;
 import kjr.gfx.Box;
 import kjr.gfx.Colour;
 import kjr.gfx.SpriteBatch;
-import kjr.gui.Align;
 import kjr.input.Buttons;
 import kjr.input.Input;
 
@@ -14,15 +12,98 @@ import java.util.Arrays;
 public class List extends XComp
 {
     private ArrayList<ListItem> items = new ArrayList<>();
+    private int listOffset = 0;
+
+    private ListItem firstNode = null;
+    private ListItem lastNode = null;
 
     public List(Box box, XConsole console)
     {
         super(box, console);
     }
 
-    public List(Box box, XConsole console, Align align)
+    @Override
+    public void draw(SpriteBatch renderer)
     {
-        super(box, console, align);
+        alignBox();
+
+        int line = 0;
+        if(items.size() > 0)
+            firstNode = items.get(listOffset);
+
+        for(int index = 0; index < items.size() && index + listOffset < items.size(); ++index)
+        {
+            ListItem item = items.get(index + listOffset);
+
+            boolean highlighting = item.box.asRect(console.getGlyphSize()).contains(Input.getMousePosition());
+            Colour inner = (highlighting) ? console.getColourTheme().getBorder() : console.getColourTheme().getInner();
+            Colour border = (highlighting) ? console.getColourTheme().getInner() : console.getColourTheme().getBorder();
+
+            boolean itemHasTexture = item.texture != null;
+
+            if(itemHasTexture)
+                renderer.draw(item.texture, Colour.white, alignedBox.x, alignedBox.y + line, 0.0f);
+
+            for(int i = 0; i < item.text.length(); ++i)
+            {
+                int posX = alignedBox.x + ((itemHasTexture) ? 1 : 0);
+                posX += i % alignedBox.width;
+
+                if(i % alignedBox.width == 0 && i != 0)
+                {
+                    ++line;
+                    if(line > alignedBox.height)
+                    {
+                        lastNode = item;
+                        return;
+                    }
+                }
+
+                renderer.draw(inner, posX, alignedBox.y + line, 0.0f);
+                renderer.draw(item.text.charAt(i), border, posX, alignedBox.y + line, 0.0f);
+            }
+
+
+            ++line;
+            if(line > alignedBox.height)
+            {
+                lastNode = item;
+                return;
+            }
+
+            lastNode = item;
+        }
+    }
+
+    @Override
+    public void update()
+    {
+        alignBox();
+
+        int yOffset = 0;
+        for(int i = listOffset; i < items.size(); ++i)
+        {
+            ListItem item = items.get(i);
+            item.wrapToBox(alignedBox, yOffset);
+            yOffset += item.measureY(alignedBox);
+
+            if(Input.buttonPressed(Buttons.Left) && item.box.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
+                item.onActivate.call();
+        }
+
+        if(alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
+        {
+            if(Input.getScrollY() < -0.1)
+            {
+                if(items.size() > 0 && lastNode != items.get(items.size() - 1))
+                    ++listOffset;
+            }
+            else if(Input.getScrollY() > 0.1)
+            {
+                if(listOffset != 0)
+                    --listOffset;
+            }
+        }
     }
 
     public void add(ListItem... items) { this.items.addAll(Arrays.asList(items)); }
@@ -32,56 +113,4 @@ public class List extends XComp
     public boolean hasRef(ListItem item) { return this.items.contains(item); }
 
     public ArrayList<ListItem> getItems() { return items; }
-
-    @Override
-    public void draw(SpriteBatch renderer)
-    {
-        alignBox();
-        int line = 0;
-
-        int posX = 0;
-        int posY = 0;
-
-        for(int index = 0; index < items.size(); ++index)
-        {
-            ListItem item = items.get(index);
-            item.wrapToBox(alignedBox, index);
-            boolean itemHasTexture = item.texture != null;
-
-            if(itemHasTexture)
-                renderer.draw(item.texture, Colour.white, alignedBox.x, alignedBox.y + line, 0.0f);
-
-            for(int i = 0; i < item.text.length(); ++i)
-            {
-                posX = alignedBox.x + ((itemHasTexture) ? 1 : 0);
-                posX += i % alignedBox.width;
-
-                if(i % alignedBox.width == 0 && i != 0)
-                    ++line;
-
-                renderer.draw(item.text.charAt(i), console.getColourTheme().getBorder(), posX, alignedBox.y + line, 0.0f);
-                //renderer.draw(item.text.charAt(i), console.getColourTheme().getBorder(), alignedBox.x, alignedBox.y, 0.0f);
-
-            }
-
-            ++line;
-        }
-    }
-
-    @Override
-    public void update()
-    {
-        for(int i = 0; i < items.size(); ++i)
-        {
-            int previousYOffset = (i > 0) ? items.get(i - 1).box.height - 1 : 0;
-            ListItem item = items.get(i);
-            item.wrapToBox(alignedBox, i + previousYOffset);
-
-            //System.out.println(item.box.toString());
-
-            // if box contains the mouse position and clicked it
-            if(item.box.asRect(console.getGlyphSize()).contains(Input.getMousePosition()) && Input.buttonPressed(Buttons.Left))
-                item.onActivate.call();
-        }
-    }
 }

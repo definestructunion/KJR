@@ -69,7 +69,7 @@ public final class Input
      * Note: Can't be used to set GLFW keys
      * </pre>
      */
-    public static void updateKeys()
+    public static void update()
     {
         for(int i = 0; i < MAX_KEYS; ++i)
         {
@@ -94,6 +94,9 @@ public final class Input
         // copy the value of glfw buttons to current buttons
         // as they are set each frame
         System.arraycopy(glfw.buttons, 0, current.buttons, 0, MAX_BUTTONS);
+
+        if(scrollCount > 0)
+            --scrollCount;
     }
 
     /**
@@ -165,10 +168,7 @@ public final class Input
      * @param button the button to check
      * @return true if the button is pressed
      */
-    public static boolean buttonPressed(Buttons button)
-    {
-        return previous.buttons[button.value()];
-    }
+    public static boolean buttonPressed(Buttons button) { return previous.buttons[button.value()]; }
 
     /**
      * <pre>
@@ -311,5 +311,36 @@ public final class Input
         boolean isButtonPressed = previous.buttons[button.value()];
         previous.buttons[button.value()] = false;
         return isButtonPressed;
+    }
+
+    private static double scrollX = 0;
+    private static double scrollY = 0;
+    private static int scrollCount = 0;
+
+    public static void setScrollWheel(double xOffset, double yOffset)
+    {
+        scrollX = xOffset;
+        scrollY = yOffset;
+        // I don't know why this works, but it works
+        // perfectly, don't touch
+        scrollCount += 2;
+    }
+
+    //public static double getScrollX() { return scrollX; }
+    //public static double getScrollY() { return scrollY; }
+
+    public static double getScrollX()
+    {
+        if(scrollCount > 0)
+            return scrollX;
+        return 0.0;
+    }
+
+    public static double getScrollY()
+    {
+        if(scrollCount > 0) {
+            return scrollY;
+        }
+        return 0.0;
     }
 }

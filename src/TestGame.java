@@ -62,38 +62,60 @@ public class TestGame extends GameProgram
         window.show();
 
         XConsole console = new XConsole("Inventory");
-        console.setBox(new Box(15, 15, 20, 20));
+        console.setBox(new Box(5, 5, 40, 32));
         console.setFont(font);
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
 
-        List myInv = new List(new Box(1, 1, 8, 8), console);
-        ListItem heart = new ListItem(texture2, "Heart");
-        List enemInv = new List(new Box(-1, 1, 6, 6), console);
-        enemInv.setAlign(Align.BottomRight);
+        List myInv = new List(new Box(1, 1, 15, 15), console);
 
-        heart.onActivate = () ->
+        List enemInv = new List(new Box(-1, 1, 15, 15), console);
+        enemInv.setAlign(Align.TopRight);
+
+        String[] names =
         {
-            System.out.println("oopsie woopsie");
-            if(myInv.hasRef(heart)) {
-                enemInv.add(heart);
-                myInv.remove(heart); }
-            else {
-                enemInv.remove(heart); myInv.add(heart);
-            }
+                "Mask of Thing",
+                "Heart",
+                "Thing",
+                "Sword",
+                "Super Duper Shield of Yeah and Stuff"
         };
+
+        for(int i = 0; i < 30; ++i)
+        {
+            ListItem heart = new ListItem(texture2, "");
+            heart.text = names[random.nextInt(5)];
+            heart.onActivate = () ->
+            {
+                System.out.println("oopsie woopsie");
+                if(myInv.hasRef(heart)) {
+                    enemInv.add(heart);
+                    myInv.remove(heart); }
+                else {
+                    enemInv.remove(heart); myInv.add(heart);
+                }
+            };
+
+            myInv.add(heart);
+        }
+
 
         ListItem coolHeart = new ListItem(texture2, "CHeartTest");
         coolHeart.onActivate = () ->  { System.out.println("Clicked coolheart"); };
-        myInv.add(coolHeart);
+
 
 
         ListItem thing = new ListItem(texture2, "Thing");
         thing.onActivate = () -> { System.out.println("Clicked thing"); };
         ListItem coolThing = new ListItem(texture2, "CThingTest");
         coolThing.onActivate = () ->  { System.out.println("Clicked coolthing"); };
-        enemInv.add(thing, coolThing, heart);
-        System.out.println(enemInv.getItems().size());
+        enemInv.add(thing, coolThing);
+
+        Button button = new Button("Close", console);
+        button.setUpdate(() -> { XGUI.remove(console); });
+        button.setAlign(Align.BottomRight);
+
+        console.add(button);
         console.add(myInv);
         console.add(enemInv);
     }
@@ -153,13 +175,11 @@ public class TestGame extends GameProgram
         }
 
         window.update();
-
     }
 
     @Override public void draw()
     {
-        //window.clear(0.05f, 0.05f, 0.05f, 1.0f);
-        window.clear(1, 1, 1, 1);
+        window.clear(0, 0, 0, 1);
         shader.bind();
         renderer.begin();
 

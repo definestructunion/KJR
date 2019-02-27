@@ -41,14 +41,15 @@ public class Button extends XComp
     @Override
     public void draw(SpriteBatch renderer)
     {
+        box.height = 1;
         box.width = message.length();
         alignBox();
 
+        Colour inner = (highlighting) ? console.getColourTheme().getBorder() : console.getColourTheme().getInner();
+        Colour border = (highlighting) ? console.getColourTheme().getInner() : console.getColourTheme().getBorder();
+
         for(int x = 0; x < box.width; ++x)
         {
-            Colour inner = (highlighting) ? console.getColourTheme().getBorder() : console.getColourTheme().getInner();
-            Colour border = (highlighting) ? console.getColourTheme().getInner() : console.getColourTheme().getBorder();
-
             renderer.draw(inner, alignedBox.x + x, alignedBox.y, 0.0f);
 
             if(x < message.length())

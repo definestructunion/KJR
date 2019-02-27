@@ -19,6 +19,7 @@ import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
@@ -150,6 +151,11 @@ public class Window
     private void buttonCallback(long window, int button, int action, int mods)
     {
         Input.setButton(button, action != GLFW_RELEASE);
+    }
+
+    private void scrollWheelCallback(long window, double xOffset, double yOffset)
+    {
+        Input.setScrollWheel(xOffset, yOffset);
     }
 
     /**
@@ -349,6 +355,8 @@ public class Window
         glfwSetCursorPosCallback(glfw_window, this::cursorPositionCallback);
         glfwSetWindowSizeCallback(glfw_window, this::windowResizeCallback);
 
+        glfwSetScrollCallback(glfw_window, this::scrollWheelCallback);
+
         // whether or not to use vsync
         glfwSwapInterval(vsync);
 
@@ -392,7 +400,7 @@ public class Window
      */
     public void update()
     {
-        Input.updateKeys();
+        Input.update();
         int error = glGetError();
         if(error != GL_NO_ERROR)
         {

@@ -34,8 +34,20 @@ public class ListItem
         box.x = wrapper.x;
         box.y = wrapper.y + yOffset;
         box.width = wrapper.width;
+
+        if(hasTexture)
+            ++box.width;
+
         box.height = text.length() / wrapper.width;
         if(text.length() % wrapper.width != 0)
             ++box.height;
+    }
+
+    public int measureY(Box wrapper)
+    {
+        int y = text.length() / wrapper.width;
+        if(text.length() % wrapper.width != 0)
+            ++y;
+        return y;
     }
 }
