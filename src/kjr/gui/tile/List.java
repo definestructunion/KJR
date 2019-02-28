@@ -35,16 +35,16 @@ public class List extends XComp
         {
             ListItem item = items.get(index + listOffset);
 
-            boolean highlighting = item.box.asRect(console.getGlyphSize()).contains(Input.getMousePosition());
+            boolean highlighting = item.getBox().asRect(console.getGlyphSize()).contains(Input.getMousePosition());
             Colour inner = (highlighting) ? console.getColourTheme().getBorder() : console.getColourTheme().getInner();
             Colour border = (highlighting) ? console.getColourTheme().getInner() : console.getColourTheme().getBorder();
 
-            boolean itemHasTexture = item.texture != null;
+            boolean itemHasTexture = item.getTexture() != null;
 
             if(itemHasTexture)
-                renderer.draw(item.texture, Colour.white, alignedBox.x, alignedBox.y + line, 0.0f);
+                renderer.draw(item.getTexture(), Colour.white, alignedBox.x, alignedBox.y + line, 0.0f);
 
-            for(int i = 0; i < item.text.length(); ++i)
+            for(int i = 0; i < item.getText().length(); ++i)
             {
                 int posX = alignedBox.x + ((itemHasTexture) ? 1 : 0);
                 posX += i % alignedBox.width;
@@ -60,7 +60,7 @@ public class List extends XComp
                 }
 
                 renderer.draw(inner, posX, alignedBox.y + line, 0.0f);
-                renderer.draw(item.text.charAt(i), border, posX, alignedBox.y + line, 0.0f);
+                renderer.draw(item.getText().charAt(i), border, posX, alignedBox.y + line, 0.0f);
             }
 
 
@@ -87,8 +87,8 @@ public class List extends XComp
             item.wrapToBox(alignedBox, yOffset);
             yOffset += item.measureY(alignedBox);
 
-            if(Input.buttonPressed(Buttons.Left) && item.box.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
-                item.onActivate.call();
+            if(Input.buttonPressed(Buttons.Left) && item.getBox().asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
+                item.getActivate().call();
         }
 
         if(alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))

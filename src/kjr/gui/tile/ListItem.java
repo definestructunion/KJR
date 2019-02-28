@@ -6,16 +6,16 @@ import kjr.gui.Func;
 
 public class ListItem
 {
-    public Texture texture;
-    public String text;
-    public Func onActivate;
-    public Box box;
+    private Texture texture;
+    private String text;
+    private Func activate;
+    private Box box;
 
     public ListItem(Texture texture, String text, Func onActivate)
     {
         this.texture = texture;
         this.text = text;
-        this.onActivate = onActivate;
+        this.activate = onActivate;
         this.box = new Box();
     }
 
@@ -23,7 +23,7 @@ public class ListItem
     {
         this.texture = texture;
         this.text = text;
-        this.onActivate = () -> { };
+        this.activate = () -> { };
         this.box = new Box();
     }
 
@@ -50,4 +50,16 @@ public class ListItem
             ++y;
         return y;
     }
+
+    public Texture getTexture() { return texture; }
+    public ListItem setTexture(Texture value) { texture = value; return this; }
+
+    public String getText() { return text; }
+    public ListItem setText(String value) { text = value; return this; }
+
+    public Func getActivate() { return activate; }
+    public ListItem setActivate(Func value) { activate = value; return this; }
+
+    public Box getBox() { return box; }
+    public ListItem setBox(Box value) { box = value; return this; }
 }

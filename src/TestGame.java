@@ -67,10 +67,16 @@ public class TestGame extends GameProgram
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
 
-        List myInv = new List(new Box(1, 1, 15, 15), console);
+        List myInv = new List(new Box(1, 4, 15, 15), console);
 
-        List enemInv = new List(new Box(-1, 1, 15, 15), console);
+        List enemInv = new List(new Box(-1, 4, 15, 15), console);
         enemInv.setAlign(Align.TopRight);
+
+        Label playerLabel = new Label("Player", 1, 2, console);
+        playerLabel.setAlign(Align.TopLeft);
+
+        Label enemyLabel = new Label("Enemy", 0, 2, console);
+        enemyLabel.setAlign(Align.TopRight);
 
         String[] names =
         {
@@ -84,8 +90,8 @@ public class TestGame extends GameProgram
         for(int i = 0; i < 30; ++i)
         {
             ListItem heart = new ListItem(texture2, "");
-            heart.text = names[random.nextInt(5)];
-            heart.onActivate = () ->
+            heart.setText(names[random.nextInt(5)]);
+            heart.setActivate( () ->
             {
                 System.out.println("oopsie woopsie");
                 if(myInv.hasRef(heart)) {
@@ -94,27 +100,31 @@ public class TestGame extends GameProgram
                 else {
                     enemInv.remove(heart); myInv.add(heart);
                 }
-            };
+
+                playerLabel.setText(names[random.nextInt(5)]);
+            });
 
             myInv.add(heart);
         }
 
 
         ListItem coolHeart = new ListItem(texture2, "CHeartTest");
-        coolHeart.onActivate = () ->  { System.out.println("Clicked coolheart"); };
+        coolHeart.setActivate( () ->  { System.out.println("Clicked coolheart"); });
 
 
 
         ListItem thing = new ListItem(texture2, "Thing");
-        thing.onActivate = () -> { System.out.println("Clicked thing"); };
+        thing.setActivate( () -> { System.out.println("Clicked thing"); });
         ListItem coolThing = new ListItem(texture2, "CThingTest");
-        coolThing.onActivate = () ->  { System.out.println("Clicked coolthing"); };
+        coolThing.setActivate ( () ->  { System.out.println("Clicked coolthing"); });
         enemInv.add(thing, coolThing);
 
         Button button = new Button("Close", console);
         button.setUpdate(() -> { XGUI.remove(console); });
         button.setAlign(Align.BottomRight);
 
+        console.add(playerLabel);
+        console.add(enemyLabel);
         console.add(button);
         console.add(myInv);
         console.add(enemInv);
@@ -186,10 +196,6 @@ public class TestGame extends GameProgram
         renderer.draw(texture, Colour.white, 20, 20, 0.9f);
         renderer.draw(texture2, Colour.white, 20, 20, 0.9f);
 
-        //renderer.drawString("Testing\nTesting", Colour.white, 1, 1, 5.0f);
-
-        //renderer.drawString("Mask of the Ancients", Colour.white, 10, 10, 5.0f);
-
         renderer.draw(texture, Colour.white, 1, 1, 1.0f);
 
         renderer.end();
@@ -199,8 +205,6 @@ public class TestGame extends GameProgram
 
         window.render();
         shader.unbind();
-
-        //Screenshot.screenshot(window.getWidth(), window.getHeight());
     }
 
     @Override public void windowResize()

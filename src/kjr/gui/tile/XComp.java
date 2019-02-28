@@ -37,21 +37,22 @@ public abstract class XComp
         this.console = console;
         this.box = box;
         this.alignedBox = this.box.copy();
+        alignBox();
         keyPress = () -> { };
         buttonPress = () -> { };
         update = () -> { };
-        alignBox();
     }
 
     protected XComp(Box box, XConsole console, Align align)
     {
         this.console = console;
         this.box = box;
+        this.alignedBox = this.box.copy();
+        alignBox();
         this.align = align;
         keyPress = () -> { };
         buttonPress = () -> { };
         update = () -> { };
-        alignBox();
     }
 
     protected void alignBox()
