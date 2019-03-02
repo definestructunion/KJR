@@ -47,12 +47,12 @@ public class List extends XComp
             for(int i = 0; i < item.getText().length(); ++i)
             {
                 int posX = alignedBox.x + ((itemHasTexture) ? 1 : 0);
-                posX += i % alignedBox.width;
+                posX += i % (alignedBox.width - 1);
 
-                if(i % alignedBox.width == 0 && i != 0)
+                if(i % (alignedBox.width - 1) == 0 && i != 0)
                 {
                     ++line;
-                    if(line > alignedBox.height)
+                    if(line >= alignedBox.height)
                     {
                         lastNode = item;
                         return;
@@ -65,7 +65,7 @@ public class List extends XComp
 
 
             ++line;
-            if(line > alignedBox.height)
+            if(line >= alignedBox.height)
             {
                 lastNode = item;
                 return;

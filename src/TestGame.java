@@ -69,14 +69,14 @@ public class TestGame extends GameProgram
 
         List myInv = new List(new Box(1, 4, 15, 15), console);
 
-        List enemInv = new List(new Box(-1, 4, 15, 15), console);
+        List enemInv = new List(new Box(0, 4, 15, 15), console);
         enemInv.setAlign(Align.TopRight);
 
         Label playerLabel = new Label("Player", 1, 2, console);
         playerLabel.setAlign(Align.TopLeft);
 
-        Label enemyLabel = new Label("Enemy", 0, 2, console);
-        enemyLabel.setAlign(Align.TopRight);
+        Label enemyLabel = new Label("Player 2", 24, 2, console);
+        enemyLabel.setAlign(Align.TopLeft);
 
         String[] names =
         {
@@ -123,11 +123,18 @@ public class TestGame extends GameProgram
         button.setUpdate(() -> { XGUI.remove(console); });
         button.setAlign(Align.BottomRight);
 
+        Wrapper wrapper = new Wrapper("Test", myInv, console);
+        Wrapper wrapper2 = new Wrapper("Test", enemInv, console);
+        Wrapper wrapper3 = new Wrapper("Test", button, console);
+
         console.add(playerLabel);
         console.add(enemyLabel);
         console.add(button);
         console.add(myInv);
         console.add(enemInv);
+        console.add(wrapper);
+        console.add(wrapper2);
+        console.add(wrapper3);
     }
 
     @Override public void update()

@@ -17,6 +17,7 @@ KJR is a simple, cross-platform, performant framework for creating tiled rogueli
 	- List ✓
 	- Panel ✓
 	- Textbox
+	- Component Wrapper ✓
 
 # Maybe features
 - Config class
