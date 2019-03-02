@@ -8,6 +8,7 @@ KJR is a simple, cross-platform, performant framework for creating tiled rogueli
 - Rendering
 - Audio
 - Input
+- GUI
 
 # Planned features
 - GUI
@@ -18,6 +19,9 @@ KJR is a simple, cross-platform, performant framework for creating tiled rogueli
 	- Panel ✓
 	- Textbox
 	- Component Wrapper ✓
+
+- FastNoise port to Java (Perlin Noise Only)
+- A* Pathfinding
 
 # Maybe features
 - Config class
