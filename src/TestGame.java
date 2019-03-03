@@ -61,13 +61,17 @@ public class TestGame extends GameProgram
         renderer.pushFont(font);
         window.show();
 
-        XConsole console = new XConsole("Inventory");
+        XConsole console = new XConsole("");
         console.setBox(new Box(5, 5, 40, 32));
         console.setFont(font);
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
 
-        List myInv = new List(new Box(1, 4, 15, 15), console);
+        Label label = new Label("Test", 0, 0, console);
+        label.setAlign(Align.BottomRight);
+
+        console.add(label);
+        /*List myInv = new List(new Box(1, 4, 15, 15), console);
 
         List enemInv = new List(new Box(0, 4, 15, 15), console);
         enemInv.setAlign(Align.TopRight);
@@ -93,7 +97,6 @@ public class TestGame extends GameProgram
             heart.setText(names[random.nextInt(5)]);
             heart.setActivate( () ->
             {
-                System.out.println("oopsie woopsie");
                 if(myInv.hasRef(heart)) {
                     enemInv.add(heart);
                     myInv.remove(heart); }
@@ -134,7 +137,7 @@ public class TestGame extends GameProgram
         console.add(enemInv);
         console.add(wrapper);
         console.add(wrapper2);
-        console.add(wrapper3);
+        console.add(wrapper3);*/
     }
 
     @Override public void update()

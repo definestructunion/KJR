@@ -14,7 +14,6 @@ public class List extends XComp
     private ArrayList<ListItem> items = new ArrayList<>();
     private int listOffset = 0;
 
-    private ListItem firstNode = null;
     private ListItem lastNode = null;
 
     public List(Box box, XConsole console)
@@ -28,8 +27,6 @@ public class List extends XComp
         alignBox();
 
         int line = 0;
-        if(items.size() > 0)
-            firstNode = items.get(listOffset);
 
         for(int index = 0; index < items.size() && index + listOffset < items.size(); ++index)
         {
