@@ -89,6 +89,9 @@ public class List extends XComp
 
             if(Input.buttonPressed(Buttons.Left) && item.getBox().asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
                 item.getActivate().call();
+
+            if(yOffset >= alignedBox.height)
+                break;
         }
 
         if(alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
