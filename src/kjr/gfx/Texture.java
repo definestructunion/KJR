@@ -7,7 +7,29 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 /**
- * Image memory such as a sprite or picture
+ * The {@code Texture} class represents an image to be used for rendering.
+ * The {@code Texture} class uses <a href="https://github.com/nothings/stb">STB Image</a>, 
+ * which supports the following formats:
+ * <ul>
+ * <li>PNG
+ * <li>JPG
+ * <li>TGA
+ * <li>BMP
+ * <li>PSD
+ * <li>GIF
+ * <li>HDR
+ * <li>PIC
+ * </ul>
+ * Do note however that not all of these formats have been tested for, and may not work.
+ * <p>
+ * Due to OpenGL handling the memory allocation process, any allocation of the
+ * {@code Texture} class must call delete() some time in the object's lifetime,
+ * otherwise the memory will not be fully deallocated and will cause a memory leak.
+ * <p>
+ * The {@Texture} class contains a static {@code ArrayList} of Textures, which can be added to.
+ * Upon exiting the {@code GameProgram}, the ArrayList will iterate and manually call delete(). Therefore, 
+ * any {@code Texture}s added to the ArrayList does not require the user to manually call delete() themselves, 
+ * and is preferred to use as there should only be one copy of a unique {@code Texture} object anyways.
  */
 public class Texture
 {
