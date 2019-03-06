@@ -22,6 +22,12 @@ public class Button extends XComp
         this.message = message;
     }
 
+    public Button(String message, int xOffset, int yOffset, XConsole console)
+    {
+        super(new Box(xOffset, yOffset, message.length(), 1), console);
+        this.message = message;
+    }
+
     @Override
     public void update()
     {

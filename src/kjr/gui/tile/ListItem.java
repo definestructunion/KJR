@@ -10,6 +10,7 @@ public class ListItem
     private String text;
     private Func activate;
     private Box box;
+    private boolean selected = false;
 
     public ListItem(Texture texture, String text, Func onActivate)
     {
@@ -22,6 +23,14 @@ public class ListItem
     public ListItem(Texture texture, String text)
     {
         this.texture = texture;
+        this.text = text;
+        this.activate = () -> { };
+        this.box = new Box();
+    }
+
+    public ListItem(String text)
+    {
+        this.texture = null;
         this.text = text;
         this.activate = () -> { };
         this.box = new Box();
@@ -62,4 +71,7 @@ public class ListItem
 
     public Box getBox() { return box; }
     public ListItem setBox(Box value) { box = value; return this; }
+
+    public boolean getSelected() { return selected; }
+    public ListItem setSelected(boolean value) { selected = value; return this; }
 }

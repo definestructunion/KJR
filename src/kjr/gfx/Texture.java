@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * {@code Texture} class must call delete() some time in the object's lifetime,
  * otherwise the memory will not be fully deallocated and will cause a memory leak.
  * <p>
- * The {@Texture} class contains a static {@code ArrayList} of Textures, which can be added to.
+ * The {@code Texture} class contains a static {@code ArrayList} of Textures, which can be added to.
  * Upon exiting the {@code GameProgram}, the ArrayList will iterate and manually call delete(). Therefore, 
  * any {@code Texture}s added to the ArrayList does not require the user to manually call delete() themselves, 
  * and is preferred to use as there should only be one copy of a unique {@code Texture} object anyways.

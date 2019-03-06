@@ -22,12 +22,12 @@ public class Rect implements DeepCopy<Rect>
 
     public boolean contains(float x, float y)
     {
-        return ((x >= this.x && x <= this.x + this.width) && (y >= this.y && y <= this.y + this.height));
+        return ((x > this.x && x < this.x + this.width) && (y > this.y && y < this.y + this.height));
     }
 
     public boolean contains(Vec2 pos)
     {
-        return ((pos.x >= this.x && pos.x <= this.x + this.width) && (pos.y >= this.y && pos.y <= this.y + this.height));
+        return ((pos.x > this.x && pos.x < this.x + this.width) && (pos.y > this.y && pos.y < this.y + this.height));
     }
 
     @Override

@@ -67,13 +67,22 @@ public class TestGame extends GameProgram
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
 
-        Label label = new Label("Test", 0, 0, console);
-        label.setAlign(Align.BottomRight);
+        /*Checkbox checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
+        checkBox.setAlign(Align.TopLeft);
 
-        console.add(label);
-        /*List myInv = new List(new Box(1, 4, 15, 15), console);
+        for(int i = 0; i < 20; ++i)
+        {
+            ListItem item = new ListItem("Testdpfjsdofjosdfjsdifj");
+            checkBox.add(item);
+        }
 
-        List enemInv = new List(new Box(0, 4, 15, 15), console);
+        console.add(checkBox);
+
+        Wrapper wrapper = new Wrapper("", checkBox, console);
+        console.add(wrapper);*/
+        List myInv = new List(new Box(1, 4, 15, 15), console);
+
+        List enemInv = new List(new Box(-1, 4, 15, 15), console);
         enemInv.setAlign(Align.TopRight);
 
         Label playerLabel = new Label("Player", 1, 2, console);
@@ -93,7 +102,7 @@ public class TestGame extends GameProgram
 
         for(int i = 0; i < 30; ++i)
         {
-            ListItem heart = new ListItem(texture2, "");
+            ListItem heart = new ListItem(texture2,"");
             heart.setText(names[random.nextInt(5)]);
             heart.setActivate( () ->
             {
@@ -122,13 +131,13 @@ public class TestGame extends GameProgram
         coolThing.setActivate ( () ->  { System.out.println("Clicked coolthing"); });
         enemInv.add(thing, coolThing);
 
-        Button button = new Button("Close", console);
+        Button button = new Button("[Close]", -1, -1, console);
         button.setUpdate(() -> { XGUI.remove(console); });
         button.setAlign(Align.BottomRight);
 
         Wrapper wrapper = new Wrapper("Test", myInv, console);
         Wrapper wrapper2 = new Wrapper("Test", enemInv, console);
-        Wrapper wrapper3 = new Wrapper("Test", button, console);
+        Wrapper wrapper3 = new Wrapper("", button, console);
 
         console.add(playerLabel);
         console.add(enemyLabel);
@@ -137,7 +146,7 @@ public class TestGame extends GameProgram
         console.add(enemInv);
         console.add(wrapper);
         console.add(wrapper2);
-        console.add(wrapper3);*/
+        console.add(wrapper3);
     }
 
     @Override public void update()

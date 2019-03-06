@@ -21,6 +21,14 @@ public class Box implements DeepCopy<Box>
         return new Rect(x * tileSize, y * tileSize, width * tileSize, height * tileSize);
     }
 
+    public void set(int x, int y, int width, int height)
+    {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
     @Override
     public Box copy()
     {

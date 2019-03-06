@@ -9,7 +9,6 @@ public abstract class Renderer
     protected Renderer(int tileSize)
     {
         this.tileSize = tileSize;
-        return;
     }
 
     public void delete()
