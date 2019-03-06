@@ -4,6 +4,7 @@ import static org.lwjgl.stb.STBImage.*;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 /**
@@ -107,19 +108,22 @@ public class Texture
     private String filePath;
 
     /**
-     * The width of the {@code Texture} in pixels.
+     * The width of the {@code Texture} in pixels. Stored as an array
+     * so the values aren't passed by value.
      */
-    private Integer width = 0;
+    private int[] width = new int[1];
 
     /**
-     * The height of the {@code Texture} in pixels.
+     * The height of the {@code Texture} in pixels. Stored as an array
+     * so the values aren't passed by value.
      */
-    private Integer height = 0;
+    private int[] height = new int[1];
 
     /**
-     * The amount of bits in a pixel for colour data.
+     * The amount of bits in a pixel for colour data. Stored as an array
+     * so the values aren't passed by value.
      */
-    private Integer bitsPerPixel = 0;
+    private int[] bitsPerPixel = new int[1];
 
     /**
      * Image memory such as a sprite or picture

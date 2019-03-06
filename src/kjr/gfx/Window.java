@@ -47,73 +47,31 @@ import static org.lwjgl.opengl.GL11.glGetError;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
 /**
- * <pre>
- * Brief: Renders content onto the screen.
- * 
- * Layman:
- * 
- * This class sets up GLFW (the window) and OpenGL to work
- * with this object. Any rendering will be displayed on this
- * screen.
- * 
- * Non-Layman:
- * 
- * This class creates an OpenGL context and uses this instance
- * as the context.
+ * Renders content onto the screen. The {@code Window} class creates an OpenGL context
+ * and uses this instance as the context.
  * Initializes glfw and the OpenGL library once.
- * Wrapper class for GLFW.
- * 
- * Contains:
- * - Title as String - title of the window
- * - Width as int - width of screen in pixels
- * - Height as int - height of screen in pixels
- * - GLFW Window as long - the pointer to the object in C
- * </pre>
  */
 public class Window
 {
     /**
-     * <pre>
-     * Brief: Stops GLFW from being initialized more than once.
-     * 
-     * Layman:
-     * 
-     * GLFW doesn't like being initialized multiple times.
-     * 
-     * Non-Layman:
-     * 
-     * While GLFW can be successfully initialized multiple times,
-     * GLFW doesn't support multiple instances of itself in a single
-     * process.
-     * </pre>
+     * Stops GLFW from being initialized more than once.
      */
     private static boolean IS_GLFW_INITTED = false;
 
     /**
-     * <pre>
-     * Brief: Stops OpenGL from being initialized more than once.
-     * 
-     * Note: I assume that LWJGL's initializing is similar to GLEW,
-     * where it doesn't like being initialized more than once.
-     * 
-     * Layman:
-     * 
-     * OpenGL doesn't like being initialized more than once.
-     * 
-     * Non-Layman:
-     * 
+     * Stops OpenGL from being initialized more than once.
+     * <p>
      * LWJGL's OpenGL may be able to be initialized more than once, but because
      * there is only ever 1 context at a time, there isn't a need to 
      */
     private static boolean IS_OPENGL_INITTED = false;
 
     /**
-     * <pre>
-     * Brief: GLFW callback function for setting window dimensions.
-     * </pre>
-     * @param window - glfw window
-     * @param width - new width of the monitor in pixels
-     * @param height - new height of the monitor in pixels
+     * GLFW callback function for setting window dimensions. Sets {@link width} and
+     * {@link height} to the new dimension values, and resizes the OpenGL viewport accordingly.
+     * @param window the glfw window
+     * @param width the new width of the monitor in pixels
+     * @param height the new height of the monitor in pixels
      */
     private void windowResizeCallback(long window, int width, int height)
     {
@@ -140,13 +98,12 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: GLFW callback function for setting input buttons.
-     * </pre>
-     * @param window - glfw window
-     * @param button - button being set
-     * @param action - what is happening to the button
-     * @param mods - button's modifiers
+     * GLFW callback function for setting input buttons. Sets a button
+     * in {@link kjr.input.Input} to whether or not the button is fired.
+     * @param window the glfw window
+     * @param button the button being set
+     * @param action the what is happening to the button
+     * @param mods the button's modifiers
      */
     private void buttonCallback(long window, int button, int action, int mods)
     {
@@ -159,9 +116,9 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: GLFW callback function for setting the mouse positions.
-     * </pre>
+     * GLFW callback function for setting the mouse positions. Calls
+     * {@link kjr.input.Input#setX() Input's setX} and {@link kjr.input.Input#setY() setY}
+     * according to the x and y arguments.
      * @param window
      * @param x
      * @param y
@@ -174,106 +131,53 @@ public class Window
 
 
     /**
-     * <pre>
-     * Brief: the current game running used for user callbacks.
-     * 
-     * Layman:
-     * 
-     * Since the game window is tied to the current game being used
-     * we can use it to allow the user to make their own callback
-     * functions if they wish to make them.
-     * </pre>
+     * The {@link kjr.base.GameProgram GameProgram} instance to be used for
+     * callback functions such as {@link kjr.base.GameProgram#windowResize() GameProgram.windowResize}
      */
     private GameProgram game;
 
     /**
-     * <pre>
-     * Brief: The actual window being rendererd to.
-     * 
-     * Layman:
-     * 
-     * This class only allows functionality to the window.
-     * This class doesn't actually manage the window itself, but
-     * exists to add flexibility to the window.
-     * 
-     * Non-Layman:
-     * 
      * The pointer to the GLFW window in C which we use
      * to access our created window outside of Java in Java.
      * Set to 0 by default as 0 represents NULL.
-     * </pre>
      */
     private long glfw_window = 0;
 
     /**
-     * <pre>
-     * Brief: The title of the window.
-     * </pre>
+     * Title of the {@link kjr.gfx.Window Window}.
      */
     private String title = null;
 
     /**
-     * <pre>
-     * Brief: The width of the window in pixels.
-     * 
-     * Non-Layman:
-     * 
-     * Value is set to 0 by default as GLFW asserts [width > 0]
-     * halting the program if [!(width > 0)]
-     * </pre>
+     * Width of the {@link kjr.gfx.Window Window} in pixels.
      */
     private int width = 0;
 
     /**
-     * <pre>
-     * Brief: The height of the window in pixels.
-     * 
-     * Non-Layman:
-     * 
-     * Value is set to 0 by default as GLFW asserts [height > 0]
-     * halting the program if [!(height > 0)]
-     * </pre>
+     * Width of the {@link kjr.gfx.Window Window} in pixels.
      */
     private int height = 0;
 
     /**
-     * <pre>
-     * Brief: Whether or not the window uses vsync and
-     *       waits for 1 v-blank
-     * 
-     * Note: 0 = not using vsync
-     * Note: 1 = using vsync
-     * 
-     * Layman:
-     * 
-     * If using vsync (vsync = 1), then it means
-     * that it renders only when the monitor is
-     * ready to display the information. Recommended
-     * to use vsync (= 1).
-     * 
-     * Non-Layman:
-     * 
+     * Whether or not the {@link kjr.gfx.Window Window} uses vsync and waits for 1 v-blank.
      * If using vsync, then the window waits for the next vblank for swapping
      * front and back buffers. If not using vsync, then the window does not
      * wait for vblanks for swapping front and back buffers.
-     * </pre>
+     * <p>
+     * 0 = not using vsync, swap buffers when next able.
+     * 1 = using vsync, swap buffers only as needed.>
      */
     private int vsync = 1;
 
     /**
-     * <pre>
-     * Brief: Constructs a window.
-     * 
-     * Note: Window construction only initializes GLFW/OpenGL once,
+     * Constructs a {@link kjr.gfx.Window Window}.
+     * Window construction only initializes GLFW/OpenGL once,
      * meaning the context will only be at the first window created.
-     * 
-     * Note: For more information, read the class javadoc.
-     * </pre> 
-     * @param title - title of the window
-     * @param width - width of the window in pixels
-     * @param height - height of the window in pixels
-     * @param game - game program used for user defined callback functions
-     * @param limit_framerate - whether or not to limit the framerate
+     * @param title the title of the window
+     * @param width the width of the window in pixels
+     * @param height the height of the window in pixels
+     * @param game the game program used for user defined callback functions
+     * @param limit_framerate whether or not to limit the framerate
      */
     public Window(String title, int width, int height, GameProgram game, boolean limit_framerate)
     {
@@ -286,7 +190,7 @@ public class Window
     }
 
     /**
-     * Brief: Initialization step for creating the window
+     * Initialization step for creating the {@link kjr.gfx.Window Window}.
      */
     private void initWindow()
     {
@@ -368,24 +272,15 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Clears the screen.
-     * 
-     * Layman:
-     * 
-     * Removes all the stuff rendered previously from the screen.
-     * 
-     * Non-Layman:
-     * 
-     * Clears both the OpenGL color buffer bits and
+     * Removes all the stuff rendered previously from the {@link kjr.gfx.Window Window}.
+     * Clears both the OpenGL colour buffer bits and
      * depth buffer bits. It's recommended to clear
      * everything previously rendered, making the window
      * a clean slate.
-     * </pre>
-     * @param r - red value between 0 and 1
-     * @param g - green value between 0 and 1
-     * @param b - blue value between 0 and 1
-     * @param a - alpha value between 0 and 1
+     * @param r the red value between 0 and 1
+     * @param g the green value between 0 and 1
+     * @param b the blue value between 0 and 1
+     * @param a the alpha value between 0 and 1
      */
     public void clear(float r, float g, float b, float a)
     {
@@ -394,9 +289,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Updates all events such as input and callbacks.
-     * </pre>
+     * Polls for events/callbacks and updates the {@link kjr.input.Input Input} buttons, keys, and scrollwheel.
      */
     public void update()
     {
@@ -410,19 +303,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Renders all submitted data.
-     * 
-     * Layman:
-     * 
-     * Anything that was told to render onto the screen
-     * will be rendered onto the screen. If nothing shows up,
-     * something is messed up.
-     * 
-     * Non-Layman:
-     * 
-     * Swaps the front and back buffers of the GLFW window.
-     * </pre>
+     * Renders all submitted data. Swaps the front and back buffers of the {@link kjr.gfx.Window Window}.
      */
     public void render()
     {
@@ -430,9 +311,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Hides the window (minimizes).
-     * </pre>
+     * Minimizes the {@link kjr.gfx.Window Window} if it isn't already minimized.
      */
     public void hide()
     {
@@ -440,10 +319,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Shows the window if it's hidden
-     *       otherwise, doesn't do anything.
-     * </pre>
+     * Shows the {@link kjr.gfx.Window Window} if it isn't already showing.
      */
     public void show()
     {
@@ -451,25 +327,10 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Deletes all native memory.
-     * 
-     * Warning: Will cause memory leak if delete
-     * is not called once GC collects the window.
-     * 
-     * Layman:
-     * 
-     * There is memory that the java GC can not collect.
-     * You need to explicitely call delete() once
-     * done with the window.
-     * 
-     * Non-Layman:
-     * 
-     * Since the GLFW window is bound to native resources (C),
-     * java GC does not know about it and therefor cannot collect it.
-     * Explicitely call delete on a pointer object once
-     * done with the resource.
-     * </pre>
+     * Deletes all of {@link kjr.gfx.Window Window}'s native resources.
+     * Calling {@link kjr.gfx.Window#delete() delete} will not delete the
+     * {@link kjr.gfx.Window Window} from Java, but it will render it unusable.
+     * Should only call once the {@link kjr.base.GameProgram GameProgram} is closing.
      */
     public void delete()
     {
@@ -480,11 +341,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Returns true if the window is still active.
-     * 
-     * @return 
-     * </pre>
+     * Returns whether or not {@link kjr.gfx.Window Window} is still active.
      */
     public boolean running()
     {
@@ -492,10 +349,8 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Changes the title.
-     * </pre>
-     * @param new_title - new title to change to
+     * Sets the {@link kjr.gfx.Window Window} title to a new title.
+     * @param new_title the desired title.
      */
     public void setTitle(String new_title)
     {
@@ -505,10 +360,7 @@ public class Window
 
 
     /**
-     * <pre>
-     * Brief: Returns the primary monitor width in pixels.
-     * </pre>
-     * @return int - monitor width
+     * @return the monitor's width in pixels.
      */
     public int getScreenWidth()
     {
