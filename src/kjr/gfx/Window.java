@@ -50,6 +50,9 @@ import static org.lwjgl.opengl.GL11.glClearColor;
  * Renders content onto the screen. The {@code Window} class creates an OpenGL context
  * and uses this instance as the context.
  * Initializes glfw and the OpenGL library once.
+ * <p>
+ * When creating a {@code Window} object, it is important that the screen dimensions are greater
+ * than 0. If that requirement is not met, the rendering context will not be made.
  */
 public class Window
 {
@@ -116,8 +119,8 @@ public class Window
     }
 
     /**
-     * GLFW callback function for setting the mouse positions. Calls
-     * {@link kjr.input.Input#setX() Input's setX} and {@link kjr.input.Input#setY() setY}
+     * GLFW callback function for setting the mouse positions. Calls {@link kjr.input.Input Input's}
+     * {@link kjr.input.Input#setX() setX} and {@link kjr.input.Input#setY() setY}
      * according to the x and y arguments.
      * @param window
      * @param x
@@ -350,17 +353,16 @@ public class Window
 
     /**
      * Sets the {@link kjr.gfx.Window Window} title to a new title.
-     * @param new_title the desired title.
      */
-    public void setTitle(String new_title)
+    public void setTitle(String newTitle)
     {
-        title = new_title;
-        glfwSetWindowTitle(glfw_window, new_title);
+        title = newTitle;
+        glfwSetWindowTitle(glfw_window, newTitle);
     }
 
 
     /**
-     * @return the monitor's width in pixels.
+     * Returns the monitor's width in pixels.
      */
     public int getScreenWidth()
     {
@@ -369,10 +371,7 @@ public class Window
     }
 
     /**
-     * <pre>
      * Brief: Returns the primary monitor height in pixels.
-     * </pre>
-     * @return int - monitor height
      */
     public int getScreenHeight()
     {
@@ -381,10 +380,8 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Returns the primary monitor resolution in pixels.
-     * </pre>
-     * @return Vec2 - monitor resolution
+     * Returns the primary monitor resolution in pixels. Creates a Vec2
+     * object when called.
      */
     public Vec2 getScreenResolution()
     {
@@ -393,10 +390,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Returns the window width in pixels.
-     * </pre>
-     * @return int - window width
+     * Returns the window width in pixels.
      */
     public int getWidth()
     {
@@ -404,10 +398,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Returns the window height in pixels.
-     * </pre>
-     * @return int - window height
+     * Returns the window height in pixels.
      */
     public int getHeight()
     {
@@ -415,10 +406,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Returns the window dimensions in pixels.
-     * </pre>
-     * @return Vec2 - window dimensions
+     * Returns the window dimensions in pixels.
      */
     public Vec2 getDimensions()
     {
@@ -426,10 +414,7 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Returns the elapsed time in milliseconds.
-     * </pre>
-     * @return double - milliseconds
+     * Returns elapsed time in milliseconds
      */
     public double getTime()
     {
@@ -437,9 +422,8 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: Sets the window to close, setting running to false.
-     * </pre>
+     * Closes the {@link kjr.gfx.Window Window} by hinting to GLFW that the
+     * window should close as requested by the user.
      */
     public void close()
     {
