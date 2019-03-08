@@ -1,5 +1,9 @@
 package kjr.input;
 
+/**
+ * Represents buttons on a mouse. Button values should not be passed as ordinal(), as Buttons is not
+ * created ordinally. Button values should be passed as value().
+ */
 public enum Buttons
 {
     B1           (0),
@@ -23,6 +27,9 @@ public enum Buttons
         this.number = number;
     }
 
+    /**
+     * Returns the actual value of the key.
+     */
     public int value()
     {
         return number;

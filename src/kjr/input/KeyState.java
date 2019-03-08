@@ -3,16 +3,8 @@ package kjr.input;
 import java.util.Arrays;
 
 /**
- * <pre>
- * Brief: Holds information about key states.
- * 
- * Layman:
- * 
- * Holds information about whether or not a key
- * or button is being fired (pushed down).
- * 
- * Non-Layman:
- * 
+ * Holds information about key states.
+ * <p>
  * Holds generic information about an array of keys and their state.
  * This information is not tied to any particular time or state in the application.
  * Meaning KeyState works for any state of time, but must be recorded and defined as such.
@@ -22,29 +14,22 @@ import java.util.Arrays;
  * Contains:
  * - Keys as boolean array - the states of all the keys
  * - Buttons as boolean array - the states of all the buttons
- * </pre>
  */
 public class KeyState
 {
     /**
-     * <pre>
-     * Brief: keys on the keyboard.
-     * </pre>
+     * Keeps track of the keys in this {@link kjr.input.KeyState KeyState}.
      */
     boolean[] keys = new boolean[Input.MAX_KEYS];
 
     /**
-     * <pre>
-     * Brief: buttons on the mouse.
-     * </pre>
+     * Keeps track of the buttons in this {@link kjr.input.KeyState KeyState}.
      */
     boolean[] buttons = new boolean[Input.MAX_BUTTONS];
 
     /**
-     * <pre>
-     * Brief: Creates a state with every key and button
-     *       set to false
-     * </pre>
+     * Creates a new key state with every {@link kjr.input.Keys Key} and {@link kjr.input.Buttons Button}
+     * value set to false
      */
     public KeyState()
     {

@@ -1,5 +1,9 @@
 package kjr.input;
 
+/**
+ * Represents a key on a keyboard. Key values should not be passed as ordinal(), as Keys is not
+ * created ordinally. Key values should be passed as value().
+ */
 public enum Keys{
     Unknown      (-1),
     Space        (32),
