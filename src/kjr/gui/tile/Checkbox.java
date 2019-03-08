@@ -3,6 +3,7 @@ package kjr.gui.tile;
 import kjr.gfx.Box;
 import kjr.gfx.Colour;
 import kjr.gfx.Renderer;
+import kjr.input.Buttons;
 import kjr.input.Input;
 import kjr.math.Vec2;
 
@@ -16,6 +17,8 @@ public class Checkbox extends XComp
 
     private String checkedBox = "[X]";
     private String uncheckedBox = "[ ]";
+
+    private boolean singleSelect = false;
 
     public Checkbox(Box box, XConsole console)
     {
@@ -76,6 +79,48 @@ public class Checkbox extends XComp
     {
         alignBox();
 
+        int yOffset = 0;
+        for(int i = listOffset; i < items.size(); ++i)
+        {
+            ListItem item = items.get(i);
+            item.getBox().set(alignedBox.x, alignedBox.y + yOffset, alignedBox.width, 1);
+
+            if(Input.buttonPressed(Buttons.Left) && getContains(item, Input.getMousePosition()))
+            {
+                if(singleSelect)
+                {
+                    if(getSelectedCount() == 0)
+                        item.setSelected(true);
+                    else if(item.getSelected())
+                        item.setSelected(false);
+                    else
+                    {
+                        deselectAll();
+                        item.setSelected(true);
+                    }
+                }
+                else
+                {
+                    item.setSelected(!item.getSelected());
+                }
+            }
+
+            ++yOffset;
+        }
+
+        if(alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
+        {
+            if(Input.getScrollY() < -0.1)
+            {
+                if(items.size() > 0 && listOffset < items.size() - alignedBox.height)
+                    ++listOffset;
+            }
+            else if(Input.getScrollY() > 0.1)
+            {
+                if(listOffset != 0)
+                    --listOffset;
+            }
+        }
     }
 
     public void add(ListItem... items) { this.items.addAll(Arrays.asList(items)); }
@@ -96,4 +141,37 @@ public class Checkbox extends XComp
 
     public String getUncheckedBox() { return uncheckedBox; }
     public Checkbox setUncheckedBox(String value) { uncheckedBox = value; return this; }
+
+    public Checkbox setSelectionTypeSingle()
+    {
+        singleSelect = true;
+        return this;
+    }
+
+    public Checkbox setSelectionTypeMultiple()
+    {
+        singleSelect = false;
+        return this;
+    }
+
+    public int getSelectedCount()
+    {
+        int count = 0;
+        for(ListItem item : items)
+            if(item.getSelected())
+                ++count;
+        return count;
+    }
+
+    public void selectAll()
+    {
+        for(ListItem item : items)
+            item.setSelected(true);
+    }
+
+    public void deselectAll()
+    {
+        for(ListItem item : items)
+            item.setSelected(false);
+    }
 }

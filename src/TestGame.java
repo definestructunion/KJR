@@ -67,8 +67,9 @@ public class TestGame extends GameProgram
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
 
-        /*Checkbox checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
+        Checkbox checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
         checkBox.setAlign(Align.TopLeft);
+        checkBox.setSelectionTypeMultiple();
 
         for(int i = 0; i < 20; ++i)
         {
@@ -79,8 +80,8 @@ public class TestGame extends GameProgram
         console.add(checkBox);
 
         Wrapper wrapper = new Wrapper("", checkBox, console);
-        console.add(wrapper);*/
-        List myInv = new List(new Box(1, 4, 15, 15), console);
+        console.add(wrapper);
+        /*List myInv = new List(new Box(1, 4, 15, 15), console);
 
         List enemInv = new List(new Box(-1, 4, 15, 15), console);
         enemInv.setAlign(Align.TopRight);
@@ -146,7 +147,7 @@ public class TestGame extends GameProgram
         console.add(enemInv);
         console.add(wrapper);
         console.add(wrapper2);
-        console.add(wrapper3);
+        console.add(wrapper3);*/
     }
 
     @Override public void update()
