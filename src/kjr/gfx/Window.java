@@ -47,7 +47,8 @@ import static org.lwjgl.opengl.GL11.glGetError;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
 /**
- * Renders content onto the screen. The {@code Window} class creates an OpenGL context
+ * Renders content onto the screen. The {@code Window} class creates an OpenGL
+ * (via GL.createCapabilities) context
  * and uses this instance as the context.
  * Initializes glfw and the OpenGL library once.
  * <p>
