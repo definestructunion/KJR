@@ -4,12 +4,11 @@ import static org.lwjgl.stb.STBImage.*;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 /**
- * The {@code Texture} class represents an image to be used for rendering.
- * The {@code Texture} class uses <a href="https://github.com/nothings/stb">STB Image</a>, 
+ * The Texture class represents an image to be used for rendering.
+ * The Texture class uses <a href="https://github.com/nothings/stb">STB Image</a>, 
  * which supports the following formats:
  * <ul>
  * <li>PNG
@@ -24,13 +23,13 @@ import java.util.ArrayList;
  * Do note however that not all of these formats have been tested for, and may not work.
  * <p>
  * Due to OpenGL handling the memory allocation process, any allocation of the
- * {@code Texture} class must call {@link #delete() delete} some time in the object's lifetime,
+ * Texture class must call {@link #delete() delete} some time in the object's lifetime,
  * otherwise the memory will not be fully deallocated and will cause a memory leak.
  * <p>
- * The {@code Texture} class contains a static {@code ArrayList} of Textures, which can be added to.
- * Upon exiting the {@code GameProgram}, the ArrayList will iterate and manually call {@link #delete() delete}. Therefore,
- * any {@code Texture}s added to the ArrayList does not require the user to manually call {@link #delete() delete} themselves,
- * and is preferred to use as there should only be one copy of a unique {@code Texture} object anyways.
+ * The Texture class contains a static ArrayList of Textures, which can be added to.
+ * Upon exiting the {@link kjr.base.GameProgram GameProgram}, the ArrayList will iterate and manually call {@link #delete() delete}. Therefore,
+ * any {@code Textures} added to the ArrayList does not require the user to manually call {@link #delete() delete} themselves,
+ * and is preferred to use as there should only be one copy of a unique Texture object anyways.
  */
 public class Texture
 {
@@ -98,30 +97,30 @@ public class Texture
     }
 
     /**
-     * Integer ID for OpenGL to keep track of the {@code Texture}
+     * Integer ID for OpenGL to keep track of the {@link kjr.gfx.Texture Texture}
      */
     private int id;
 
     /**
-     * Keeps track of the {@code Texture}'s filePath
+     * Keeps track of the {@link kjr.gfx.Texture Texture's} filePath
      */
     private String filePath;
 
     /**
-     * The width of the {@code Texture} in pixels. Stored as an array
-     * so the values aren't passed by value.
+     * The width of the {@link kjr.gfx.Texture Texture} in pixels. Stored as an array
+     * so the values are passed by reference.
      */
     private int[] width = new int[1];
 
     /**
-     * The height of the {@code Texture} in pixels. Stored as an array
-     * so the values aren't passed by value.
+     * The height of the {@link kjr.gfx.Texture Texture} in pixels. Stored as an array
+     * so the values are passed by reference.
      */
     private int[] height = new int[1];
 
     /**
      * The amount of bits in a pixel for colour data. Stored as an array
-     * so the values aren't passed by value.
+     * so the values are passed by reference.
      */
     private int[] bitsPerPixel = new int[1];
 
@@ -219,11 +218,11 @@ public class Texture
     }
 
     /**
-     * Deletes the {@code Texture}'s memory from OpenGL, does not
+     * Deletes the {@link kjr.gfx.Texture Texture's} memory from OpenGL, does not
      * deallocate the {@code Texture} from Java.
      * <p>
-     * A memory leak will occur if a {@code Texture} gets collected
-     * without having {@link #delete() delete} be called.
+     * A memory leak will occur if a {@link kjr.gfx.Texture Texture} gets collected
+     * without having {@link kjr.gfx.Texture#delete() delete} be called.
      */
     public void delete()
     {
@@ -232,8 +231,7 @@ public class Texture
     }
 
     /**
-     * Returns OpenGL's ID for this {@code Texture}'s ID.
-     * @return ID for this {@code Texture}
+     * Returns OpenGL's ID for this {@link kjr.gfx.Texture Texture's} {@link kjr.gfx.Texture#id ID}.
      */
     public int getID()
     {
@@ -241,9 +239,8 @@ public class Texture
     }
 
     /**
-     * Returns whether or not the {@link filePath}s are the same.
-     * @param obj The {@code Texture} for testing.
-     * @return if the {@code Texture}s are the same.
+     * Returns whether or not the {@link kjr.gfx.Texture#filePath file paths} are the same.
+     * @param obj The {@link kjr.gfx.Texture Texture} for testing.
      */
     @Override
     public boolean equals(Object obj)
@@ -255,9 +252,9 @@ public class Texture
     }
 
     /**
-     * Returns this {@code Texture}'s {@link id} as a hashCode, as any {@code Texture} with
-     * a different {@link id} is not equal.
-     * @return
+     * Returns this {@link kjr.gfx.Texture Texture} {@link kjr.gfx.Texture#id ID} 
+     * as a hashCode, as any {@code Texture} with
+     * a different {@link kjr.gfx.Texture#id ID} is not equal.
      */
     @Override
     public int hashCode() { return id; }

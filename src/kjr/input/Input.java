@@ -3,71 +3,91 @@ package kjr.input;
 import kjr.math.Vec2;
 
 /**
- * <pre>
- * Brief: The keystate of the application.
- * 
- * Layman:
- * 
- * All key related activities are kept here, such as keys being
- * pressed or not
- * 
- * Contains:
- * Max Keys as final int - amount of keys in the key array
- * Max Buttons as final int - amount of buttons in the button array
- * GLFW as KeyState - keys set by GLFW on callback
- * Current as KeyState - keys that are being fired this frame
- * Previous as KeyState - keys that are being fired this frame
- *                        but only remain true for one frame
- *                        until released
- * </pre>
+ * Contains information about {@link kjr.input.Keys Keys}, {@link kjr.input.Buttons Buttons},
+ * Mouse positition, and scroll wheel information. This information is set by GLFW callbacks. While
+ * user can set this information manually, it's not recommended as the user should not force state.
+ * <p>
+ * Input allows the user to query for various states of the application. They can check for specific keys
+ * and buttons, whether they are held down or pressed. They can check for the mouse position and check for
+ * movement of the scroll wheel.
+ * <p>
+ * To update this information, it's imperative that either {@link kjr.gfx.Window#update() Window.update} or
+ * {@link kjr.input.Input#update() Input.update} are called. Without updating Input, the state will be locked
+ * and prone to inaccuracy.
  */
 public final class Input
 {
     /**
-     * <pre>
-     * Brief: The amount of keys.
-     * </pre>
+     * The amount of keys to go into {@link kjr.input.KeyState KeyState} keys.
      */
     public static final int MAX_KEYS    = 1024;
 
     /**
-     * <pre>
-     * Brief: The amount of buttons.
-     * </pre>
+     * The amount of buttons to go into {@link kjr.input.KeyState KeyState} buttons.
      */
     public static final int MAX_BUTTONS = 32;
 
     /**
-     * <pre>
-     * Brief: The KeyState holding the GLFW keys
-     * 
-     * Note: This is useful for the previous KeyState, which relies
+     * The {@link kjr.input.KeyState KeyState} holding the key state
+     * for GLFW callback functions.
+     * <p>
+     * This is useful for the previous KeyState, which relies
      * on both glfw and current.
-     * </pre>
      */
     private static KeyState glfw = new KeyState();
 
     /**
-     * <pre>
-     * Brief: The currently fired keys.
-     * </pre>
+     * The currently fired keys. This {@link kjr.input.KeyState KeyState} is useful
+     * for getting the current frame's key state.
      */
     private static KeyState current = new KeyState();
 
     /**
-     * <pre>
-     * Brief: Keys that are only fired once when held down
-     * allowed to be fired again once released.
-     * </pre>
+     * The previously fired keys. Values are set to reflect a key/button to only fire once
+     * when held down, rather than continuously.
      */
     private static KeyState previous = new KeyState();
 
     /**
-     * <pre>
-     * Brief: Updates the current and previous KeyStates.
-     * 
-     * Note: Can't be used to set GLFW keys
-     * </pre>
+     * X position of the cursor.
+     * Note that (0, 0) is located at the top left
+     */
+    private static float x;
+
+    /**
+     * Y position of the cursor.
+     * Note that (0, 0) is located at the top left
+     */
+    private static float y;
+
+    /**
+     * Position of the cursor a vector. Created in {@link kjr.input.Input Input} so that
+     * calling {@link kjr.input.Input#getMousePosition() getMousePosition} does not allocate
+     * resources to be collected soon after.
+     */
+    private static Vec2 mousePosition = new Vec2(0, 0);
+
+    /**
+     * Scroll position on the X axis. Most mice do not support X axis scrolling (right, left).
+     */
+    private static double scrollX = 0;
+
+    /**
+     * Scroll position on the Y axis. Most mice do support Y axis Scrolling (up, down).
+     */
+    private static double scrollY = 0;
+
+    /**
+     * GLFW callback on scrolling does not reset the values of {@link kjr.input.Input#scrollX scrollX}
+     * and {@link kjr.input.Input#scrollY scrollY}. Therefore, it's mimicked by scrollCount, which only returns
+     * {@link kjr.input.Input#scrollX scrollX} and {@link kjr.input.Input#scrollY scrollY} values if scrollCount
+     * is greater than 0.
+     */
+    private static int scrollCount = 0;
+
+    /**
+     * Updates the {@link kjr.input.KeyState KeyState} and {@link kjr.input.Input#scrollCount scrollCount}
+     * to reflect the new frame.
      */
     public static void update()
     {
@@ -100,11 +120,7 @@ public final class Input
     }
 
     /**
-     * <pre>
-     * Brief: Returns whether or not the specified key is down.
-     * </pre>
-     * @param key - key to check
-     * @return - true if key is fired
+     * Returns whether or not the specified key is down.
      */
     public static boolean keyDown(Keys key)
     {
@@ -112,24 +128,12 @@ public final class Input
     }
 
     /**
-     * <pre>
-     * Brief: Returns true if the key is pressed down
-     * 
-     * Layman:
-     * 
-     * Holding the key down will only fire once,
-     * meaning you have to release the key and press
-     * it down again to fire the key.
-     * 
-     * Non-Layman:
-     * 
-     * Returns true if the key is pressed down,
-     * the difference between this and keyDown is that
-     * keyPressed is only fired once when held down
+     * Returns true if the key is pressed down.
+     * The difference between {@link kjr.input.Input#keyPressed(Key) keyPressed} and
+     * {@link kjr.input.Input#keyDown(Key) keyDown} is that
+     * {@link kjr.input.Input#keyPressed(Key) keyPressed} is only fired once when held down
      * and must be released to be able to be fired again.
-     * </pre>
      * @param key the key to check
-     * @return true if the key is pressed
      */
     public static boolean keyPressed(Keys key)
     {
@@ -137,11 +141,8 @@ public final class Input
     }
 
     /**
-     * <pre>
-     * Brief: Returns true if the button is held down
-     * </pre>
-     * @param button - button to check
-     * @return - true if the button is down
+     * Returns whether or not the button is down.
+     * @param button the button to check
      */
     public static boolean buttonDown(Buttons button)
     {
@@ -149,36 +150,25 @@ public final class Input
     }
 
     /**
-     * <pre>
-     * Brief: Returns true if the button is pressed down.
-     * 
-     * Layman:
-     * 
-     * Holding the button down will only fire once,
-     * meaning you have to release the button and press
-     * it down again to fire the key.
-     * 
-     * Non-Layman:
-     * 
-     * Returns true if the button is pressed down,
-     * the difference between this and buttonDown is that
-     * buttonPressed is only fired once when held down
+     * Returns whether or not the button is pressed down.
+     * The difference between {@link kjr.input.Input#buttonPressed(Key) buttonPressed} and
+     * {@link kjr.input.Input#buttonDown(Key) buttonDown} is that
+     * {@link kjr.input.Input#buttonPressed(Key) buttonPressed} is only fired once when held down
      * and must be released to be able to be fired again.
-     * </pre>
      * @param button the button to check
-     * @return true if the button is pressed
      */
-    public static boolean buttonPressed(Buttons button) { return previous.buttons[button.value()]; }
+    public static boolean buttonPressed(Buttons button)
+    {
+        return previous.buttons[button.value()];
+    }
 
     /**
-     * <pre>
-     * Brief: Sets the according key to val.
-     * 
-     * Warning: This should not be used by a user, this is
+     * Sets the corresponding key to val.
+     * <p>
+     * This should not be used by user, this is
      * designed for GLFW callbacks
-     * </pre>
-     * @param key - key being set
-     * @param val - value of the button
+     * @param key the key being set
+     * @param val the value of the key (true, false)
      */
     public static void setKey(int key, boolean val)
     {
@@ -186,14 +176,12 @@ public final class Input
     }
 
     /**
-     * <pre>
-     * Brief: Sets the according button to val.
-     * 
-     * Warning: This should not be used by a user, this is
+     * Sets the corresponding key to val.
+     * <p>
+     * This should not be used by user, this is
      * designed for GLFW callbacks
-     * </pre>
-     * @param button - button being set
-     * @param val - value of the button
+     * @param button the button being set
+     * @param val the value of the button (true, false)
      */
     public static void setButton(int button, boolean val)
     {
@@ -201,27 +189,7 @@ public final class Input
     }
 
     /**
-     * <pre>
-     * Brief: X position of the cursor
-     * 
-     * Note: (0, 0) is located at the top left
-     * </pre>
-     */
-    private static float x;
-    /**
-     * <pre>
-     * Brief: Y position of the cursor
-     * 
-     * Note: (0, 0) is located at the top left
-     * </pre>
-     */
-    private static float y;
-
-    /**
-     * <pre>
-     * Brief: Gets the X position of the mouse.
-     * </pre>
-     * @return double - mouse position's X
+     * Returns the X position of the mouse.
      */
     public static double getX()
     {
@@ -229,10 +197,7 @@ public final class Input
     }
 
     /**
-     * <pre>
-     * Brief: Gets the Y position of the mouse.
-     * </pre>
-     * @return double - mouse position's Y
+     * Returns the Y position of the mouse.
      */
     public static double getY()
     {
@@ -240,28 +205,23 @@ public final class Input
     }
 
     /**
-     * <pre>
-     * Brief: Sets the mouse X position.
-     * 
-     * Warning: This should not be used by a user, this is
+     * Sets the mouse X position.
+     * <p>
+     * This should not be used by user, this is
      * designed for GLFW callbacks.
-     * </pre>
-     * @param val - new X value
+     * @param val the new X value
      */
     public static void setX(float val) { x = val; }
 
     /**
-     * <pre>
-     * Brief: Sets the mouse Y position.
-     * 
-     * Warning: This should not be used by a user, this is
+     * Sets the mouse Y position.
+     * <p>
+     * This should not be used by user, this is
      * designed for GLFW callbacks.
-     * </pre>
-     * @param val - new Y value
+     * @param val the new Y value
      */
     public static void setY(float val) { y = val; }
 
-    private static Vec2 mousePosition = new Vec2(0, 0);
     public static Vec2 getMousePosition()
     {
         mousePosition.x = x;
@@ -270,53 +230,13 @@ public final class Input
     }
 
     /**
-     * If the key is down, it returns true and sets the key to false
-     * @return
+     * Sets the new scroll wheel values.
+     * <p>
+     * This should not be used by user, this is
+     * designed for GLFW callbacks.
+     * @param xOffset the new X value of scrollX
+     * @param yOffset the new Y value of scrollY
      */
-    public static boolean keyDownSet(Keys key)
-    {
-        boolean isKeyDown = current.keys[key.value()];
-        current.keys[key.value()] = false;
-        return isKeyDown;
-    }
-
-    /**
-     * If the key is pressed, it returns true and sets the key to false
-     * @return
-     */
-    public static boolean keyPressedSet(Keys key)
-    {
-        boolean isKeyPressed = previous.keys[key.value()];
-        previous.keys[key.value()] = false;
-        return isKeyPressed;
-    }
-
-    /**
-     * If the button is down, it returns true and sets the key to false
-     * @return
-     */
-    public static boolean buttonDownSet(Buttons button)
-    {
-        boolean isButtonDown = current.buttons[button.value()];
-        current.buttons[button.value()] = false;
-        return isButtonDown;
-    }
-
-    /**
-     * If the button is pressed, it returns true and sets the key to false
-     * @return
-     */
-    public static boolean buttonPressedSet(Buttons button)
-    {
-        boolean isButtonPressed = previous.buttons[button.value()];
-        previous.buttons[button.value()] = false;
-        return isButtonPressed;
-    }
-
-    private static double scrollX = 0;
-    private static double scrollY = 0;
-    private static int scrollCount = 0;
-
     public static void setScrollWheel(double xOffset, double yOffset)
     {
         scrollX = xOffset;
@@ -326,9 +246,12 @@ public final class Input
         scrollCount += 2;
     }
 
-    //public static double getScrollX() { return scrollX; }
-    //public static double getScrollY() { return scrollY; }
-
+    /**
+     * Returns the {@link kjr.input.Input#scrollX scrollX} value only if
+     * {@link kjr.input.Input#scrollCount} is greater than 0. If
+     * {@link kjr.input.Input#scrollCount} is equal to 0, getScrollY returns
+     * 0.0.
+     */
     public static double getScrollX()
     {
         if(scrollCount > 0)
@@ -336,6 +259,12 @@ public final class Input
         return 0.0;
     }
 
+    /**
+     * Returns the {@link kjr.input.Input#scrollY scrollY} value only if
+     * {@link kjr.input.Input#scrollCount} is greater than 0. If
+     * {@link kjr.input.Input#scrollCount} is equal to 0, getScrollX returns
+     * 0.0.
+     */
     public static double getScrollY()
     {
         if(scrollCount > 0) {

@@ -52,7 +52,7 @@ import static org.lwjgl.opengl.GL11.glClearColor;
  * and uses this instance as the context.
  * Initializes glfw and the OpenGL library once.
  * <p>
- * When creating a {@code Window} object, it is important that the screen dimensions are greater
+ * When creating a {@code Window} object, it is important that the window dimensions are greater
  * than 0. If that requirement is not met, the rendering context will not be made.
  */
 public class Window
@@ -71,8 +71,9 @@ public class Window
     private static boolean IS_OPENGL_INITTED = false;
 
     /**
-     * GLFW callback function for setting window dimensions. Sets {@link width} and
-     * {@link height} to the new dimension values, and resizes the OpenGL viewport accordingly.
+     * GLFW callback function for setting window dimensions. Sets {@link kjr.gfx.Window#width width} and
+     * {@link kjr.gfx.Window#height height} to the new dimension values,
+     * and resizes the OpenGL viewport accordingly.
      * @param window the glfw window
      * @param width the new width of the monitor in pixels
      * @param height the new height of the monitor in pixels
@@ -87,14 +88,13 @@ public class Window
     }
 
     /**
-     * <pre>
-     * Brief: GLFW callback function for setting input keys.
-     * </pre>
-     * @param window - glfw window
-     * @param key - key being set
-     * @param scancode - code for the key to query
-     * @param action - what is happening to the key
-     * @param mods - key's modifiers
+     * GLFW callback function for setting input keys. Sets a key
+     * in {@link kjr.input.Input Input} to the key's state (pressed or not).
+     * @param window the glfw window
+     * @param key the key being set
+     * @param scancode the code for the key to query
+     * @param action what is happening to the key
+     * @param mods the key's modifiers
      */
     private void keyCallback(long window, int key, int scancode, int action, int mods)
     {
@@ -103,10 +103,10 @@ public class Window
 
     /**
      * GLFW callback function for setting input buttons. Sets a button
-     * in {@link kjr.input.Input} to whether or not the button is fired.
+     * in {@link kjr.input.Input Input} to the button's state (pressed or not).
      * @param window the glfw window
      * @param button the button being set
-     * @param action the what is happening to the button
+     * @param action what is happening to the button
      * @param mods the button's modifiers
      */
     private void buttonCallback(long window, int button, int action, int mods)
@@ -123,9 +123,9 @@ public class Window
      * GLFW callback function for setting the mouse positions. Calls {@link kjr.input.Input Input's}
      * {@link kjr.input.Input#setX() setX} and {@link kjr.input.Input#setY() setY}
      * according to the x and y arguments.
-     * @param window
-     * @param x
-     * @param y
+     * @param window the glfw window
+     * @param x the mouse x coordinate
+     * @param y the mouse y coordinate
      */
     private void cursorPositionCallback(long window, double x, double y)
     {
@@ -331,7 +331,7 @@ public class Window
     }
 
     /**
-     * Deletes all of {@link kjr.gfx.Window Window}'s native resources.
+     * Deletes all of {@link kjr.gfx.Window Window's} native resources.
      * Calling {@link kjr.gfx.Window#delete() delete} will not delete the
      * {@link kjr.gfx.Window Window} from Java, but it will render it unusable.
      * Should only call once the {@link kjr.base.GameProgram GameProgram} is closing.
@@ -372,7 +372,7 @@ public class Window
     }
 
     /**
-     * Brief: Returns the primary monitor height in pixels.
+     * Returns the primary monitor height in pixels.
      */
     public int getScreenHeight()
     {
