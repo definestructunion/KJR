@@ -1,7 +1,17 @@
 package kjr.gfx;
 
+import kjr.math.Mathf;
 import kjr.util.DeepCopy;
 
+/**
+ * A class with four values represents red, green, blue, and alpha channels between 0 and 1.
+ * Values outside of 0 and 1 will be {@link kjr.math.Mathf#clamp(float, float, float) clamped}.
+ * <p>
+ * Colour implements {@link kjr.util.DeepCopy DeepCopy}, so colours can be copied via
+ * {@link kjr.gfx.Colour#copy() Colour.copy()}.
+ * <p>
+ * Colour comes with 23 static final colours to use for convenience.
+ */
 public class Colour implements DeepCopy<Colour>
 {
     public static final Colour red;
@@ -64,25 +74,24 @@ public class Colour implements DeepCopy<Colour>
 
     public Colour(float r, float g, float b)
     {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = 1.0f;
+        r(r); g(g); b(b); a(1.0f);
         setHex();
     }
 
     public Colour(float r, float g, float b, float a)
     {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
+        r(r); g(g); b(b); a(a);
         setHex();
+        Colour c = Colour.red;
+        c.r(0.5f);
     }
     
     private void setHex()
     {
-        hex = Float.intBitsToFloat(((int)(a * 255) << 0x0018 | (int)(b * 255) << 0x0010 | (int)(g * 255) << 0x0008 | (int)(r * 255)));
+        hex = Float.intBitsToFloat(((int)(a * 255) << 0x0018 |
+                                    (int)(b * 255) << 0x0010 |
+                                    (int)(g * 255) << 0x0008 |
+                                    (int)(r * 255)));
     }
 
     public float r() { return r; }
@@ -91,10 +100,10 @@ public class Colour implements DeepCopy<Colour>
     public float a() { return a; }
     public float hex() { return hex; }
 
-    public void r(float val) { r = val; setHex(); }
-    public void g(float val) { g = val; setHex(); }
-    public void b(float val) { b = val; setHex(); }
-    public void a(float val) { a = val; setHex(); }
+    public void r(float val) { r = channelClamp(val); setHex(); }
+    public void g(float val) { g = channelClamp(val); setHex(); }
+    public void b(float val) { b = channelClamp(val); setHex(); }
+    public void a(float val) { a = channelClamp(val); setHex(); }
 
     @Override
     public Colour copy()
@@ -106,5 +115,10 @@ public class Colour implements DeepCopy<Colour>
         obj.a      = a;
         obj.hex    = hex;
         return obj;
+    }
+
+    private float channelClamp(float value)
+    {
+        return Mathf.clamp(value, 0.0f, 1.0f);
     }
 }

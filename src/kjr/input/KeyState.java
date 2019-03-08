@@ -5,15 +5,12 @@ import java.util.Arrays;
 /**
  * Holds information about key states.
  * <p>
- * Holds generic information about an array of keys and their state.
+ * Holds generic information about a {@link kjr.input.Keys Key} 
+ * array and a {@link kjr.input.Buttons Button} array and their state.
  * This information is not tied to any particular time or state in the application.
  * Meaning KeyState works for any state of time, but must be recorded and defined as such.
- * Meaning if you want a key state for the last frame, you must treat the keys and buttons
+ * Meaning if user want a key state for the last frame, user must treat the keys and buttons
  * as if they were keys and buttons from the last frame.
- * 
- * Contains:
- * - Keys as boolean array - the states of all the keys
- * - Buttons as boolean array - the states of all the buttons
  */
 public class KeyState
 {

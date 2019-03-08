@@ -32,6 +32,7 @@ While libraries such as libGDX and jMonkeyEngine may have many more features, ma
 used in a typical roguelike game, and often slows down the game as a result. 
 
 # Todo
+- Finish replacing Colours objects in Colour with functions
 - Finish Planned features
 - Add more menial functionality to Window and Audio
 - Finish documentation

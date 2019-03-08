@@ -136,6 +136,9 @@ public enum Keys{
         this.number = number;
     }
 
+    /**
+     * Returns the actual value of the key.
+     */
     public int value()
     {
         return number;
