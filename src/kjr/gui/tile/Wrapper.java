@@ -1,6 +1,7 @@
 package kjr.gui.tile;
 
 import kjr.gfx.Colour;
+import kjr.gfx.Renderer;
 import kjr.gfx.SpriteBatch;
 
 public class Wrapper extends XComp
@@ -16,7 +17,7 @@ public class Wrapper extends XComp
     }
 
     @Override
-    public void draw(SpriteBatch renderer)
+    public void draw(Renderer renderer)
     {
         box = wrapperComp.alignedBox.copy();
         --box.x;
@@ -36,7 +37,7 @@ public class Wrapper extends XComp
 
     }
 
-    private void drawCorners(SpriteBatch renderer)
+    private void drawCorners(Renderer renderer)
     {
         int left = box.x;
         int right = box.x + box.width;
@@ -50,7 +51,7 @@ public class Wrapper extends XComp
         renderer.draw(console.getBottomRightGlyph(), border, right, bottom, 0.0f);
     }
 
-    private void drawColumns(SpriteBatch renderer)
+    private void drawColumns(Renderer renderer)
     {
         Colour border = console.getColourTheme().getBorder();
 
@@ -65,7 +66,7 @@ public class Wrapper extends XComp
         }
     }
 
-    private void drawRowBottom(SpriteBatch renderer)
+    private void drawRowBottom(Renderer renderer)
     {
         Colour border = console.getColourTheme().getBorder();
 
@@ -74,7 +75,7 @@ public class Wrapper extends XComp
             renderer.draw(console.getRowGlyph(), border, box.x + x, box.y + box.height, 0.0f);
     }
 
-    private void drawRowTop(SpriteBatch renderer)
+    private void drawRowTop(Renderer renderer)
     {
         Colour border = console.getColourTheme().getBorder();
         int titleStart = 3;

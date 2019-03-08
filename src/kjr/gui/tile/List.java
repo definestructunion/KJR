@@ -2,7 +2,7 @@ package kjr.gui.tile;
 
 import kjr.gfx.Box;
 import kjr.gfx.Colour;
-import kjr.gfx.SpriteBatch;
+import kjr.gfx.Renderer;
 import kjr.input.Buttons;
 import kjr.input.Input;
 import kjr.math.Vec2;
@@ -21,7 +21,7 @@ public class List extends XComp
     }
 
     @Override
-    public void draw(SpriteBatch renderer)
+    public void draw(Renderer renderer)
     {
         alignBox();
 
@@ -45,7 +45,7 @@ public class List extends XComp
             {
                 int posX = alignedBox.x + ((itemHasTexture) ? 1 : 0) + i;
 
-                if(i >= alignedBox.width - 1)
+                if(posX >= alignedBox.x + alignedBox.width)
                     break;
 
                 renderer.draw(inner, posX, alignedBox.y + index, 0.0f);

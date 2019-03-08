@@ -49,7 +49,7 @@ public class Texture
 
     /**
      * Loads and returns a {@code Texture} based on the filePath given. This method also
-     * adds the loaded {@code Texture} to {@link textures}.
+     * adds the loaded {@code Texture} to {@link kjr.gfx.Texture#textures}.
      * @param filePath the path to the {@code Texture} to be loaded.
      * @return the {@code Texture} created based on the argument.
      */
@@ -61,12 +61,12 @@ public class Texture
     }
 
     /**
-     * Returns a {@code Texture} based on the given index from the {@code ArrayList} {@link textures}.
+     * Returns a {@code Texture} based on the given index from the {@code ArrayList} {@link kjr.gfx.Texture#textures}.
      * In order to keep track of {@code Texture} indeces (IDs), the user can create an enum called
      * TextureNames (for example), and use ordinal(). If each {@code Texture} is added to represent the
      * enum, then knowing a {@code Texture} index can be kept track of much easier.
-     * @param index the index of the desired {@code Texture} in {@link textures}
-     * @return the {@code Texture} based on the {@link index}
+     * @param index the index of the desired {@code Texture} in {@link kjr.gfx.Texture#textures}.
+     * @return the {@code Texture} based on the index argument.
      */
     public static Texture get(int index)
     {
@@ -74,8 +74,7 @@ public class Texture
     }
 
     /**
-     * Returns the last element of {@link textures}. Will not check for {@link textures} size > 0.
-     * @return the last element
+     * Returns the last element of {@link kjr.gfx.Texture#textures}. Will not check for {@link kjr.gfx.Texture#textures} size > 0.
      */
     public static Texture getBack()
     {
@@ -83,8 +82,8 @@ public class Texture
     }
 
     /**
-     * Iterates through {@link textures} and calls {@link #delete() delete} on each element in {@link textures}.
-     * No {@code Texture} in {@link textures} needs to call {@link #delete() delete} manually by the user.
+     * Iterates through {@link kjr.gfx.Texture#textures} and calls {@link #delete() delete} on each element in {@link kjr.gfx.Texture#textures}.
+     * No {@code Texture} in {@link kjr.gfx.Texture#textures} needs to call {@link #delete() delete} manually by the user.
      */
     public static void clean()
     {
@@ -166,7 +165,6 @@ public class Texture
 		// and a magnification filter
 		// and wrap the texture on the x and y axis
         // and clamp the textures to the edge
-        
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -222,7 +220,7 @@ public class Texture
      * deallocate the {@code Texture} from Java.
      * <p>
      * A memory leak will occur if a {@link kjr.gfx.Texture Texture} gets collected
-     * without having {@link kjr.gfx.Texture#delete() delete} be called.
+     * without having delete() be called.
      */
     public void delete()
     {
@@ -245,7 +243,7 @@ public class Texture
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == null)
+        if(!(obj instanceof Texture))
             return false;
         Texture texObj = (Texture)obj;
         return filePath.equals(texObj.filePath);

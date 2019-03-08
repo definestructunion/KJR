@@ -2,8 +2,7 @@ package kjr.gui.tile;
 
 import kjr.gfx.Box;
 import kjr.gfx.Colour;
-import kjr.gfx.SpriteBatch;
-import kjr.gui.Align;
+import kjr.gfx.Renderer;
 import kjr.input.Buttons;
 import kjr.input.Input;
 
@@ -45,7 +44,7 @@ public class Button extends XComp
     }
 
     @Override
-    public void draw(SpriteBatch renderer)
+    public void draw(Renderer renderer)
     {
         box.height = 1;
         box.width = message.length();

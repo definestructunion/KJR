@@ -2,10 +2,7 @@ package kjr.gui.tile;
 
 import java.util.ArrayList;
 
-import kjr.gfx.Box;
-import kjr.gfx.Colour;
-import kjr.gfx.Font;
-import kjr.gfx.SpriteBatch;
+import kjr.gfx.*;
 import kjr.gui.ColourTheme;
 
 public class XConsole
@@ -91,7 +88,7 @@ public class XConsole
             xcomp.update();
     }
 
-    public void draw(SpriteBatch renderer)
+    public void draw(Renderer renderer)
     {
         renderer.pushFont(font);
 
@@ -114,7 +111,7 @@ public class XConsole
         renderer.popFont();
     }
 
-    private void drawCorners(SpriteBatch renderer)
+    private void drawCorners(Renderer renderer)
     {
         int left = x;
         int right = x + width;
@@ -128,7 +125,7 @@ public class XConsole
         renderer.draw(getBottomRightGlyph(), border, right, bottom, 0.0f);
     }
 
-    private void drawColumns(SpriteBatch renderer)
+    private void drawColumns(Renderer renderer)
     {
         Colour border = getColourTheme().getBorder();
 
@@ -143,7 +140,7 @@ public class XConsole
         }
     }
 
-    private void drawRowBottom(SpriteBatch renderer)
+    private void drawRowBottom(Renderer renderer)
     {
         Colour border = getColourTheme().getBorder();
 
@@ -152,7 +149,7 @@ public class XConsole
             renderer.draw(getRowGlyph(), border, this.x + x, this.y + height, 0.0f);
     }
 
-    private void drawRowTop(SpriteBatch renderer)
+    private void drawRowTop(Renderer renderer)
     {
         Colour border = getColourTheme().getBorder();
         int titleStart = 3;

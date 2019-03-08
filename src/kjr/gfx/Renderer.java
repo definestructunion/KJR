@@ -6,6 +6,9 @@ public abstract class Renderer
 {
     public int tileSize = 0;
 
+    protected ArrayList<Font> fonts = new ArrayList<Font>();
+    protected Font fontsBack = null;
+
     protected Renderer(int tileSize)
     {
         this.tileSize = tileSize;
@@ -62,5 +65,22 @@ public abstract class Renderer
         }
 
 		return false;
+    }
+
+    public void pushFont(Font font)
+    {
+        fonts.add(font);
+        fontsBack = font;
+    }
+
+    public void popFont()
+    {
+        int size = fonts.size();
+
+        if(size > 0)
+        {
+            fonts.remove(size - 1);
+            fontsBack = fonts.get(size - 2);
+        }
     }
 }

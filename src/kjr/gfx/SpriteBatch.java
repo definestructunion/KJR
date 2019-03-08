@@ -34,9 +34,6 @@ public class SpriteBatch extends Renderer
     private FloatBuffer buffer;
     private ArrayList<Float> textureSlots = new ArrayList<Float>(RENDERER_MAX_TEXTURES);
 
-    private ArrayList<Font> fonts = new ArrayList<Font>();
-    private Font fontsBack = null;
-
     public SpriteBatch(int tile_size)
     {
         super(tile_size);
@@ -91,23 +88,6 @@ public class SpriteBatch extends Renderer
         ibo = new IndexBuffer(indices, RENDERER_INDICES_SIZE);
 
         glBindVertexArray(0);
-    }
-
-    public void pushFont(Font font)
-    {
-        fonts.add(font);
-        fontsBack = font;
-    }
-
-    public void popFont()
-    {
-        int size = fonts.size();
-
-        if(size > 0)
-        {
-            fonts.remove(size - 1);
-            fontsBack = fonts.get(size - 2);
-        }
     }
 
     public void setSortModeLayered()

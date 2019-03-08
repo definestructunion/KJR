@@ -2,7 +2,7 @@ package kjr.gui.tile;
 
 import kjr.gfx.Box;
 import kjr.gfx.Colour;
-import kjr.gfx.SpriteBatch;
+import kjr.gfx.Renderer;
 
 public class Label extends XComp
 {
@@ -21,7 +21,7 @@ public class Label extends XComp
     }
 
     @Override
-    public void draw(SpriteBatch renderer)
+    public void draw(Renderer renderer)
     {
         alignBox();
 

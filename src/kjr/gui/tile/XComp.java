@@ -2,7 +2,6 @@ package kjr.gui.tile;
 
 import kjr.gfx.Box;
 import kjr.gfx.Renderer;
-import kjr.gfx.SpriteBatch;
 import kjr.gui.Align;
 import kjr.gui.Func;
 
@@ -29,7 +28,7 @@ public abstract class XComp
     public void setButtonPress(Func value) { buttonPress = value; }
     public void setUpdate(Func value) { update = value; }
 
-    abstract public void draw(SpriteBatch renderer);
+    abstract public void draw(Renderer renderer);
     abstract public void update();
 
     protected XComp(Box box, XConsole console)

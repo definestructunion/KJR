@@ -129,9 +129,9 @@ public final class Input
 
     /**
      * Returns true if the key is pressed down.
-     * The difference between {@link kjr.input.Input#keyPressed(Key) keyPressed} and
-     * {@link kjr.input.Input#keyDown(Key) keyDown} is that
-     * {@link kjr.input.Input#keyPressed(Key) keyPressed} is only fired once when held down
+     * The difference between {@link kjr.input.Input#keyPressed(Keys) keyPressed} and
+     * {@link kjr.input.Input#keyDown(Keys) keyDown} is that
+     * {@link kjr.input.Input#keyPressed(Keys) keyPressed} is only fired once when held down
      * and must be released to be able to be fired again.
      * @param key the key to check
      */
@@ -151,9 +151,9 @@ public final class Input
 
     /**
      * Returns whether or not the button is pressed down.
-     * The difference between {@link kjr.input.Input#buttonPressed(Key) buttonPressed} and
-     * {@link kjr.input.Input#buttonDown(Key) buttonDown} is that
-     * {@link kjr.input.Input#buttonPressed(Key) buttonPressed} is only fired once when held down
+     * The difference between {@link kjr.input.Input#buttonPressed(Buttons) buttonPressed} and
+     * {@link kjr.input.Input#buttonDown(Buttons) buttonDown} is that
+     * {@link kjr.input.Input#buttonPressed(Buttons) buttonPressed} is only fired once when held down
      * and must be released to be able to be fired again.
      * @param button the button to check
      */
