@@ -14,6 +14,7 @@ import kjr.input.Input;
 import kjr.input.Keys;
 import kjr.math.Mat4;
 import kjr.sfx.Audio;
+import kjr.gui.tile.Checkbox;
 
 public class TestGame extends GameProgram
 {
@@ -65,7 +66,7 @@ public class TestGame extends GameProgram
         console.setBox(new Box(5, 5, 40, 32));
         console.setFont(font);
         console.setGlyphSize(16);
-        console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
+        console.setColourTheme(new ColourTheme(Colour.grey(), Colour.darkGrey()));
 
         Checkbox checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
         checkBox.setAlign(Align.TopLeft);
@@ -187,7 +188,7 @@ public class TestGame extends GameProgram
             console.setBox(new Box(xPos, yPos, width, height));
             console.setFont(font);
             console.setGlyphSize(16);
-            console.setColourTheme(new ColourTheme(Colour.grey, Colour.darkGrey));
+            console.setColourTheme(new ColourTheme(Colour.grey(), Colour.darkGrey()));
 
             Button button = new Button("Close", console);
             button.setBox(new Box(0, 0, 5, 1));
@@ -213,10 +214,10 @@ public class TestGame extends GameProgram
         shader.bind();
         renderer.begin();
 
-        renderer.draw(texture, Colour.white, 20, 20, 0.9f);
-        renderer.draw(texture2, Colour.white, 20, 20, 0.9f);
+        renderer.draw(texture, Colour.white(), 20, 20, 0.9f);
+        renderer.draw(texture2, Colour.white(), 20, 20, 0.9f);
 
-        renderer.draw(texture, Colour.white, 1, 1, 1.0f);
+        renderer.draw(texture, Colour.white(), 1, 1, 1.0f);
 
         renderer.end();
         renderer.flush();

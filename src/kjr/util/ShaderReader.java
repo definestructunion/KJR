@@ -8,23 +8,20 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
- * <pre>
- * Brief: Reads shaders and splits them into 2 parts.
- * 
- * Note: OutOfBoundsException will be made if either the
- * shader token (default: "#shader") is incorrect or the
- * shader identifier (default: "vertex", "fragment") do
- * not match the tokens passed in as parameters.
- * Example:
- * - File: #shader vertex
- * - Parameters: #sahder vertexx
- * 
- * Layman:
- * 
- * Splits the vertex and fragment shaders into a String array.
- * Vertex shader goes at index [0] and the Fragment shader
- * goes at index [1].
- * </pre>
+ * Reads shaders and splits them into two separate parts. ShaderReader is designed
+ * to read fragment and vertex shaders, but can be used to read into different types
+ * of shaders. Note that {@link kjr.gfx.Shader Shader} only supports vertex and fragment
+ * shaders.
+ * <p>
+ * Split shader files are returned as a {@link String} array of length 2.
+ * <p>
+ * An {@link IllegalStateException} will be thrown if ShaderReader is not
+ * able to find any of the shader tokens in the file or {@link String} presented.
+ * An example of this problem:
+ * <ul>
+ * <li>File: #shader vertex
+ * <li>Parameter: #sahder vertexx
+ * </ul>
  */
 public final class ShaderReader
 {
@@ -33,9 +30,8 @@ public final class ShaderReader
     private static final int SHADER_FRAGMENT = 1;
 
     /**
-     * <pre>
-     * Brief: Reads the KJR standard shader
-     * </pre>
+     * Reads the KJR standard shader. KJR by default comes with
+     * a premade {@link kjr.gfx.Shader#KJR_STANDARD_SHADER shader}.
      * @return vertex shader at [0] and fragment shader at [1]
      */
     public static String[] readString()
@@ -44,16 +40,15 @@ public final class ShaderReader
     }
 
     /**
-     * <pre>
-     * Brief: Reads a shader and returns an array where [0] = vertex
-     *       and [1] = fragment.
-     * 
-     * Note:
-     * - Reads a string value that is not interpreted as a file
-     * - Will throw a RuntimeException if a type_token was
-     *   identified but both the vertex_name and the fragment_name
-     *   were incorrectly passed through into this function
-     * </pre>
+     * Reads a shader and returns an array where [0] = vertex and [1] = fragment.
+     * <p>
+     * Some things worth noting:
+     * <ul>
+     * <li>Reads a string value that is not interpreted as a file
+     * <li>Will throw a RuntimeException if a type_token was 
+     * identified but both the vertex_name and the fragment_name 
+     * were incorrectly passed through into this function
+     * </ul>
      * @param shader the shader source containing the
      *               vertex and fragment shaders
      * @param type_token the identifier which informs the readString
@@ -154,6 +149,12 @@ public final class ShaderReader
             // the array would be SHADER CODE
             else
             {
+                if(shader_index == -1)
+                {
+                    stream.close();
+                    throw new IllegalStateException("Unable to find a valid shader token.");
+                }
+
                 sources[shader_index] += (line + '\n');
             }
         }
@@ -162,7 +163,25 @@ public final class ShaderReader
         return sources;
     }
 
-    public static String[] readShaderFile(String file_path, String type_token, String vertex_name, String fragment_name) throws IOException
+    /**
+     * Reads a shader file and returns an array where [0] = vertex and [1] = fragment.
+     * <p>
+     * Will throw a RuntimeException if a type_token was 
+     * identified but both the vertex_name and the fragment_name 
+     * were incorrectly passed through into this function
+     * @param file_path the path to the shader source
+     * @param type_token the identifier which informs the readString
+     *                   function that it's reading into a new shader
+     *                   type
+     * @param vertex_name the name of the vertex shader
+     *                    used on the same line
+     *                    as type_token
+     * @param fragment_name the name of the fragment shader
+     *                      used on the same line
+     *                      as type_token
+     * @return the vertex shader at index 0 and the fragment shader at index 1
+     */
+    public static String[] readFile(String file_path, String type_token, String vertex_name, String fragment_name) throws IOException
     {
         String shader = new String(Files.readAllBytes(Paths.get(file_path)));
         return readString(shader, type_token, vertex_name, fragment_name);

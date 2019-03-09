@@ -14,29 +14,52 @@ import kjr.util.DeepCopy;
  */
 public class Colour implements DeepCopy<Colour>
 {
-    public static final Colour red;
-    public static final Colour green;
-    public static final Colour yellow;
-    public static final Colour blue;
-    public static final Colour orange;
-    public static final Colour purple;
-    public static final Colour cyan;
-    public static final Colour magenta;
-    public static final Colour lime;
-    public static final Colour pink;
-    public static final Colour teal;
-    public static final Colour lavender;
-    public static final Colour brown;
-    public static final Colour beige;
-    public static final Colour maroon;
-    public static final Colour mint;
-    public static final Colour olive;
-    public static final Colour apricot;
-    public static final Colour navy;
-    public static final Colour grey;
-    public static final Colour white;
-    public static final Colour black;
-    public static final Colour darkGrey;
+    private static final Colour red;
+    public static Colour red() { return red.copy(); }
+    private static final Colour green;
+    public static Colour green() { return green.copy(); }
+    private static final Colour yellow;
+    public static Colour yellow() { return yellow.copy(); }
+    private static final Colour blue;
+    public static Colour blue() { return blue.copy(); }
+    private static final Colour orange;
+    public static Colour orange() { return orange.copy(); }
+    private static final Colour purple;
+    public static Colour purple() { return purple.copy(); }
+    private static final Colour cyan;
+    public static Colour cyan() { return cyan.copy(); }
+    private static final Colour magenta;
+    public static Colour magenta() { return magenta.copy(); }
+    private static final Colour lime;
+    public static Colour lime() { return lime.copy(); }
+    private static final Colour pink;
+    public static Colour pink() { return pink.copy(); }
+    private static final Colour teal;
+    public static Colour teal() { return teal.copy(); }
+    private static final Colour lavender;
+    public static Colour lavender() { return lavender.copy(); }
+    private static final Colour brown;
+    public static Colour brown() { return brown.copy(); }
+    private static final Colour beige;
+    public static Colour beige() { return beige.copy(); }
+    private static final Colour maroon;
+    public static Colour maroon() { return maroon.copy(); }
+    private static final Colour mint;
+    public static Colour mint() { return mint.copy(); }
+    private static final Colour olive;
+    public static Colour olive() { return olive.copy(); }
+    private static final Colour apricot;
+    public static Colour apricot() { return apricot.copy(); }
+    private static final Colour navy;
+    public static Colour navy() { return navy.copy(); }
+    private static final Colour grey;
+    public static Colour grey() { return grey.copy(); }
+    private static final Colour white;
+    public static Colour white() { return white.copy(); }
+    private static final Colour black;
+    public static Colour black() { return black.copy(); }
+    private static final Colour darkGrey;
+    public static Colour darkGrey() { return darkGrey.copy(); }
     static
     {
         red      = new Colour(0.902f, 0.098f, 0.294f, 1.0f);
@@ -82,8 +105,6 @@ public class Colour implements DeepCopy<Colour>
     {
         r(r); g(g); b(b); a(a);
         setHex();
-        Colour c = Colour.red;
-        c.r(0.5f);
     }
     
     private void setHex()

@@ -174,7 +174,7 @@ public class Shader
         String[] sources = null;
         try
         {
-            sources = (is_file) ? ShaderReader.readShaderFile(shader, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME)
+            sources = (is_file) ? ShaderReader.readFile(shader, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME)
                                 : ShaderReader.readString(shader, KJR_SHADER_TOKEN, KJR_VERTEX_NAME, KJR_FRAGMENT_NAME);
         }
 

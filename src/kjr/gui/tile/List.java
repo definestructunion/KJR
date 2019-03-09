@@ -14,6 +14,7 @@ public class List extends XComp
 {
     private ArrayList<ListItem> items = new ArrayList<>();
     private int listOffset = 0;
+    private Colour itemColour = new Colour(1, 1, 1, 1);
 
     public List(Box box, XConsole console)
     {
@@ -39,7 +40,7 @@ public class List extends XComp
             boolean itemHasTexture = item.getTexture() != null;
 
             if(itemHasTexture)
-                renderer.draw(item.getTexture(), Colour.white, alignedBox.x, alignedBox.y + index, 0.0f);
+                renderer.draw(item.getTexture(), itemColour, alignedBox.x, alignedBox.y + index, 0.0f);
 
             for(int i = 0; i < item.getText().length(); ++i)
             {
