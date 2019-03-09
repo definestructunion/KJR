@@ -1,11 +1,18 @@
 package kjr.gfx;
 
-import static org.lwjgl.opengl.GL30.*;
-
 import java.io.IOException;
-
 import kjr.util.ShaderReader;
-import kjr.math.*;
+import kjr.math.Mat4;
+import kjr.math.Vec2;
+import kjr.math.Vec3;
+import kjr.math.Vec4;
+
+import static org.lwjgl.opengl.GL30.glCreateProgram;
+import static org.lwjgl.opengl.GL30.GL_VERTEX_SHADER;
+import static org.lwjgl.opengl.GL30.GL_FRAGMENT_SHADER;
+import static org.lwjgl.opengl.GL30.glCreateShader;
+import static org.lwjgl.opengl.GL30.glShaderSource;
+import static org.lwjgl.opengl.GL30.glCompileShader;
 
 /**
  * <pre>
