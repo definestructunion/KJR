@@ -13,30 +13,56 @@ import static org.lwjgl.opengl.GL30.GL_FRAGMENT_SHADER;
 import static org.lwjgl.opengl.GL30.glCreateShader;
 import static org.lwjgl.opengl.GL30.glShaderSource;
 import static org.lwjgl.opengl.GL30.glCompileShader;
+import static org.lwjgl.opengl.GL30.GL_COMPILE_STATUS;
+import static org.lwjgl.opengl.GL30.glGetShaderiv;
+import static org.lwjgl.opengl.GL30.GL_FALSE;
+import static org.lwjgl.opengl.GL30.glGetShaderInfoLog;
+import static org.lwjgl.opengl.GL30.glDeleteShader;
+import static org.lwjgl.opengl.GL30.glDeleteProgram;
+import static org.lwjgl.opengl.GL30.glLinkProgram;
+import static org.lwjgl.opengl.GL30.glAttachShader;
+import static org.lwjgl.opengl.GL30.glValidateProgram;
+import static org.lwjgl.opengl.GL30.GL_LINK_STATUS;
+import static org.lwjgl.opengl.GL30.glGetProgramiv;
+import static org.lwjgl.opengl.GL30.glUseProgram;
+import static org.lwjgl.opengl.GL30.glGetUniformLocation;
+import static org.lwjgl.opengl.GL30.glUniform1f;
+import static org.lwjgl.opengl.GL30.glUniform1i;
+import static org.lwjgl.opengl.GL30.glUniform1iv;
+import static org.lwjgl.opengl.GL30.glUniform2f;
+import static org.lwjgl.opengl.GL30.glUniform3f;
+import static org.lwjgl.opengl.GL30.glUniform4f;
+import static org.lwjgl.opengl.GL30.glUniformMatrix4fv;
 
 /**
+ * A program to run on the GPU. KJR shaders utilize only vertex and fragment shaders.
+ * Shaders are an important aspect in drawing pixels onto the screen.
+ * <p>
+ * {@link Shader#KJR_STANDARD_SHADER KJR Standard Shader} is the default shader, and is
+ * recommended. However, the shader requires OpenGL 3.4+ or else the shader will fail to compile.
+ * <p>
+ * User is able to make their own shader given they follow some rules:
+ * <ul>
+ * <li> Use of shader token: In order to have an entire shader in one file, rather than two,
+ * KJR uses a shader token, which informs the {@link kjr.util.ShaderReader ShaderReader} that
+ * a beyond that line, there is a shader to be read from.
+ * "#shader" is the default shader token. Shader tokens are put on the same line before a shader name,
+ * which is the next item on the list.
+ * <li> Use of shader names: In order to specify which shader is being read, a shader name is put in place
+ * to fulfill that role. A shader name is placed on the same life after a shader token. Default shader names
+ * are "vertex" for the vertex shader and "fragment" for the fragment shader.
+ * <li> Compiles as a shader: The contents of the shader must be able to actually be compiled by OpenGL.
+ * </ul>
+ * A pseudo example of a shader:
  * <pre>
- * Brief: A program ran on the GPU used
- *       almost exclusively for manipulating
- *       pixels.
- * 
- * Layman:
- * 
- * Doing everything on the CPU can make
- * the application slow. So if we
- * offload a lot of the information
- * over to the GPU, then we can get
- * way better performance.
- * 
- * Non-Layman:
- * 
- * Shader program that is used to manipulate pixels
- * using matrices and textures. KJR uses
- * vertex and fragment shaders.
- * 
- * Contains:
- * - ID as int - OpenGL program ID for the shader
+ * #shader vertex
+ * // some vertex shader code
+ * #shader fragment
+ * // some fragment shader code
  * </pre>
+ * <p>
+ * All non-public fields/methods are protected, meaning it's possible to inherit from
+ * Shader.
  */
 public class Shader
 {
@@ -380,7 +406,7 @@ public class Shader
         glDeleteProgram(id);
     }
 
-    private int getUniformLocation(String name)
+    protected int getUniformLocation(String name)
     {
         return glGetUniformLocation(id, name);
     }
