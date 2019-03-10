@@ -4,7 +4,7 @@ import kjr.math.Vec2;
 
 /**
  * Contains information about {@link kjr.input.Keys Keys}, {@link kjr.input.Buttons Buttons},
- * Mouse positition, and scroll wheel information. This information is set by GLFW callbacks. While
+ * Mouse position, and scroll wheel information. This information is set by GLFW callbacks. While
  * user can set this information manually, it's not recommended as the user should not force state.
  * <p>
  * Input allows the user to query for various states of the application. They can check for specific keys
@@ -129,9 +129,9 @@ public final class Input
 
     /**
      * Returns true if the key is pressed down.
-     * The difference between {@link kjr.input.Input#keyPressed(Keys) keyPressed} and
+     * The difference between keyPressed and
      * {@link kjr.input.Input#keyDown(Keys) keyDown} is that
-     * {@link kjr.input.Input#keyPressed(Keys) keyPressed} is only fired once when held down
+     * keyPressed is only fired once when held down
      * and must be released to be able to be fired again.
      * @param key the key to check
      */
@@ -151,9 +151,9 @@ public final class Input
 
     /**
      * Returns whether or not the button is pressed down.
-     * The difference between {@link kjr.input.Input#buttonPressed(Buttons) buttonPressed} and
+     * The difference between buttonPressed and
      * {@link kjr.input.Input#buttonDown(Buttons) buttonDown} is that
-     * {@link kjr.input.Input#buttonPressed(Buttons) buttonPressed} is only fired once when held down
+     * buttonPressed is only fired once when held down
      * and must be released to be able to be fired again.
      * @param button the button to check
      */

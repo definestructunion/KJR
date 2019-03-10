@@ -121,7 +121,7 @@ public class Window
 
     /**
      * GLFW callback function for setting the mouse positions. Calls {@link kjr.input.Input Input's}
-     * {@link kjr.input.Input#setX() setX} and {@link kjr.input.Input#setY() setY}
+     * {@link kjr.input.Input#setX(float)}  setX} and {@link kjr.input.Input#setY(float) setY}
      * according to the x and y arguments.
      * @param window the glfw window
      * @param x the mouse x coordinate
@@ -332,7 +332,7 @@ public class Window
 
     /**
      * Deletes all of {@link kjr.gfx.Window Window's} native resources.
-     * Calling {@link kjr.gfx.Window#delete() delete} will not delete the
+     * Calling delete will not delete the
      * {@link kjr.gfx.Window Window} from Java, but it will render it unusable.
      * Should only call once the {@link kjr.base.GameProgram GameProgram} is closing.
      */
