@@ -6,32 +6,127 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
+/**
+ * Batches {@link kjr.gfx.Texture Textures}, {@link kjr.gfx.Font Fonts}, and {@link kjr.gfx.Colour Colours} into a single
+ * buffer, which reduces draw calls and improving performance.
+ * <p>
+ * {@code SpriteBatch} requires OpenGL version 3.4 to be able to use {@code SpriteBatch}. If OpenGL version 3.4
+ * is not available, then the shader that runs on {@code SpriteBatch} will not compile successfully.
+ * <p>
+ * {@code SpriteBatch} allows up to 32 textures, as specified by {@link kjr.gfx.SpriteBatch#RENDERER_MAX_SPRITES}. Once a unique {@link kjr.gfx.Texture Texture}
+ * is added and was not added previously, a draw call will be made.
+ */
 public class SpriteBatch extends Renderer
 {
+    /**
+     * The amount of indices in a single square/glyph.
+     */
     public final static int INDICES_SIZE            = 6;
 
+    /**
+     * The index of the vertices info (x, y, z) in the {@link kjr.gfx.Shader Shader}.
+     */
     public final static int SHADER_VERTEX_INDEX     = 0;
+
+    /**
+     * The index of the uv texture coordinates (between 0 and 1) in the {@link kjr.gfx.Shader Shader}.
+     */
     public final static int SHADER_UV_INDEX         = 1;
+
+    /**
+     * The index of the texture ID in the {@link kjr.gfx.Shader Shader}.
+     */
     public final static int SHADER_TID_INDEX        = 2;
+
+    /**
+     * The index of the colour (r, g, b, a) in the {@link kjr.gfx.Shader Shader}.
+     */
     public final static int SHADER_COLOR_INDEX      = 3;
 
+    /**
+     * The size of the vertices info (x, y, z) in bytes.
+     */
     public final static int SHADER_VERTEX_SIZE      = (3 * 4);
+
+    /**
+     * The size of the uv texture coordinates in bytes.
+     */
     public final static int SHADER_UV_SIZE          = (2 * 4);
+
+    /**
+     * The size of the texture ID in bytes.
+     */
     public final static int SHADER_TID_SIZE         = (1 * 4);
+
+    /**
+     * The size of the colour info (r, g, b, a) in bytes. Despite {@link kjr.gfx.Colour Colour} using
+     * 4 floats, OpenGL reads the {@link kjr.gfx.Colour#hex() hex} value of the Colour, and each channel is
+     * read as the size of a byte, which equals 4 bytes.
+     */
     public final static int SHADER_COLOR_SIZE       = (1 * 4);
 
+    /**
+     * The amount of textures OpenGL allows to be bound at a single time/
+     */
     public final static int RENDERER_MAX_TEXTURES   = 32;
+
+    /**
+     * The amount of sprites that can be pushed into a single draw buffer.
+     */
     public final static int RENDERER_MAX_SPRITES    = 60000;
+
+    /**
+     * The size of a vertex in bytes.
+     */
     public final static int RENDERER_VERTEX_SIZE    = SHADER_VERTEX_SIZE + SHADER_UV_SIZE + SHADER_COLOR_SIZE + SHADER_TID_SIZE;
+
+    /**
+     * The size of an entire sprite in bytes.
+     */
     public final static int RENDERER_SPRITE_SIZE    = RENDERER_VERTEX_SIZE * 4;
+
+    /**
+     * The size of the {@link java.nio.FloatBuffer FloatBuffer} used to store sprite information.
+     */
     public final static int RENDERER_BUFFER_SIZE    = RENDERER_SPRITE_SIZE * RENDERER_MAX_SPRITES;
+
+    /**
+     * The size of a index in bytes.
+     */
     public final static int RENDERER_INDICES_SIZE   = RENDERER_MAX_SPRITES * INDICES_SIZE;
 
+    /**
+     * This {@link SpriteBatch SpriteBatch's} vertex array object.
+     */
     private int vao;
+
+    /**
+     * This {@link SpriteBatch SpriteBatch's} vertex buffer object.
+     */
     private int vbo;
+
+    /**
+     * This {@link SpriteBatch SpriteBatch's} index buffer object. Due to a square being rendered
+     * as 2 triangles, there are 2 redundant indices. With {@link kjr.gfx.IndexBuffer IndexBuffer}, it allows
+     * a square to be rendered with 4 indices, rather than 6.
+     */
     private IndexBuffer ibo;
+
+    /**
+     * The amount of indices to be rendered. This informs OpenGL how many indices are to be drawn.
+     */
     private int indexCount;
+
+    /**
+     * The buffer for our vertices.
+     */
     private FloatBuffer buffer;
+
+    /**
+     * The {@link kjr.gfx.Texture Texture} array which holds the {@link kjr.gfx.Texture#id texture IDs}. OpenGL
+     * is not able to use {@link kjr.gfx.Texture Texture}, OpenGL instead uses the {@link kjr.gfx.Texture#id ID} attached
+     * to the object.
+     */
     private ArrayList<Float> textureSlots = new ArrayList<Float>(RENDERER_MAX_TEXTURES);
 
     public SpriteBatch(int tile_size)
