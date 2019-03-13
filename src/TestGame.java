@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 import kjr.base.GameProgram;
@@ -56,8 +57,19 @@ public class TestGame extends GameProgram
         //bfont = new Font("res/fonts/bfont8x8.png", 8);
     }
 
+    Checkbox checkBox;
+
     @Override public void initialize()
     {
+        String[] names =
+                {
+                        "Mask of Thing",
+                        "Heart",
+                        "Thing",
+                        "Sword",
+                        "Super Duper Shield of Yeah and Stuff"
+                };
+
         renderer.setSortModeLayered();
         renderer.pushFont(font);
         window.show();
@@ -68,13 +80,17 @@ public class TestGame extends GameProgram
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey(), Colour.darkGrey()));
 
-        Checkbox checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
+        checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
         checkBox.setAlign(Align.TopLeft);
-        checkBox.setSelectionTypeMultiple();
+        checkBox.setSelectCount(5);
 
         for(int i = 0; i < 20; ++i)
         {
             ListItem item = new ListItem("Testdpfjsdofjosdfjsdifj");
+            item.setActivate(() ->
+            {
+                System.out.println(names[random.nextInt(5)]);
+            });
             checkBox.add(item);
         }
 
@@ -82,73 +98,6 @@ public class TestGame extends GameProgram
 
         Wrapper wrapper = new Wrapper("", checkBox, console);
         console.add(wrapper);
-        /*List myInv = new List(new Box(1, 4, 15, 15), console);
-
-        List enemInv = new List(new Box(-1, 4, 15, 15), console);
-        enemInv.setAlign(Align.TopRight);
-
-        Label playerLabel = new Label("Player", 1, 2, console);
-        playerLabel.setAlign(Align.TopLeft);
-
-        Label enemyLabel = new Label("Player 2", 24, 2, console);
-        enemyLabel.setAlign(Align.TopLeft);
-
-        String[] names =
-        {
-                "Mask of Thing",
-                "Heart",
-                "Thing",
-                "Sword",
-                "Super Duper Shield of Yeah and Stuff"
-        };
-
-        for(int i = 0; i < 30; ++i)
-        {
-            ListItem heart = new ListItem(texture2,"");
-            heart.setText(names[random.nextInt(5)]);
-            heart.setActivate( () ->
-            {
-                if(myInv.hasRef(heart)) {
-                    enemInv.add(heart);
-                    myInv.remove(heart); }
-                else {
-                    enemInv.remove(heart); myInv.add(heart);
-                }
-
-                playerLabel.setText(names[random.nextInt(5)]);
-            });
-
-            myInv.add(heart);
-        }
-
-
-        ListItem coolHeart = new ListItem(texture2, "CHeartTest");
-        coolHeart.setActivate( () ->  { System.out.println("Clicked coolheart"); });
-
-
-
-        ListItem thing = new ListItem(texture2, "Thing");
-        thing.setActivate( () -> { System.out.println("Clicked thing"); });
-        ListItem coolThing = new ListItem(texture2, "CThingTest");
-        coolThing.setActivate ( () ->  { System.out.println("Clicked coolthing"); });
-        enemInv.add(thing, coolThing);
-
-        Button button = new Button("[Close]", -1, -1, console);
-        button.setUpdate(() -> { XGUI.remove(console); });
-        button.setAlign(Align.BottomRight);
-
-        Wrapper wrapper = new Wrapper("Test", myInv, console);
-        Wrapper wrapper2 = new Wrapper("Test", enemInv, console);
-        Wrapper wrapper3 = new Wrapper("", button, console);
-
-        console.add(playerLabel);
-        console.add(enemyLabel);
-        console.add(button);
-        console.add(myInv);
-        console.add(enemInv);
-        console.add(wrapper);
-        console.add(wrapper2);
-        console.add(wrapper3);*/
     }
 
     @Override public void update()
@@ -180,29 +129,10 @@ public class TestGame extends GameProgram
 
         if(Input.keyPressed(Keys.Enter))
         {
-            int xPos = random.nextInt(15) + 5;
-            int yPos = random.nextInt(8) + xPos + 1;
-            int width = random.nextInt(10) + 8;
-            int height = random.nextInt(10) + 8;
-            XConsole console = new XConsole("Inventory");
-            console.setBox(new Box(xPos, yPos, width, height));
-            console.setFont(font);
-            console.setGlyphSize(16);
-            console.setColourTheme(new ColourTheme(Colour.grey(), Colour.darkGrey()));
+            checkBox.callAllSelected();
+            checkBox.deselectAll();
 
-            Button button = new Button("Close", console);
-            button.setBox(new Box(0, 0, 5, 1));
-            button.setAlign(Align.BottomRight);
-
-            button.setUpdate( () -> XGUI.remove(console) );
-
-            ListItem item = new ListItem(texture2, "Heart");
-            ListItem item2 = new ListItem(texture2, "Cooler Heart");
-            List list = new List(new Box(1, 1, 10, 10), console);
-            list.add(item, item2);
-
-            console.add(button);
-            console.add(list);
+            checkBox.remove(checkBox.getSelectedItems());
         }
 
         window.update();

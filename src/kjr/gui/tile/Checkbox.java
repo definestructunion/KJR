@@ -13,12 +13,14 @@ import java.util.Arrays;
 public class Checkbox extends XComp
 {
     private ArrayList<ListItem> items = new ArrayList<>();
+
+    private ArrayList<ListItem> selectedItems = new ArrayList<>();
+    private int selectCount = 1;
+
     private int listOffset = 0;
 
     private String checkedBox = "[X]";
     private String uncheckedBox = "[ ]";
-
-    private boolean singleSelect = false;
 
     public Checkbox(Box box, XConsole console)
     {
@@ -38,7 +40,7 @@ public class Checkbox extends XComp
             ListItem item = items.get(index + listOffset);
             String itemText = item.getText();
 
-            boolean highlighting = getContains(item, Input.getMousePosition());
+            boolean highlighting = mouseOn(item);
             Colour inner = (highlighting) ? console.getColourTheme().getBorder() : console.getColourTheme().getInner();
             Colour border = (highlighting) ? console.getColourTheme().getInner() : console.getColourTheme().getBorder();
 
@@ -85,30 +87,36 @@ public class Checkbox extends XComp
             ListItem item = items.get(i);
             item.getBox().set(alignedBox.x, alignedBox.y + yOffset, alignedBox.width, 1);
 
-            if(Input.buttonPressed(Buttons.Left) && getContains(item, Input.getMousePosition()))
+            if(mouseOnClicked(item))
             {
-                if(singleSelect)
+                boolean selecting = !item.getSelected();
+
+                if(!selecting)
                 {
-                    if(getSelectedCount() == 0)
-                        item.setSelected(true);
-                    else if(item.getSelected())
-                        item.setSelected(false);
-                    else
-                    {
-                        deselectAll();
-                        item.setSelected(true);
-                    }
+                    item.setSelected(false);
+                    selectedItems.remove(item);
                 }
+
                 else
                 {
-                    item.setSelected(!item.getSelected());
+                    if(selectedItems.size() >= selectCount)
+                    {
+                        if (selectedItems.size() > 0)
+                        {
+                            selectedItems.get(0).setSelected(false);
+                            selectedItems.remove(0);
+                        }
+                    }
+
+                    item.setSelected(true);
+                    selectedItems.add(item);
                 }
             }
 
             ++yOffset;
         }
 
-        if(alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
+        if(mouseInAlignedBox())
         {
             if(Input.getScrollY() < -0.1)
             {
@@ -124,16 +132,30 @@ public class Checkbox extends XComp
     }
 
     public void add(ListItem... items) { this.items.addAll(Arrays.asList(items)); }
+    public void add(ArrayList<ListItem> items) { this.items.addAll(items); }
 
-    public void remove(ListItem item) { this.items.remove(item); }
+    public void remove(ListItem... items) { this.items.removeAll(Arrays.asList(items)); this.selectedItems.removeAll(Arrays.asList(items)); }
+    public void remove(ArrayList<ListItem> items) { this.items.removeAll(items); this.selectedItems.removeAll(items); }
 
     public boolean hasRef(ListItem item) { return this.items.contains(item); }
 
     public ArrayList<ListItem> getItems() { return items; }
 
-    private boolean getContains(ListItem item, Vec2 position)
+    public ArrayList<ListItem> getSelectedItems() { return new ArrayList<>(selectedItems); }
+
+    private boolean mouseOn(ListItem item)
     {
-        return item.getBox().asRect(console.getGlyphSize()).contains(position);
+        return item.getBox().asRect(console.getGlyphSize()).contains(Input.getMousePosition());
+    }
+
+    private boolean mouseOnClicked(ListItem item)
+    {
+        return Input.buttonPressed(Buttons.Left) && mouseOn(item);
+    }
+
+    private boolean mouseInAlignedBox()
+    {
+        return alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition());
     }
 
     public String getCheckedBox() { return checkedBox; }
@@ -142,36 +164,34 @@ public class Checkbox extends XComp
     public String getUncheckedBox() { return uncheckedBox; }
     public Checkbox setUncheckedBox(String value) { uncheckedBox = value; return this; }
 
-    public Checkbox setSelectionTypeSingle()
+    public Checkbox setSelectCount(int count)
     {
-        singleSelect = true;
-        return this;
-    }
-
-    public Checkbox setSelectionTypeMultiple()
-    {
-        singleSelect = false;
+        selectCount = count;
         return this;
     }
 
     public int getSelectedCount()
     {
-        int count = 0;
-        for(ListItem item : items)
-            if(item.getSelected())
-                ++count;
-        return count;
+        return selectedItems.size();
     }
 
-    public void selectAll()
+    public void callAllSelected()
     {
-        for(ListItem item : items)
-            item.setSelected(true);
+        for(ListItem item : selectedItems)
+        {
+            item.getActivate().call();
+        }
     }
 
     public void deselectAll()
     {
-        for(ListItem item : items)
+        for(ListItem item : selectedItems)
             item.setSelected(false);
+    }
+
+    public void selectAll()
+    {
+        for(ListItem item : selectedItems)
+            item.setSelected(true);
     }
 }
