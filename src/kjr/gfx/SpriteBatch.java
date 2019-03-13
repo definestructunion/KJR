@@ -129,13 +129,21 @@ public class SpriteBatch extends Renderer
      */
     private ArrayList<Float> textureSlots = new ArrayList<Float>(RENDERER_MAX_TEXTURES);
 
-    public SpriteBatch(int tile_size)
+    /**
+     * Creates a new {@link SpriteBatch SpriteBatch} with the given tileSize.
+     */
+    public SpriteBatch(int tileSize)
     {
-        super(tile_size);
+        super(tileSize);
         init();
     }
 
-    @Override public void delete()
+    /**
+     * Deletes OpenGL resources that were allocated during the creation of {@link SpriteBatch SpriteBatch}. A memory leak
+     * will occur if delete is not called in the object's lifetime.
+     */
+    @Override
+    public void delete()
     {
         super.delete();
         ibo.delete();
@@ -143,6 +151,9 @@ public class SpriteBatch extends Renderer
         glDeleteBuffers(vbo);
     }
 
+    /**
+     * Initializes the {@link SpriteBatch SpriteBatch} by setting up the VBO, VAO, IBO, and the {@link kjr.gfx.Shader Shader}.
+     */
     private void init()
     {
         vao = glGenVertexArrays();
@@ -185,6 +196,11 @@ public class SpriteBatch extends Renderer
         glBindVertexArray(0);
     }
 
+    /**
+     * Sets SpriteBatch to take the Z axis (layer) into consideration when drawing. This will mean that order of submission does
+     * not matter unless the submitted sprites are on the same layer. If that is the case, then the objects submitted first will be
+     * shown on top.
+     */
     public void setSortModeLayered()
     {
         glEnable(GL_DEPTH_TEST);
@@ -193,18 +209,37 @@ public class SpriteBatch extends Renderer
         glAlphaFunc(GL_GREATER, 0.0f);
     }
 
+    /**
+     * Sets SpriteBatch to not take the Z axis (layer) into consideration when drawing. This will mean that the order of submission
+     * matters and objects submitted first will be behind/underneath the objects submitted last.
+     */
     public void setSortModeDeferred()
     {
         glDisable(GL_DEPTH_TEST);
         //glDisable(GL_ALPHA_TEST);
     }
 
+    /**
+     * Starts the drawing process for the {@link SpriteBatch SpriteBatch}. An exception will be thrown if begin is either not called
+     * or not called in the right order.
+     * <p>
+     * The order for drawing is:
+     * <ul>
+     * <li>Begin
+     * <li>End
+     * <li>Flush
+     * </ul>
+     * The listed order must be followed strictly.
+     */
     public void begin()
     {
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         buffer = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY).asFloatBuffer();
     }
 
+    /**
+     * 
+     */
     public void draw(Texture texture, Colour colour, int x, int y, float layer)
     {
         float posX = tilePosX(x);
