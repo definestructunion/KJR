@@ -238,7 +238,16 @@ public class SpriteBatch extends Renderer
     }
 
     /**
-     * 
+     * Draws a textured tile.
+     * @param texture a {@link Texture texture} to use.
+     * Will clamp the size down to {@link Renderer#tileSize tileSize}
+     * for width and height.
+     * @param colour a {@link Colour colour} to use.
+     * Will set a tint on the {@link Texture texture}.
+     * @param x coordinate that is adjusted to fit {@link Renderer#tileSize tileSize}.
+     * @param y coordinate that is adjusted to fit {@link Renderer#tileSize tileSIze}.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred() 
+     * deferred} rendering is enabled.
      */
     public void draw(Texture texture, Colour colour, int x, int y, float layer)
     {
