@@ -2,6 +2,8 @@ package kjr.input;
 
 import kjr.math.Vec2;
 
+import java.util.ArrayList;
+
 /**
  * Contains information about {@link kjr.input.Keys Keys}, {@link kjr.input.Buttons Buttons},
  * Mouse position, and scroll wheel information. This information is set by GLFW callbacks. While

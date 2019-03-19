@@ -5,8 +5,6 @@ import kjr.gfx.Colour;
 import kjr.gfx.Renderer;
 import kjr.input.Buttons;
 import kjr.input.Input;
-import kjr.math.Vec2;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -136,6 +134,14 @@ public class Checkbox extends XComp
 
     public void remove(ListItem... items) { this.items.removeAll(Arrays.asList(items)); this.selectedItems.removeAll(Arrays.asList(items)); }
     public void remove(ArrayList<ListItem> items) { this.items.removeAll(items); this.selectedItems.removeAll(items); }
+    public void remove(int... indices)
+    {
+        for(int i = 0; i <  indices.length; ++i)
+        {
+            ListItem item = items.get(indices[i]);
+            remove(item);
+        }
+    }
 
     public boolean hasRef(ListItem item) { return this.items.contains(item); }
 
@@ -151,11 +157,6 @@ public class Checkbox extends XComp
     private boolean mouseOnClicked(ListItem item)
     {
         return Input.buttonPressed(Buttons.Left) && mouseOn(item);
-    }
-
-    private boolean mouseInAlignedBox()
-    {
-        return alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition());
     }
 
     public String getCheckedBox() { return checkedBox; }
@@ -193,5 +194,21 @@ public class Checkbox extends XComp
     {
         for(ListItem item : selectedItems)
             item.setSelected(true);
+    }
+
+    public ListItem getHovered()
+    {
+        for(int i = listOffset; i < items.size(); ++i)
+        {
+            ListItem item = items.get(i);
+
+            if(mouseOn(item))
+                return item;
+
+            if(i - listOffset >= alignedBox.height - 1)
+                return null;
+        }
+
+        return null;
     }
 }

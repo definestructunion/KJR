@@ -4,6 +4,7 @@ import kjr.gfx.Box;
 import kjr.gfx.Renderer;
 import kjr.gui.Align;
 import kjr.gui.Func;
+import kjr.input.Input;
 
 public abstract class XComp
 {
@@ -70,5 +71,10 @@ public abstract class XComp
 
         alignedBox.width = box.width;
         alignedBox.height = box.height;
+    }
+
+    protected boolean mouseInAlignedBox()
+    {
+        return alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition());
     }
 }

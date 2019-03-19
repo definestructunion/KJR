@@ -130,10 +130,80 @@ public enum Keys{
     LENGTH       (119);
 
     private final int number;
-    
+    private final char noShiftChar;
+    private final char shiftChar;
+
+    // noShiftChar = ''; shiftChar = ''; break;
+
     Keys(int number)
     {
         this.number = number;
+        switch(number)
+        {
+            case -1: noShiftChar = '\u0000'; shiftChar = '\u0000'; break;
+            case 32: noShiftChar = ' '; shiftChar = ' '; break;
+            case 39: noShiftChar = '\''; shiftChar = '\"'; break;
+            case 44: noShiftChar = ','; shiftChar = '<'; break;
+            case 45: noShiftChar = '-'; shiftChar = '_'; break;
+            case 46: noShiftChar = '.'; shiftChar = '>'; break;
+            case 47: noShiftChar = '/'; shiftChar = '?'; break;
+            case 48: noShiftChar = '0'; shiftChar = ')'; break;
+            case 49: noShiftChar = '1'; shiftChar = '!'; break;
+            case 50: noShiftChar = '2'; shiftChar = '@'; break;
+            case 51: noShiftChar = '3'; shiftChar = '#'; break;
+            case 52: noShiftChar = '4'; shiftChar = '$'; break;
+            case 53: noShiftChar = '5'; shiftChar = '%'; break;
+            case 54: noShiftChar = '6'; shiftChar = '^'; break;
+            case 55: noShiftChar = '7'; shiftChar = '&'; break;
+            case 56: noShiftChar = '8'; shiftChar = '*'; break;
+            case 57: noShiftChar = '9'; shiftChar = '('; break;
+            case 59: noShiftChar = ';'; shiftChar = ':'; break;
+            case 61: noShiftChar = '='; shiftChar = '+'; break;
+            case 65: noShiftChar = 'a'; shiftChar = 'A'; break;
+            case 66: noShiftChar = 'b'; shiftChar = 'B'; break;
+            case 67: noShiftChar = 'c'; shiftChar = 'C'; break;
+            case 68: noShiftChar = 'd'; shiftChar = 'D'; break;
+            case 69: noShiftChar = 'e'; shiftChar = 'E'; break;
+            case 70: noShiftChar = 'f'; shiftChar = 'F'; break;
+            case 71: noShiftChar = 'g'; shiftChar = 'G'; break;
+            case 72: noShiftChar = 'h'; shiftChar = 'H'; break;
+            case 73: noShiftChar = 'i'; shiftChar = 'I'; break;
+            case 74: noShiftChar = 'j'; shiftChar = 'J'; break;
+            case 75: noShiftChar = 'k'; shiftChar = 'K'; break;
+            case 76: noShiftChar = 'l'; shiftChar = 'L'; break;
+            case 77: noShiftChar = 'm'; shiftChar = 'M'; break;
+            case 78: noShiftChar = 'n'; shiftChar = 'N'; break;
+            case 79: noShiftChar = 'o'; shiftChar = 'O'; break;
+            case 80: noShiftChar = 'p'; shiftChar = 'P'; break;
+            case 81: noShiftChar = 'q'; shiftChar = 'Q'; break;
+            case 82: noShiftChar = 'r'; shiftChar = 'R'; break;
+            case 83: noShiftChar = 's'; shiftChar = 'S'; break;
+            case 84: noShiftChar = 't'; shiftChar = 'T'; break;
+            case 85: noShiftChar = 'u'; shiftChar = 'U'; break;
+            case 86: noShiftChar = 'v'; shiftChar = 'V'; break;
+            case 87: noShiftChar = 'w'; shiftChar = 'W'; break;
+            case 88: noShiftChar = 'x'; shiftChar = 'X'; break;
+            case 89: noShiftChar = 'y'; shiftChar = 'Y'; break;
+            case 90: noShiftChar = 'z'; shiftChar = 'Z'; break;
+            case 91: noShiftChar = '['; shiftChar = '{'; break;
+            case 92: noShiftChar = '\\'; shiftChar = '|'; break;
+            case 93: noShiftChar = ']'; shiftChar = '}'; break;
+            case 96: noShiftChar = '`'; shiftChar = '~'; break;
+            case 257: noShiftChar = '\n'; shiftChar = '\n'; break;
+            //case 258: noShiftChar = '\b'; shiftChar = '\b'; break; // will almost certainly not work as expected of a backspace
+            case 320: noShiftChar = '0'; shiftChar = '0'; break;
+            case 321: noShiftChar = '1'; shiftChar = '1'; break;
+            case 322: noShiftChar = '2'; shiftChar = '2'; break;
+            case 323: noShiftChar = '3'; shiftChar = '3'; break;
+            case 324: noShiftChar = '4'; shiftChar = '4'; break;
+            case 325: noShiftChar = '5'; shiftChar = '5'; break;
+            case 326: noShiftChar = '6'; shiftChar = '6'; break;
+            case 327: noShiftChar = '7'; shiftChar = '7'; break;
+            case 328: noShiftChar = '8'; shiftChar = '8'; break;
+            case 329: noShiftChar = '9'; shiftChar = '9'; break;
+            case 330: noShiftChar = '0'; shiftChar = '0'; break;
+            default: noShiftChar = '\u0000'; shiftChar = '\u0000'; break;
+        }
     }
 
     /**
@@ -142,5 +212,20 @@ public enum Keys{
     public int value()
     {
         return number;
+    }
+
+    public char lower()
+    {
+        return noShiftChar;
+    }
+
+    public char upper()
+    {
+        return shiftChar;
+    }
+
+    public boolean printable()
+    {
+        return noShiftChar != '\u0000' && shiftChar != '\u0000';
     }
 }

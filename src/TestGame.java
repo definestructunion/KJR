@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Random;
 
 import kjr.base.GameProgram;
@@ -11,11 +10,13 @@ import kjr.gfx.Texture;
 import kjr.gui.Align;
 import kjr.gui.ColourTheme;
 import kjr.gui.tile.*;
+import kjr.gui.tile.Label;
 import kjr.input.Input;
 import kjr.input.Keys;
 import kjr.math.Mat4;
 import kjr.sfx.Audio;
 import kjr.gui.tile.Checkbox;
+import kjr.util.Clipboard;
 
 public class TestGame extends GameProgram
 {
@@ -57,7 +58,9 @@ public class TestGame extends GameProgram
         //bfont = new Font("res/fonts/bfont8x8.png", 8);
     }
 
+    Label label;
     Checkbox checkBox;
+    Textbox textBox;
 
     @Override public void initialize()
     {
@@ -75,33 +78,46 @@ public class TestGame extends GameProgram
         window.show();
 
         XConsole console = new XConsole("");
-        console.setBox(new Box(5, 5, 40, 32));
+        console.setBox(new Box(0, 0, 40, 32));
         console.setFont(font);
         console.setGlyphSize(16);
         console.setColourTheme(new ColourTheme(Colour.grey(), Colour.darkGrey()));
 
-        checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
+        textBox = new Textbox(new Box(1, 1, 15, 5), console);
+        console.add(textBox);
+
+        Wrapper wrapper = new Wrapper("", textBox, console);
+        console.add(wrapper);
+
+        /*checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
         checkBox.setAlign(Align.TopLeft);
         checkBox.setSelectCount(5);
 
+        label = new Label("Item", 17, 1, console);
+
         for(int i = 0; i < 20; ++i)
         {
-            ListItem item = new ListItem("Testdpfjsdofjosdfjsdifj");
+            String name = names[random.nextInt(5)];
+            ListItem item = new ListItem(name);
             item.setActivate(() ->
             {
-                System.out.println(names[random.nextInt(5)]);
+                System.out.println(item.getText());
             });
             checkBox.add(item);
         }
 
         console.add(checkBox);
+        console.add(label);
 
         Wrapper wrapper = new Wrapper("", checkBox, console);
-        console.add(wrapper);
+        console.add(wrapper);*/
     }
 
     @Override public void update()
     {
+        if(Input.keyDown(Keys.Q))
+            System.out.println(Clipboard.paste());
+
         XGUI.update();
 
         if(Input.keyDown(Keys.W)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y - 1, e.getBox().width, e.getBox().height))); }
@@ -129,11 +145,17 @@ public class TestGame extends GameProgram
 
         if(Input.keyPressed(Keys.Enter))
         {
-            checkBox.callAllSelected();
-            checkBox.deselectAll();
+            //checkBox.callAllSelected();
+            //checkBox.deselectAll();
 
-            checkBox.remove(checkBox.getSelectedItems());
+            //checkBox.remove(checkBox.getSelectedItems());
+            System.out.println(textBox.getText());
         }
+
+        //if(checkBox.getHovered() != null)
+        //    label.setText(checkBox.getHovered().getText());
+        //else
+        //    label.setText("Item");
 
         window.update();
     }
