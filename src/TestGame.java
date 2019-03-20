@@ -80,14 +80,14 @@ public class TestGame extends GameProgram
         XConsole console = new XConsole("");
         console.setBox(new Box(0, 0, 40, 32));
         console.setFont(font);
-        console.setGlyphSize(16);
+        console.setGlyphSize(12);
         console.setColourTheme(new ColourTheme(Colour.grey(), Colour.darkGrey()));
 
         textBox = new Textbox(new Box(1, 1, 15, 5), console);
-        console.add(textBox);
+        //console.add(textBox);
 
         Wrapper wrapper = new Wrapper("", textBox, console);
-        console.add(wrapper);
+        //console.add(wrapper);
 
         /*checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
         checkBox.setAlign(Align.TopLeft);
@@ -120,10 +120,10 @@ public class TestGame extends GameProgram
 
         XGUI.update();
 
-        if(Input.keyDown(Keys.W)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y - 1, e.getBox().width, e.getBox().height))); }
-        if(Input.keyDown(Keys.A)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x - 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
-        if(Input.keyDown(Keys.S)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y + 1, e.getBox().width, e.getBox().height))); }
-        if(Input.keyDown(Keys.D)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x + 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
+        //if(Input.keyDown(Keys.W)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y - 1, e.getBox().width, e.getBox().height))); }
+        //if(Input.keyDown(Keys.A)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x - 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
+        //if(Input.keyDown(Keys.S)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x, e.getBox().y + 1, e.getBox().width, e.getBox().height))); }
+        //if(Input.keyDown(Keys.D)) { XGUI.getList().forEach(e -> e.setBox(new Box(e.getBox().x + 1, e.getBox().y, e.getBox().width, e.getBox().height))); }
 
         if(Input.keyDown(Keys.Escape))
         {
@@ -150,12 +150,8 @@ public class TestGame extends GameProgram
 
             //checkBox.remove(checkBox.getSelectedItems());
             System.out.println(textBox.getText());
+            //textBox.setText("Entered text");
         }
-
-        //if(checkBox.getHovered() != null)
-        //    label.setText(checkBox.getHovered().getText());
-        //else
-        //    label.setText("Item");
 
         window.update();
     }

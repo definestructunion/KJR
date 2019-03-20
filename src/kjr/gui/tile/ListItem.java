@@ -61,17 +61,17 @@ public class ListItem
     }
 
     public Texture getTexture() { return texture; }
-    public ListItem setTexture(Texture value) { texture = value; return this; }
+    public void setTexture(Texture value) { texture = value; }
 
     public String getText() { return text; }
-    public ListItem setText(String value) { text = value; return this; }
+    public void setText(String value) { text = value; }
 
     public Func getActivate() { return activate; }
-    public ListItem setActivate(Func value) { activate = value; return this; }
+    public void setActivate(Func value) { activate = value; }
 
     public Box getBox() { return box; }
-    public ListItem setBox(Box value) { box = value; return this; }
+    public void setBox(Box value) { box = value; }
 
     public boolean getSelected() { return selected; }
-    public ListItem setSelected(boolean value) { selected = value; return this; }
+    public void setSelected(boolean value) { selected = value; }
 }

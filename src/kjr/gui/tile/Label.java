@@ -36,5 +36,5 @@ public class Label extends XComp
     }
 
     public String getText() { box.width = text.length(); return text; }
-    public Label setText(String value) { text = value; return this; }
+    public void setText(String value) { text = value; }
 }

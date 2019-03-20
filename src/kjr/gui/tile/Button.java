@@ -28,22 +28,6 @@ public class Button extends XComp
     }
 
     @Override
-    public void update()
-    {
-        if(activated)
-            update.call();
-
-        if(alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
-        {
-            highlighting = true;
-            if(Input.buttonPressed(Buttons.Left))
-                activated = true;
-        }
-        else
-            highlighting = false;
-    }
-
-    @Override
     public void draw(Renderer renderer)
     {
         box.height = 1;
@@ -60,5 +44,21 @@ public class Button extends XComp
             if(x < message.length())
                 renderer.draw(message.charAt(x), border, alignedBox.x + x, alignedBox.y, 0.0f);
         }
+    }
+
+    @Override
+    public void update()
+    {
+        if(activated)
+            update.call();
+
+        if(alignedBox.asRect(console.getGlyphSize()).contains(Input.getMousePosition()))
+        {
+            highlighting = true;
+            if(Input.buttonPressed(Buttons.Left))
+                activated = true;
+        }
+        else
+            highlighting = false;
     }
 }

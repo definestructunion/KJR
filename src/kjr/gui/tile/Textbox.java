@@ -34,7 +34,7 @@ public class Textbox extends XComp
                 continue;
             }
 
-            if(i != startI && i % alignedBox.width == 0)
+            if(xPos != startI && xPos % alignedBox.width == 0)
             {
                 ++yPos;
                 xPos = 0;
@@ -64,5 +64,5 @@ public class Textbox extends XComp
     }
     
     public String getText() { return text.toString(); }
-    public Textbox setText(String value) { text.setLength(0); text.append(value); return this; }
+    public void setText(String value) { text.setLength(0); text.append(value); }
 }

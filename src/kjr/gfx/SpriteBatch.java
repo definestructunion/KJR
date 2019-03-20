@@ -256,6 +256,14 @@ public class SpriteBatch extends Renderer
         drawSquare(texture.getID(), colour.hex(), posX, posY, layer);
     }
 
+    /**
+     * Draws a coloured tile.
+     * @param colour a {@link Colour colour} to use.
+     * @param x coordinate that is adjusted to fit {@link Renderer#tileSize tileSize}.
+     * @param y coordinate that is adjusted to fit {@link Renderer#tileSize tileSIze}.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred()
+     * deferred} rendering is enabled.
+     */
     public void draw(Colour colour, int x, int y, float layer)
     {
         float posX = tilePosX(x);
@@ -263,6 +271,18 @@ public class SpriteBatch extends Renderer
         drawSquare(0, colour.hex(), posX, posY, layer);
     }
 
+    /**
+     * Draws a glyph tile based on the {@link #fontsBack font} pushed into {@link SpriteBatch SpriteBatch}.
+     * @param c the char to be drawn.
+     * Will clamp the size down to {@link Renderer#tileSize tileSize}
+     * for width and height.
+     * @param colour a {@link Colour colour} to use.
+     * Will set a tint on the {@link #fontsBack fontsBack Texture}.
+     * @param x coordinate that is adjusted to fit {@link Renderer#tileSize tileSize}.
+     * @param y coordinate that is adjusted to fit {@link Renderer#tileSize tileSIze}.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred()
+     * deferred} rendering is enabled.
+     */
     public void draw(char c, Colour colour, int x, int y, float layer)
     {
         float posX = tilePosX(x);
@@ -274,6 +294,19 @@ public class SpriteBatch extends Renderer
         drawGlyph(glyph, slot, colour.hex(), posX, posY, layer);
     }
 
+    /**
+     * Draws a textured tile with x and y being true values not affected by {@link #tileSize tileSize}.
+     * However, width and height are still affected by {@link #tileSize tileSize}.
+     * @param texture a {@link Texture texture} to use.
+     * Will clamp the size down to {@link Renderer#tileSize tileSize}
+     * for width and height.
+     * @param colour a {@link Colour colour} to use.
+     * Will set a tint on the {@link Texture texture}.
+     * @param x coordinate in pixels.
+     * @param y coordinate in pixels.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred()
+     * deferred} rendering is enabled.
+     */
     public void drawFree(Texture texture, Colour colour, int x, int y, float layer)
     {
         drawSquare(texture.getID(), colour.hex(), x, y, layer);

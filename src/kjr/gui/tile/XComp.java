@@ -41,6 +41,7 @@ public abstract class XComp
         keyPress = () -> { };
         buttonPress = () -> { };
         update = () -> { };
+        this.console.add(this);
     }
 
     protected XComp(Box box, XConsole console, Align align)
@@ -53,6 +54,7 @@ public abstract class XComp
         keyPress = () -> { };
         buttonPress = () -> { };
         update = () -> { };
+        this.console.add(this);
     }
 
     protected void alignBox()
