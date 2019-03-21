@@ -1,6 +1,5 @@
 package kjr.gui.tile;
 
-import kjr.gfx.RenderType;
 import kjr.gfx.SpriteBatch;
 
 import java.util.ArrayList;
@@ -24,9 +23,9 @@ public final class XGUI
         return consoles;
     }
 
-    private static RenderType renderType = RenderType.Layered;
+    private static boolean switchBackToLayered = true;
 
-    public static void renderTypeSwitchBackTo(RenderType renderType) { XGUI.renderType = renderType; }
+    public static void renderTypeSwitchBackTo(boolean backToLayered) { switchBackToLayered = backToLayered; }
 
     public static void draw(SpriteBatch renderer)
     {
@@ -36,7 +35,7 @@ public final class XGUI
             console.draw(renderer);
         renderer.end();
         renderer.flush();
-        if(renderType == RenderType.Layered)
+        if(switchBackToLayered)
             renderer.setSortModeLayered();
     }
 

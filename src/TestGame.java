@@ -16,7 +16,7 @@ import kjr.input.Keys;
 import kjr.math.Mat4;
 import kjr.sfx.Audio;
 import kjr.gui.tile.Checkbox;
-import kjr.util.Clipboard;
+//import kjr.util.Clipboard;
 
 public class TestGame extends GameProgram
 {
@@ -115,8 +115,8 @@ public class TestGame extends GameProgram
 
     @Override public void update()
     {
-        if(Input.keyDown(Keys.Q))
-            System.out.println(Clipboard.paste());
+        //if(Input.keyDown(Keys.Q))
+        //    System.out.println(Clipboard.paste());
 
         XGUI.update();
 

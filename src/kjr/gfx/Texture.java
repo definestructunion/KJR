@@ -28,7 +28,7 @@ import java.util.ArrayList;
  * <p>
  * The Texture class contains a static ArrayList of Textures, which can be added to.
  * Upon exiting the {@link kjr.base.GameProgram GameProgram}, the ArrayList will iterate and manually call {@link #delete() delete}. Therefore,
- * any {@code Textures} added to the ArrayList does not require the user to manually call {@link #delete() delete} themselves,
+ * any Textures added to the ArrayList does not require the user to manually call {@link #delete() delete} themselves,
  * and is preferred to use as there should only be one copy of a unique Texture object anyways.
  */
 public class Texture
