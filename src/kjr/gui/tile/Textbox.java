@@ -20,6 +20,10 @@ public class Textbox extends XComp
     public void draw(Renderer renderer)
     {
         alignBox();
+
+        if(widthZero())
+            return;
+
         int startI = line * alignedBox.width;
 
         int xPos = 0;
@@ -39,6 +43,9 @@ public class Textbox extends XComp
                 ++yPos;
                 xPos = 0;
             }
+
+            if(yPos >= alignedBox.height)
+                return;
 
             renderer.draw(text.charAt(i), console.getColourTheme().getBorder(), alignedBox.x + xPos, alignedBox.y + yPos, 0.0f);
             ++xPos;
@@ -65,4 +72,6 @@ public class Textbox extends XComp
     
     public String getText() { return text.toString(); }
     public void setText(String value) { text.setLength(0); text.append(value); }
+
+    private boolean widthZero() { return alignedBox.width == 0; }
 }
