@@ -7,13 +7,13 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 
 /**
- * Batches {@link kjr.gfx.Texture Textures}, {@link kjr.gfx.Font Fonts}, and {@link kjr.gfx.Colour Colours} into a single
+ * Batches {@link Texture Textures}, {@link Font Fonts}, and {@link Colour Colours} into a single
  * buffer, which reduces draw calls and improving performance.
  * <p>
- * {@code SpriteBatch} requires OpenGL version 3.4 to be able to use {@code SpriteBatch}. If OpenGL version 3.4
- * is not available, then the shader that runs on {@code SpriteBatch} will not compile successfully.
+ * SpriteBatch requires OpenGL version 3.4 to be able to use SpriteBatch. If OpenGL version 3.4
+ * is not available, then the shader that runs on SpriteBatch will not compile successfully.
  * <p>
- * {@code SpriteBatch} allows up to 32 textures, as specified by {@link kjr.gfx.SpriteBatch#RENDERER_MAX_SPRITES}. Once a unique {@link kjr.gfx.Texture Texture}
+ * SpriteBatch allows up to 32 textures, as specified by {@link SpriteBatch#RENDERER_MAX_SPRITES}. Once a unique {@link Texture Texture}
  * is added and was not added previously, a draw call will be made.
  */
 public class SpriteBatch extends Renderer
@@ -24,22 +24,22 @@ public class SpriteBatch extends Renderer
     public final static int INDICES_SIZE            = 6;
 
     /**
-     * The index of the vertices info (x, y, z) in the {@link kjr.gfx.Shader Shader}.
+     * The index of the vertices info (x, y, z) in the {@link Shader Shader}.
      */
     public final static int SHADER_VERTEX_INDEX     = 0;
 
     /**
-     * The index of the uv texture coordinates (between 0 and 1) in the {@link kjr.gfx.Shader Shader}.
+     * The index of the uv texture coordinates (between 0 and 1) in the {@link Shader Shader}.
      */
     public final static int SHADER_UV_INDEX         = 1;
 
     /**
-     * The index of the texture ID in the {@link kjr.gfx.Shader Shader}.
+     * The index of the texture ID in the {@link Shader Shader}.
      */
     public final static int SHADER_TID_INDEX        = 2;
 
     /**
-     * The index of the colour (r, g, b, a) in the {@link kjr.gfx.Shader Shader}.
+     * The index of the colour (r, g, b, a) in the {@link Shader Shader}.
      */
     public final static int SHADER_COLOR_INDEX      = 3;
 
@@ -59,8 +59,8 @@ public class SpriteBatch extends Renderer
     public final static int SHADER_TID_SIZE         = (1 * 4);
 
     /**
-     * The size of the colour info (r, g, b, a) in bytes. Despite {@link kjr.gfx.Colour Colour} using
-     * 4 floats, OpenGL reads the {@link kjr.gfx.Colour#hex() hex} value of the Colour, and each channel is
+     * The size of the colour info (r, g, b, a) in bytes. Despite {@link Colour Colour} using
+     * 4 floats, OpenGL reads the {@link Colour#hex() hex} value of the Colour, and each channel is
      * read as the size of a byte, which equals 4 bytes.
      */
     public final static int SHADER_COLOR_SIZE       = (1 * 4);
@@ -107,7 +107,7 @@ public class SpriteBatch extends Renderer
 
     /**
      * This {@link SpriteBatch SpriteBatch's} index buffer object. Due to a square being rendered
-     * as 2 triangles, there are 2 redundant indices. With {@link kjr.gfx.IndexBuffer IndexBuffer}, it allows
+     * as 2 triangles, there are 2 redundant indices. With {@link IndexBuffer IndexBuffer}, it allows
      * a square to be rendered with 4 indices, rather than 6.
      */
     private IndexBuffer ibo;
@@ -123,9 +123,9 @@ public class SpriteBatch extends Renderer
     private FloatBuffer buffer;
 
     /**
-     * The {@link kjr.gfx.Texture Texture} array which holds the {@link kjr.gfx.Texture#id texture IDs}. OpenGL
-     * is not able to use {@link kjr.gfx.Texture Texture}, OpenGL instead uses the {@link kjr.gfx.Texture#id ID} attached
-     * to the object.
+     * The {@link Texture Texture} array which holds the {@link Texture#id texture IDs}. OpenGL
+     * is not able to use {@link Texture Texture}, OpenGL instead uses the {@link Texture#id ID} attached
+     * to {@link Texture Texture}.
      */
     private ArrayList<Float> textureSlots = new ArrayList<Float>(RENDERER_MAX_TEXTURES);
 
@@ -152,7 +152,7 @@ public class SpriteBatch extends Renderer
     }
 
     /**
-     * Initializes the {@link SpriteBatch SpriteBatch} by setting up the VBO, VAO, IBO, and the {@link kjr.gfx.Shader Shader}.
+     * Initializes the {@link SpriteBatch SpriteBatch} by setting up the VBO, VAO, IBO, and the {@link Shader Shader}.
      */
     private void init()
     {
@@ -225,9 +225,9 @@ public class SpriteBatch extends Renderer
      * <p>
      * The order for drawing is:
      * <ul>
-     * <li>Begin
-     * <li>End
-     * <li>Flush
+     * <li>begin
+     * <li>{@link #end() end}
+     * <li>{@link #flush() flush}
      * </ul>
      * The listed order must be followed strictly.
      */
@@ -312,6 +312,18 @@ public class SpriteBatch extends Renderer
         drawSquare(texture.getID(), colour.hex(), x, y, layer);
     }
 
+    /**
+     * Draws a string of text as glyphs. x, y, width, and height values are affected 
+     * by {@link #tileSize tileSize}. drawString will not word wrap.
+     * Only supported escape character is '\n'.
+     * @param text a string of text to draw.
+     * @param colour a {@link Colour colour} to use.
+     * Will set a tint on the {@link Texture texture}.
+     * @param x coordinate in pixels.
+     * @param y coordinate in pixels.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred()
+     * deferred} rendering is enabled.
+     */
     public void drawString(String text, Colour colour, int x, int y, float layer)
     {
         flushIfNeeded(INDICES_SIZE * text.length());
@@ -337,6 +349,18 @@ public class SpriteBatch extends Renderer
         }
     }
 
+    /**
+     * Draws a string of text as glyphs. Only width, and height values are affected 
+     * by {@link #tileSize tileSize}. drawString will not word wrap.
+     * Only supported escape character is '\n'.
+     * @param text a string of text to draw.
+     * @param colour a {@link Colour colour} to use.
+     * Will set a tint on the {@link Texture texture}.
+     * @param x coordinate in pixels.
+     * @param y coordinate in pixels.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred()
+     * deferred} rendering is enabled.
+     */
     public void drawStringFree(String text, Colour colour, int x, int y, float layer)
     {
         flushIfNeeded(INDICES_SIZE * text.length());
@@ -363,6 +387,16 @@ public class SpriteBatch extends Renderer
         }
     }
 
+    /**
+     * Fills four buffer slots with the given information. UV values will be
+     * defaulted to 0 and 1.
+     * @param id the OpenGL texture ID.
+     * @param colour {@link Colour#hex() hexadecimal} value colour.
+     * @param x coordinate in pixels.
+     * @param y coordinate in pixels.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred()
+     * deferred} rendering is enabled.
+     */
     private void drawSquare(float id, float colour, float x, float y, float layer)
     {
         flushIfNeeded(INDICES_SIZE);
@@ -375,6 +409,17 @@ public class SpriteBatch extends Renderer
         indexCount += INDICES_SIZE;
     }
 
+    /**
+     * Fills four buffer slots with the given information. Specialized for drawing glyphs
+     * specifically.
+     * @param glyph the glyph to draw.
+     * @param slot the slot of the OpenGL texture ID given using {@link #getSlot(ArrayList, float) getSlot}.
+     * @param colour {@link Colour#hex() hexadecimal} value colour.
+     * @param x coordinate in pixels.
+     * @param y coordinate in pixels.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred()
+     * deferred} rendering is enabled.
+     */
     private void drawGlyph(Glyph glyph, float slot, float colour, float x, float y, float layer)
     {
         flushIfNeeded(INDICES_SIZE);
@@ -385,6 +430,17 @@ public class SpriteBatch extends Renderer
         indexCount += INDICES_SIZE;
     }
 
+    /**
+     * Fills buffer with all data needed to properly fill a buffer slot.
+     * @param slot the slot of the OpenGL texture ID given using {@link #getSlot(ArrayList, float) getSlot}.
+     * @param colour {@link Colour#hex() hexadecimal} value colour.
+     * @param x coordinate in pixels.
+     * @param y coordinate in pixels.
+     * @param layer z coordinate for layering. Will be ignored if {@link #setSortModeDeferred()
+     * deferred} rendering is enabled.
+     * @param u the U coordinate for the texture between 0 and 1.
+     * @param v the V coordinate for the texture between 0 and 1.
+     */
     private void fillBuffer(float slot, float colour, float x, float y, float layer, float u, float v)
     {
         buffer.put(x).put(y).put(layer);
@@ -393,12 +449,38 @@ public class SpriteBatch extends Renderer
         buffer.put(colour);
     }
 
+    /**
+     * Ends the drawing process for the {@link SpriteBatch SpriteBatch}. An exception will be thrown if begin is either not called
+     * or not called in the right order.
+     * <p>
+     * The order for drawing is:
+     * <ul>
+     * <li>{@link #begin() begin}
+     * <li>end
+     * <li>{@link #flush() flush}
+     * </ul>
+     * The listed order must be followed strictly.
+     */
     public void end()
     {
         glUnmapBuffer(GL_ARRAY_BUFFER);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
+    /**
+     * Flushes all currently submitted data from the draw functions onto the screen.
+     * Will not be rendered until {@link Window#render() render} is called.
+     * An exception will be thrown if begin is either not called
+     * or not called in the right order.
+     * <p>
+     * The order for drawing is:
+     * <ul>
+     * <li>{@link #begin() begin}
+     * <li>{@link #end() end}
+     * <li>flush
+     * </ul>
+     * The listed order must be followed strictly.
+     */
     public void flush()
     {
         for(int i = 0; i < textureSlots.size(); ++i)
@@ -420,6 +502,13 @@ public class SpriteBatch extends Renderer
         buffer.clear();
     }
     
+    /**
+     * {@link #flush() flushes} all content from {@link #buffer buffer} if the
+     * expected increase in indices goes over the {@link #RENDERER_INDICES_SIZE max indices count}.
+     * @param expectedIndexCountIncrease the amount of indices the draw call is expected to draw.
+     * Everything in {@link SpriteBatch SpriteBatch} is expected to be a square, so it should be the
+     * {@link #INDICES_SIZE indices size} multiplied by the amount of submissions.
+     */
     private void flushIfNeeded(int expectedIndexCountIncrease)
     {
         if(indexCount + expectedIndexCountIncrease >= RENDERER_INDICES_SIZE)
@@ -439,11 +528,19 @@ public class SpriteBatch extends Renderer
         }
     }
 
+    /**
+     * Returns the x coordinate in pixels as if it were a tile.
+     * @param x coordinate as a tile rather than a pixel
+     */
     private float tilePosX(int x)
     {
         return x * tileSize;
     }
 
+    /**
+     * Returns the y coordinate in pixels as if it were a tile.
+     * @param y coordinate as a tile rather than a pixel
+     */
     private float tilePosY(int y)
     {
         return y * tileSize;
