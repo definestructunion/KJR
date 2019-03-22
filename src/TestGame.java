@@ -84,6 +84,7 @@ public class TestGame extends GameProgram
         console.setColourTheme(new ColourTheme(Colour.grey(), Colour.darkGrey()));
 
         textBox = new Textbox(new Box(1, 1, 15, 5), console);
+        textBox.setText("ABC\nEFG\nHIJ\nKLM\nNOP\nQRS\nTUV\nWXY\nZ");
         //console.add(textBox);
 
         Wrapper wrapper = new Wrapper("", textBox, console);

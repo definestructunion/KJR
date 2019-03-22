@@ -14,8 +14,6 @@ public class Textbox extends XComp
         super(box, console);
     }
 
-    private int line = 0;
-
     @Override
     public void draw(Renderer renderer)
     {
@@ -24,12 +22,10 @@ public class Textbox extends XComp
         if(widthZero())
             return;
 
-        int startI = line * alignedBox.width;
-
         int xPos = 0;
         int yPos = 0;
 
-        for(int i = startI; i < text.length(); ++i)
+        for(int i = 0; i < text.length(); ++i)
         {
             if(text.charAt(i) == '\n')
             {
@@ -38,7 +34,7 @@ public class Textbox extends XComp
                 continue;
             }
 
-            if(xPos != startI && xPos % alignedBox.width == 0)
+            if(xPos != 0 && xPos % alignedBox.width == 0)
             {
                 ++yPos;
                 xPos = 0;
