@@ -1,38 +1,44 @@
-# KJR - A Roguelike Framework
+# KJR - A Roguelike Graphics Library
 #### Khys Java Roguelike
 
-KJR is a simple, cross-platform, performant framework for creating tiled roguelike games.
+KJR is a graphics library for developing roguelikes.
 
-# Core Features
+![ ](https://raw.githubusercontent.com/definestructunion/KJR/master/readmeres/kjrdemopic.png)
 
-- Rendering
-- Audio
-- Input
-- GUI
+KJR is a graphics library aimed towards roguelike games based on 2D grid cells. KJR is simply a graphics library, and has no intention of being a roguelike engine. KJR does, however, feature a GUI library.
 
-# Planned features
-- FastNoise port to Java (Perlin Noise Only)
-- A* Pathfinding
+## Features
 
-# Maybe features
-- Config class
+KJR is build for simplicity. KJR does not offer anything more than graphics (actually it has audio but that will be removed in favour of the MIT license). KJR allows both tilesets as well as ASCII graphics. It also uses OpenGL 3.4 in SpriteBatch, which allows for blazingly fast sprite batching.
 
-# Why KJR Over More Popular Libraries?
+- FPS based rendering for full motion rendering.
+- Input based rendering to lower CPU usage if need be.
+- Input handling.
+- Window handling.
+- Fast rendering.
+- Flexible GUI.
 
-While libraries such as libGDX and jMonkeyEngine may have many more features, many of them will not be
-used in a typical roguelike game, and often slows down the game as a result. 
+## Planned Features
 
-# Todo
-- Finish replacing Colours objects in Colour with functions
-- Finish Planned features
-- Add more menial functionality to Window and Audio
-- Finish documentation
-- Add pretty pictures to README.md
+- Removal of OpenAL, allowing licensing to be under MIT rather than LGPL2.1.
+- SpriteSheet class.
+- SpriteSheet rendering.
+- Free form rendering.
+- Centralized structure for less headache on the user.
+- Additional menial functions.
+- Finishing JavaDoc.
 
-# Licence
+## API Documentation
 
+TODO
 
-KJR is licenced under the LGPL.
+## Getting Started
 
+Clone KJR into a repository > Add libraries in the libs folder > good to go.
 
-![ ](https://raw.githubusercontent.com/definestructunion/KJR/master/sabersmile.jpg)
+## Made with
+
+- [LWJGL](https://www.lwjgl.org/) for rendering
+- [Jackson](https://github.com/FasterXML/jackson) for JSON de/serialization
+
+# :)

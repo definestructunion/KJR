@@ -78,13 +78,17 @@ public class Wrapper extends XComp
     private void drawRowTop(Renderer renderer)
     {
         Colour border = console.getColourTheme().getBorder();
+
         int titleStart = 3;
-        int titleEnd = titleStart + title.length();
-        boolean drawingTitle = title.length() > box.width - titleStart - 1 || title.length() == 0;
+        int titleEnd = titleStart + ((title != null) ? title.length()
+                                                     : 0);
+        boolean drawingTitle = (title != null) &&
+                               (title.length() > box.width - titleStart - 1) &&
+                               (title.length() == 0);
 
         for(int x = 1; x < box.width; ++x)
         {
-            if(!drawingTitle)
+            if(drawingTitle)
             {
                 if(x == titleStart - 1)
                     renderer.draw(console.getLeftTitleGlyph(), border, box.x + x, box.y, 0.0f);
@@ -98,7 +102,7 @@ public class Wrapper extends XComp
                 renderer.draw(console.getRowGlyph(), border, box.x + x, box.y, 0.0f);
         }
 
-        if(!drawingTitle)
+        if(drawingTitle)
             for(int i = 0; i < title.length(); ++i)
                 renderer.draw(title.charAt(i), border, box.x + titleStart + i, box.y, 0.0f);
     }

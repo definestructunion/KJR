@@ -52,7 +52,7 @@ public class TestGame extends GameProgram
         sound = Audio.add("song.ogg", 0.175f, true);
         //sound2 = Audio.add("sound.ogg");
         font = Font.add("res/fonts/cheepicus8x8.png", 8);
-        texture = Texture.add("test.png");
+        texture = Texture.add("smile.png");
         texture2 = Texture.add("heart.png");
         shader = Shader.createDefault(width, height);
         //bfont = new Font("res/fonts/bfont8x8.png", 8);
@@ -77,41 +77,20 @@ public class TestGame extends GameProgram
         renderer.pushFont(font);
         window.show();
 
-        XConsole console = new XConsole("");
+        XConsole console = new XConsole("Welcome");
         console.setBox(new Box(0, 0, 40, 32));
         console.setFont(font);
-        console.setGlyphSize(12);
+        console.setGlyphSize(8);
         console.setColourTheme(new ColourTheme(Colour.grey(), Colour.darkGrey()));
 
-        textBox = new Textbox(new Box(1, 1, 15, 5), console);
-        textBox.setText("ABC\nEFG\nHIJ\nKLM\nNOP\nQRS\nTUV\nWXY\nZ");
-        //console.add(textBox);
+        Label label = new Label("Prettier README.md pictures is on my todo list", 1, 8, console);
+        label.setWrapping(true);
 
-        Wrapper wrapper = new Wrapper("", textBox, console);
-        //console.add(wrapper);
+        Wrapper wrapper = new Wrapper(null, label, console);
 
-        /*checkBox = new Checkbox(new Box(1, 1, 15, 15), console);
-        checkBox.setAlign(Align.TopLeft);
-        checkBox.setSelectCount(5);
-
-        label = new Label("Item", 17, 1, console);
-
-        for(int i = 0; i < 20; ++i)
-        {
-            String name = names[random.nextInt(5)];
-            ListItem item = new ListItem(name);
-            item.setActivate(() ->
-            {
-                System.out.println(item.getText());
-            });
-            checkBox.add(item);
-        }
-
-        console.add(checkBox);
-        console.add(label);
-
-        Wrapper wrapper = new Wrapper("", checkBox, console);
-        console.add(wrapper);*/
+        Button button = new Button("Close", -1, -1, console);
+        button.setAlign(Align.BottomRight);
+        button.setUpdate(() -> console.close());
     }
 
     @Override public void update()
@@ -150,7 +129,7 @@ public class TestGame extends GameProgram
             //checkBox.deselectAll();
 
             //checkBox.remove(checkBox.getSelectedItems());
-            System.out.println(textBox.getText());
+            //System.out.println(textBox.getText());
             //textBox.setText("Entered text");
         }
 
@@ -163,10 +142,16 @@ public class TestGame extends GameProgram
         shader.bind();
         renderer.begin();
 
-        renderer.draw(texture, Colour.white(), 20, 20, 0.9f);
-        renderer.draw(texture2, Colour.white(), 20, 20, 0.9f);
+        //renderer.draw(texture, Colour.white(), 20, 20, 0.9f);
+        //renderer.draw(texture2, Colour.white(), 20, 20, 0.9f);
 
-        renderer.draw(texture, Colour.white(), 1, 1, 1.0f);
+        //renderer.draw(texture, Colour.white(), 1, 1, 1.0f);
+
+        for(int y = 0; y < 16; ++y)
+        {
+            for(int x = 0; x < 16; ++x)
+                renderer.draw(texture, Colour.white(), x + 20, y, 0.0f);
+        }
 
         renderer.end();
         renderer.flush();

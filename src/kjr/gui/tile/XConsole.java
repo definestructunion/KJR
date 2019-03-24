@@ -176,4 +176,9 @@ public class XConsole
             for(int i = 0; i < title.length(); ++i)
                 renderer.draw(title.charAt(i), border, this.x + titleStart + i, this.y, 0.0f);
     }
+
+    public void close()
+    {
+        XGUI.remove(this);
+    }
 }
