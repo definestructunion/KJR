@@ -14,7 +14,6 @@ import kjr.gui.tile.Label;
 import kjr.input.Input;
 import kjr.input.Keys;
 import kjr.math.Mat4;
-import kjr.sfx.Audio;
 import kjr.gui.tile.Checkbox;
 //import kjr.util.Clipboard;
 
@@ -25,7 +24,6 @@ public class TestGame extends GameProgram
     private final static int height = 32 * 20;
 
     Shader shader;
-    Audio sound = null;
     //Audio sound2 = null;
     Font font = null;
     Texture texture;
@@ -49,7 +47,6 @@ public class TestGame extends GameProgram
 
     @Override public void loadAssets()
     {
-        sound = Audio.add("song.ogg", 0.175f, true);
         //sound2 = Audio.add("sound.ogg");
         font = Font.add("res/fonts/cheepicus8x8.png", 8);
         texture = Texture.add("smile.png");

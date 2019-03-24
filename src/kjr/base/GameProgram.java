@@ -1,7 +1,5 @@
 package kjr.base;
 
-import kjr.sfx.Audio;
-import kjr.sfx.AudioDevice;
 import kjr.gfx.Font;
 import kjr.gfx.Texture;
 import kjr.gfx.Window;
@@ -9,12 +7,10 @@ import kjr.gfx.Window;
 public abstract class GameProgram
 {
     protected Window window = null;
-    protected AudioDevice a_device = null;
     protected long frameTime = (long)(1000.0 / 60.0);
 
     public GameProgram(String title, int width, int height, boolean limitRefreshRate)
     {
-        this.a_device = new AudioDevice();
         this.window = new Window(title, width, height, this, limitRefreshRate);
     }
 
@@ -66,10 +62,8 @@ public abstract class GameProgram
     public void clean()
     {
         Texture.clean();
-        Audio.clean();
         Font.clean();
         window.delete();
-        a_device.delete();
     }
 
     public void windowResize()
