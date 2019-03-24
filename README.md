@@ -9,7 +9,7 @@ KJR is a graphics library aimed towards roguelike games based on 2D grid cells. 
 
 ## Features
 
-KJR is build for simplicity. KJR does not offer anything more than graphics (actually it has audio but that will be removed in favour of the MIT license). KJR allows both tilesets as well as ASCII graphics. It also uses OpenGL 3.4 in SpriteBatch, which allows for blazingly fast sprite batching.
+KJR is build for simplicity. KJR does not offer anything more than graphics. KJR allows both tilesets as well as ASCII graphics. It also uses OpenGL 3.4 in SpriteBatch, which allows for blazingly fast sprite batching.
 
 - FPS based rendering for full motion rendering.
 - Input based rendering to lower CPU usage if need be.
@@ -20,7 +20,6 @@ KJR is build for simplicity. KJR does not offer anything more than graphics (act
 
 ## Planned Features
 
-- Removal of OpenAL, allowing licensing to be under MIT rather than LGPL2.1.
 - SpriteSheet class.
 - SpriteSheet rendering.
 - Free form rendering.
