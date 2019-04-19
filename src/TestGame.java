@@ -15,6 +15,7 @@ import kjr.input.Input;
 import kjr.input.Keys;
 import kjr.math.Mat4;
 import kjr.gui.tile.Checkbox;
+import org.lwjgl.opengl.GL15;
 //import kjr.util.Clipboard;
 
 public class TestGame extends GameProgram
@@ -135,6 +136,9 @@ public class TestGame extends GameProgram
 
     @Override public void draw()
     {
+        //GL15.glEnable(GL15.GL_SCISSOR_TEST);
+        //GL15.glScissor(100, 400, 1000, 1000);
+        //GL15.glEnable(GL15.GL_SCISSOR_TEST);
         window.clear(0, 0, 0, 1);
         shader.bind();
         renderer.begin();
